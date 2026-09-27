@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gesyweb ERP — Gestión de Reformas y Presupuestos</title>
+  <title>Gesyweb ERP — Control de Obras y Partes de Intervención</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @media print {
@@ -66,7 +66,7 @@
   <!-- Contenedor Principal -->
   <main class="flex-1 p-6 md:p-10 overflow-y-auto">
 
-    <!-- SECCIÓN 1: LISTADO DE OBRAS -->
+    <!-- SECCIÓN 1: OBRAS -->
     <div id="vista-obras">
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
@@ -78,7 +78,7 @@
         </button>
       </header>
 
-      <!-- Barra de Filtros de Obras -->
+      <!-- Filtros de Obras -->
       <div id="contenedor-filtros-obras" class="mt-4 flex gap-2 overflow-x-auto pb-2">
         <button onclick="window.filtrarObras('todas', this)" class="btn-filtro px-3.5 py-1.5 rounded-full text-xs font-bold transition bg-slate-900 text-white shadow-sm">
           Todas
@@ -102,7 +102,7 @@
       </section>
     </div>
 
-    <!-- SECCIÓN 1.1: FICHA DETALLADA OBRA -->
+    <!-- SECCIÓN 1.1: FICHA DETALLE OBRA -->
     <div id="vista-detalle-obra" class="hidden">
       <div class="flex flex-wrap items-center justify-between pb-6 border-b border-slate-200 gap-3 bg-slate-100 sticky top-0 z-10 no-print">
         <button onclick="window.cambiarVista('obras')" id="btn-volver-obras" class="inline-flex items-center gap-2 text-sm font-bold text-slate-800 hover:text-amber-600 bg-white border border-slate-300 px-4 py-2 rounded-xl shadow-sm transition">
@@ -131,7 +131,7 @@
       </div>
     </div>
 
-    <!-- SECCIÓN 2: LISTADO DE CLIENTES -->
+    <!-- SECCIÓN 2: CLIENTES -->
     <div id="vista-clientes" class="hidden">
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
@@ -148,7 +148,7 @@
       </section>
     </div>
 
-    <!-- SECCIÓN 2.1: FICHA DETALLADA CLIENTE -->
+    <!-- SECCIÓN 2.1: FICHA DETALLE CLIENTE -->
     <div id="vista-detalle-cliente" class="hidden">
       <div class="flex flex-wrap items-center justify-between pb-6 border-b border-slate-200 gap-3 bg-slate-100 sticky top-0 z-10 no-print">
         <button onclick="window.cambiarVista('clientes')" id="btn-volver-clientes" class="inline-flex items-center gap-2 text-sm font-bold text-slate-800 hover:text-indigo-600 bg-white border border-slate-300 px-4 py-2 rounded-xl shadow-sm transition">
@@ -174,12 +174,12 @@
       </div>
     </div>
 
-    <!-- SECCIÓN 3: LISTADO DE INCIDENCIAS -->
+    <!-- SECCIÓN 3: INCIDENCIAS -->
     <div id="vista-incidencias" class="hidden">
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
           <h2 class="text-2xl font-bold text-slate-900">Registro de Incidencias</h2>
-          <p class="text-sm text-slate-500">Partes de averías, visitas programadas, firmas y fotografías.</p>
+          <p class="text-sm text-slate-500">Partes de averías, citas programadas, firmas y fotografías.</p>
         </div>
         <button id="btn-abrir-modal-incidencia" class="bg-rose-500 hover:bg-rose-600 text-white font-bold px-4 py-2.5 rounded-lg shadow-sm transition">
           + Reportar Incidencia
@@ -207,7 +207,7 @@
       </section>
     </div>
 
-    <!-- SECCIÓN 3.1: FICHA DETALLADA INCIDENCIA -->
+    <!-- SECCIÓN 3.1: FICHA DETALLE INCIDENCIA -->
     <div id="vista-detalle-incidencia" class="hidden">
       <div class="flex flex-wrap items-center justify-between pb-6 border-b border-slate-200 gap-3 bg-slate-100 sticky top-0 z-10 no-print">
         <button onclick="window.cambiarVista('incidencias')" id="btn-volver-incidencias" class="inline-flex items-center gap-2 text-sm font-bold text-slate-800 hover:text-rose-600 bg-white border border-slate-300 px-4 py-2 rounded-xl shadow-sm transition">
@@ -479,7 +479,7 @@
     </div>
   </div>
 
-  <!-- MODAL: PARTE COMPLETO DE INCIDENCIA CON FIRMA DIGITAL -->
+  <!-- MODAL: PARTE DE INTERVENCIÓN CON FIRMA -->
   <div id="modal-incidencia" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 z-50 overflow-y-auto">
     <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-2xl w-full shadow-2xl my-8 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center pb-4 border-b border-slate-100">
@@ -682,7 +682,7 @@
     </div>
   </div>
 
-  <!-- SCRIPT FIREBASE Y MOTOR DE FIRMA -->
+  <!-- SCRIPT FIREBASE Y MOTOR DE INTERVENCIÓN -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
     import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
@@ -739,7 +739,7 @@
     let fotoAntesBase64 = null;
     let fotoDespuesBase64 = null;
 
-    // Canvas de Firma
+    // Canvas de Firma Digital
     const canvas = document.getElementById("canvas-firma");
     let ctx = null;
     let dibujando = false;
@@ -807,7 +807,7 @@
     const btnLimpiar = document.getElementById("btn-limpiar-firma");
     if (btnLimpiar) btnLimpiar.onclick = window.limpiarCanvasFirma;
 
-    // Adjunto para Obra
+    // Adjuntos
     const inArchivoObra = document.getElementById("input-archivo-obra");
     if (inArchivoObra) {
       inArchivoObra.addEventListener("change", (e) => {
@@ -815,7 +815,7 @@
         const preview = document.getElementById("preview-archivo-seleccionado");
         if (!file) return;
         if (file.size > 2 * 1024 * 1024) {
-          alert("El archivo supera 2 MB. Elige uno más ligero.");
+          alert("El archivo supera 2 MB.");
           e.target.value = "";
           return;
         }
@@ -832,7 +832,6 @@
       });
     }
 
-    // Adjuntos Fotos Antes y Después para Incidencia
     const inFotoAntes = document.getElementById("input-foto-antes-incidencia");
     if (inFotoAntes) {
       inFotoAntes.addEventListener("change", (e) => {
@@ -879,7 +878,7 @@
       });
     }
 
-    // REPEATER: TRABAJOS DE INCIDENCIA
+    // REPEATER: TRABAJOS INCIDENCIA
     function agregarFilaTrabajoIncidencia(valor = "") {
       const c = document.getElementById("contenedor-trabajos-incidencia");
       if (!c) return;
@@ -986,7 +985,7 @@
     const btnAddMat = document.getElementById("btn-add-material");
     if (btnAddMat) btnAddMat.onclick = () => agregarFilaMaterial("", "m²", "", "");
 
-    // Botones de Modales
+    // Apertura y reset de modales
     const btnAbrirObra = document.getElementById("btn-abrir-modal-obra");
     if (btnAbrirObra) {
       btnAbrirObra.onclick = () => {
@@ -1757,7 +1756,7 @@
       };
     }
 
-    // INCIDENCIAS LOGIC
+    // INCIDENCIAS / PARTES TÉCNICOS LOGIC
     window.filtrarIncidencias = (estado, btnElement) => {
       filtroIncidenciasActual = estado;
       if (btnElement) {
