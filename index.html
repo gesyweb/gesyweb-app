@@ -20,17 +20,17 @@
       </div>
       
       <nav class="mt-8 space-y-2">
-        <button id="nav-obras" class="w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg bg-slate-800 text-white font-medium transition">
+        <button id="nav-obras" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg bg-slate-800 text-white font-medium transition">
           <span>🏗️</span> Obras y Proyectos
         </button>
-        <button id="nav-incidencias" class="w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
+        <button id="nav-incidencias" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
           <span>⚠️</span> Incidencias
         </button>
-        <button id="nav-herramientas" class="w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
-          <span>🔨</span> Herramientas
-        </button>
-        <button id="nav-operarios" class="w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
+        <button id="nav-operarios" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
           <span>👷</span> Operarios
+        </button>
+        <button id="nav-herramientas" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
+          <span>🔨</span> Herramientas
         </button>
       </nav>
     </div>
@@ -55,7 +55,6 @@
           + Nueva Obra
         </button>
       </header>
-
       <section id="lista-proyectos" class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <p class="text-sm text-slate-400">Cargando proyectos...</p>
       </section>
@@ -72,22 +71,52 @@
           + Reportar Incidencia
         </button>
       </header>
-
       <section id="lista-incidencias" class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <p class="text-sm text-slate-400">Cargando incidencias...</p>
       </section>
     </div>
 
+    <!-- SECCIÓN 3: OPERARIOS -->
+    <div id="vista-operarios" class="hidden">
+      <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
+        <div>
+          <h2 class="text-2xl font-bold text-slate-900">Equipo y Operarios</h2>
+          <p class="text-sm text-slate-500">Control de personal propio, gremios externos y contactos directos.</p>
+        </div>
+        <button id="btn-abrir-modal-operario" class="bg-sky-500 hover:bg-sky-600 text-white font-semibold px-4 py-2.5 rounded-lg shadow-sm transition">
+          + Alta Operario
+        </button>
+      </header>
+      <section id="lista-operarios" class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <p class="text-sm text-slate-400">Cargando equipo...</p>
+      </section>
+    </div>
+
+    <!-- SECCIÓN 4: HERRAMIENTAS -->
+    <div id="vista-herramientas" class="hidden">
+      <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
+        <div>
+          <h2 class="text-2xl font-bold text-slate-900">Parque de Maquinaria y Herramientas</h2>
+          <p class="text-sm text-slate-500">Inventario de equipos pesados, maquinaria y localización actual.</p>
+        </div>
+        <button id="btn-abrir-modal-herramienta" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 py-2.5 rounded-lg shadow-sm transition">
+          + Alta Herramienta
+        </button>
+      </header>
+      <section id="lista-herramientas" class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <p class="text-sm text-slate-400">Cargando inventario...</p>
+      </section>
+    </div>
+
   </main>
 
-  <!-- MODAL: NUEVA OBRA -->
+  <!-- MODAL 1: NUEVA OBRA -->
   <div id="modal-obra" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 z-50">
     <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl">
       <div class="flex justify-between items-center pb-4 border-b border-slate-100">
         <h3 class="text-lg font-bold text-slate-900">Registrar Nueva Obra</h3>
         <button id="btn-cerrar-modal-obra" class="text-slate-400 hover:text-slate-700 text-xl font-bold">&times;</button>
       </div>
-
       <form id="form-nueva-obra" class="mt-6 space-y-4">
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre o Dirección *</label>
@@ -113,20 +142,19 @@
         </div>
         <div class="mt-6 flex justify-end gap-3 pt-4 border-t border-slate-100">
           <button type="button" id="btn-cancelar-obra" class="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg">Cancelar</button>
-          <button type="submit" id="btn-guardar-obra" class="px-5 py-2 text-sm bg-amber-500 hover:bg-amber-600 text-slate-950 font-semibold rounded-lg">Guardar Obra</button>
+          <button type="submit" class="px-5 py-2 text-sm bg-amber-500 hover:bg-amber-600 text-slate-950 font-semibold rounded-lg">Guardar Obra</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- MODAL: NUEVA INCIDENCIA -->
+  <!-- MODAL 2: NUEVA INCIDENCIA -->
   <div id="modal-incidencia" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 z-50">
     <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl">
       <div class="flex justify-between items-center pb-4 border-b border-slate-100">
         <h3 class="text-lg font-bold text-slate-900">Reportar Incidencia</h3>
         <button id="btn-cerrar-modal-incidencia" class="text-slate-400 hover:text-slate-700 text-xl font-bold">&times;</button>
       </div>
-
       <form id="form-nueva-incidencia" class="mt-6 space-y-4">
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1">Obra afectada *</label>
@@ -140,7 +168,7 @@
         </div>
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1">Descripción detallada</label>
-          <textarea id="input-desc-incidencia" rows="3" placeholder="Explica qué ha sucedido o qué material falta..." class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-rose-500 outline-none"></textarea>
+          <textarea id="input-desc-incidencia" rows="3" placeholder="Explica el problema..." class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-rose-500 outline-none"></textarea>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
@@ -162,7 +190,76 @@
         </div>
         <div class="mt-6 flex justify-end gap-3 pt-4 border-t border-slate-100">
           <button type="button" id="btn-cancelar-incidencia" class="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg">Cancelar</button>
-          <button type="submit" id="btn-guardar-incidencia" class="px-5 py-2 text-sm bg-rose-500 hover:bg-rose-600 text-white font-semibold rounded-lg">Guardar Incidencia</button>
+          <button type="submit" class="px-5 py-2 text-sm bg-rose-500 hover:bg-rose-600 text-white font-semibold rounded-lg">Guardar Incidencia</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 3: NUEVO OPERARIO -->
+  <div id="modal-operario" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl">
+      <div class="flex justify-between items-center pb-4 border-b border-slate-100">
+        <h3 class="text-lg font-bold text-slate-900">Registrar Nuevo Operario</h3>
+        <button id="btn-cerrar-modal-operario" class="text-slate-400 hover:text-slate-700 text-xl font-bold">&times;</button>
+      </div>
+      <form id="form-nuevo-operario" class="mt-6 space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre y Apellidos *</label>
+          <input id="input-nombre-operario" type="text" required placeholder="Ej. Manuel García López" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-sky-500 outline-none">
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Especialidad / Oficio *</label>
+            <select id="input-oficio-operario" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-sky-500 outline-none bg-white">
+              <option value="Albañil">Albañilería</option>
+              <option value="Fontanero">Fontanería</option>
+              <option value="Electricista">Electricidad</option>
+              <option value="Pintor">Pintura</option>
+              <option value="Carpintero">Carpintería / Pladur</option>
+              <option value="Encargado">Encargado de Obra</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Teléfono</label>
+            <input id="input-tel-operario" type="tel" placeholder="600000000" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-sky-500 outline-none">
+          </div>
+        </div>
+        <div class="mt-6 flex justify-end gap-3 pt-4 border-t border-slate-100">
+          <button type="button" id="btn-cancelar-operario" class="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg">Cancelar</button>
+          <button type="submit" class="px-5 py-2 text-sm bg-sky-500 hover:bg-sky-600 text-white font-semibold rounded-lg">Guardar Operario</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 4: NUEVA HERRAMIENTA -->
+  <div id="modal-herramienta" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl">
+      <div class="flex justify-between items-center pb-4 border-b border-slate-100">
+        <h3 class="text-lg font-bold text-slate-900">Registrar Herramienta / Maquinaria</h3>
+        <button id="btn-cerrar-modal-herramienta" class="text-slate-400 hover:text-slate-700 text-xl font-bold">&times;</button>
+      </div>
+      <form id="form-nueva-herramienta" class="mt-6 space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre o Equipo *</label>
+          <input id="input-nombre-herramienta" type="text" required placeholder="Ej. Martillo demoledor Bosch GSH 11 E" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Número de Serie / Código</label>
+            <input id="input-serie-herramienta" type="text" placeholder="SER-9842" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Ubicación / Obra</label>
+            <select id="select-obra-herramienta" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none bg-white">
+              <option value="Almacén central">📦 Almacén central</option>
+            </select>
+          </div>
+        </div>
+        <div class="mt-6 flex justify-end gap-3 pt-4 border-t border-slate-100">
+          <button type="button" id="btn-cancelar-herramienta" class="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg">Cancelar</button>
+          <button type="submit" class="px-5 py-2 text-sm bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg">Guardar Herramienta</button>
         </div>
       </form>
     </div>
@@ -186,79 +283,94 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Navegación entre vistas
-    const vistaObras = document.getElementById("vista-obras");
-    const vistaIncidencias = document.getElementById("vista-incidencias");
-    const navObras = document.getElementById("nav-obras");
-    const navIncidencias = document.getElementById("nav-incidencias");
+    // Navegación modular
+    const vistas = {
+      obras: document.getElementById("vista-obras"),
+      incidencias: document.getElementById("vista-incidencias"),
+      operarios: document.getElementById("vista-operarios"),
+      herramientas: document.getElementById("vista-herramientas")
+    };
+    const botonesNav = {
+      obras: document.getElementById("nav-obras"),
+      incidencias: document.getElementById("nav-incidencias"),
+      operarios: document.getElementById("nav-operarios"),
+      herramientas: document.getElementById("nav-herramientas")
+    };
 
-    navObras.addEventListener("click", () => {
-      vistaObras.classList.remove("hidden");
-      vistaIncidencias.classList.add("hidden");
-      navObras.className = "w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg bg-slate-800 text-white font-medium";
-      navIncidencias.className = "w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition";
-    });
+    function cambiarVista(activa) {
+      Object.keys(vistas).forEach(k => {
+        if (k === activa) {
+          vistas[k].classList.remove("hidden");
+          botonesNav[k].className = "nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg bg-slate-800 text-white font-medium transition";
+        } else {
+          vistas[k].classList.add("hidden");
+          botonesNav[k].className = "nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition";
+        }
+      });
+    }
 
-    navIncidencias.addEventListener("click", () => {
-      vistaIncidencias.classList.remove("hidden");
-      vistaObras.classList.add("hidden");
-      navIncidencias.className = "w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg bg-slate-800 text-white font-medium";
-      navObras.className = "w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition";
-    });
+    botonesNav.obras.onclick = () => cambiarVista('obras');
+    botonesNav.incidencias.onclick = () => cambiarVista('incidencias');
+    botonesNav.operarios.onclick = () => cambiarVista('operarios');
+    botonesNav.herramientas.onclick = () => cambiarVista('herramientas');
 
-    // Control Modales
-    const modalObra = document.getElementById("modal-obra");
-    document.getElementById("btn-abrir-modal-obra").onclick = () => modalObra.style.display = "flex";
-    document.getElementById("btn-cerrar-modal-obra").onclick = () => modalObra.style.display = "none";
-    document.getElementById("btn-cancelar-obra").onclick = () => modalObra.style.display = "none";
+    // Manejo de Modales
+    function vincularModal(btnAbrirId, modalId, btnCerrarId, btnCancelarId) {
+      const modal = document.getElementById(modalId);
+      document.getElementById(btnAbrirId).onclick = () => modal.style.display = "flex";
+      document.getElementById(btnCerrarId).onclick = () => modal.style.display = "none";
+      document.getElementById(btnCancelarId).onclick = () => modal.style.display = "none";
+      return modal;
+    }
 
-    const modalIncidencia = document.getElementById("modal-incidencia");
-    document.getElementById("btn-abrir-modal-incidencia").onclick = () => modalIncidencia.style.display = "flex";
-    document.getElementById("btn-cerrar-modal-incidencia").onclick = () => modalIncidencia.style.display = "none";
-    document.getElementById("btn-cancelar-incidencia").onclick = () => modalIncidencia.style.display = "none";
+    const modalObra = vincularModal("btn-abrir-modal-obra", "modal-obra", "btn-cerrar-modal-obra", "btn-cancelar-obra");
+    const modalIncidencia = vincularModal("btn-abrir-modal-incidencia", "modal-incidencia", "btn-cerrar-modal-incidencia", "btn-cancelar-incidencia");
+    const modalOperario = vincularModal("btn-abrir-modal-operario", "modal-operario", "btn-cerrar-modal-operario", "btn-cancelar-operario");
+    const modalHerramienta = vincularModal("btn-abrir-modal-herramienta", "modal-herramienta", "btn-cerrar-modal-herramienta", "btn-cancelar-herramienta");
 
     // Colecciones Firestore
     const colObras = collection(db, "proyectos");
     const colIncidencias = collection(db, "incidencias");
+    const colOperarios = collection(db, "operarios");
+    const colHerramientas = collection(db, "herramientas");
 
+    // Sincronizar OBRAS + Desplegables
     const listaObrasEl = document.getElementById("lista-proyectos");
     const selectObraIncidencia = document.getElementById("select-obra-incidencia");
+    const selectObraHerramienta = document.getElementById("select-obra-herramienta");
 
-    // Sincronizar Obras
     onSnapshot(colObras, (snap) => {
       listaObrasEl.innerHTML = "";
       selectObraIncidencia.innerHTML = '<option value="">Selecciona una obra...</option>';
+      selectObraHerramienta.innerHTML = '<option value="Almacén central">📦 Almacén central</option>';
 
       if (snap.empty) {
         listaObrasEl.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay obras registradas aún.</p></div>`;
-        return;
-      }
+      } else {
+        snap.forEach((doc) => {
+          const d = doc.data();
+          const opt1 = document.createElement("option"); opt1.value = d.nombre; opt1.textContent = d.nombre;
+          selectObraIncidencia.appendChild(opt1);
+          const opt2 = document.createElement("option"); opt2.value = d.nombre; opt2.textContent = "🏗️ " + d.nombre;
+          selectObraHerramienta.appendChild(opt2);
 
-      snap.forEach((doc) => {
-        const d = doc.data();
-        // Llenar selector para incidencias
-        const opt = document.createElement("option");
-        opt.value = d.nombre;
-        opt.textContent = d.nombre;
-        selectObraIncidencia.appendChild(opt);
-
-        // Tarjeta de obra
-        let badge = d.estado === "Finalizada" ? "bg-sky-100 text-sky-800" : d.estado === "Presupuestada" ? "bg-amber-100 text-amber-800" : "bg-emerald-100 text-emerald-800";
-        const card = document.createElement("div");
-        card.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between";
-        card.innerHTML = `
-          <div>
-            <div class="flex justify-between items-start mb-3">
-              <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold ${badge}">${d.estado || 'En curso'}</span>
-              <span class="text-xs font-bold text-slate-700">${d.presupuesto ? Number(d.presupuesto).toLocaleString('es-ES') + ' €' : '-'}</span>
+          let badge = d.estado === "Finalizada" ? "bg-sky-100 text-sky-800" : d.estado === "Presupuestada" ? "bg-amber-100 text-amber-800" : "bg-emerald-100 text-emerald-800";
+          const card = document.createElement("div");
+          card.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between";
+          card.innerHTML = `
+            <div>
+              <div class="flex justify-between items-start mb-3">
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold ${badge}">${d.estado || 'En curso'}</span>
+                <span class="text-xs font-bold text-slate-700">${d.presupuesto ? Number(d.presupuesto).toLocaleString('es-ES') + ' €' : '-'}</span>
+              </div>
+              <h3 class="text-base font-bold text-slate-900">${d.nombre}</h3>
+              <p class="text-xs text-slate-500 mt-2">👤 ${d.cliente || 'Sin cliente'}</p>
             </div>
-            <h3 class="text-base font-bold text-slate-900">${d.nombre}</h3>
-            <p class="text-xs text-slate-500 mt-2">👤 ${d.cliente || 'Sin cliente'}</p>
-          </div>
-          <div class="mt-6 pt-4 border-t border-slate-100 text-xs text-slate-400">Ref: ${doc.id.substring(0, 5).toUpperCase()}</div>
-        `;
-        listaObrasEl.appendChild(card);
-      });
+            <div class="mt-6 pt-4 border-t border-slate-100 text-xs text-slate-400">Ref: ${doc.id.substring(0, 5).toUpperCase()}</div>
+          `;
+          listaObrasEl.appendChild(card);
+        });
+      }
     });
 
     // Guardar Obra
@@ -275,36 +387,35 @@
       modalObra.style.display = "none";
     };
 
-    // Sincronizar Incidencias
+    // Sincronizar INCIDENCIAS
     const listaIncidenciasEl = document.getElementById("lista-incidencias");
     onSnapshot(colIncidencias, (snap) => {
       listaIncidenciasEl.innerHTML = "";
       if (snap.empty) {
-        listaIncidenciasEl.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay incidencias reportadas. ¡Todo en orden!</p></div>`;
-        return;
-      }
-      snap.forEach((doc) => {
-        const d = doc.data();
-        let badgeUrgencia = d.prioridad === "Urgente" ? "bg-rose-100 text-rose-800 border-rose-300" : "bg-amber-100 text-amber-800 border-amber-300";
-        const card = document.createElement("div");
-        card.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between";
-        card.innerHTML = `
-          <div>
-            <div class="flex justify-between items-center mb-3">
-              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold border ${badgeUrgencia}">${d.prioridad}</span>
-              <span class="text-xs text-slate-400 font-medium">${d.estado}</span>
+        listaIncidenciasEl.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay incidencias registradas.</p></div>`;
+      } else {
+        snap.forEach((doc) => {
+          const d = doc.data();
+          let badgeUrgencia = d.prioridad === "Urgente" ? "bg-rose-100 text-rose-800" : "bg-amber-100 text-amber-800";
+          const card = document.createElement("div");
+          card.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between";
+          card.innerHTML = `
+            <div>
+              <div class="flex justify-between items-center mb-3">
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold ${badgeUrgencia}">${d.prioridad}</span>
+                <span class="text-xs text-slate-400">${d.estado}</span>
+              </div>
+              <p class="text-xs font-semibold text-amber-600 mb-1">🏗️ ${d.obra}</p>
+              <h3 class="text-base font-bold text-slate-900">${d.titulo}</h3>
+              <p class="text-sm text-slate-500 mt-2">${d.descripcion || 'Sin descripción.'}</p>
             </div>
-            <p class="text-xs font-semibold text-amber-600 mb-1">🏗️ ${d.obra}</p>
-            <h3 class="text-base font-bold text-slate-900">${d.titulo}</h3>
-            <p class="text-sm text-slate-500 mt-2">${d.descripcion || 'Sin descripción.'}</p>
-          </div>
-          <div class="mt-6 pt-4 border-t border-slate-100 text-xs text-slate-400">Incidencia #${doc.id.substring(0, 5).toUpperCase()}</div>
-        `;
-        listaIncidenciasEl.appendChild(card);
-      });
+            <div class="mt-6 pt-4 border-t border-slate-100 text-xs text-slate-400">Parte #${doc.id.substring(0, 5).toUpperCase()}</div>
+          `;
+          listaIncidenciasEl.appendChild(card);
+        });
+      }
     });
 
-    // Guardar Incidencia
     document.getElementById("form-nueva-incidencia").onsubmit = async (e) => {
       e.preventDefault();
       await addDoc(colIncidencias, {
@@ -317,6 +428,79 @@
       });
       document.getElementById("form-nueva-incidencia").reset();
       modalIncidencia.style.display = "none";
+    };
+
+    // Sincronizar OPERARIOS
+    const listaOperariosEl = document.getElementById("lista-operarios");
+    onSnapshot(colOperarios, (snap) => {
+      listaOperariosEl.innerHTML = "";
+      if (snap.empty) {
+        listaOperariosEl.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay operarios registrados en el equipo.</p></div>`;
+      } else {
+        snap.forEach((doc) => {
+          const d = doc.data();
+          const card = document.createElement("div");
+          card.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between";
+          card.innerHTML = `
+            <div>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sky-100 text-sky-800">${d.oficio}</span>
+              <h3 class="text-base font-bold text-slate-900 mt-3">${d.nombre}</h3>
+              <p class="text-sm text-slate-500 mt-1">📞 ${d.telefono || 'Sin teléfono'}</p>
+            </div>
+            <div class="mt-6 pt-4 border-t border-slate-100 text-xs text-slate-400">Ficha #${doc.id.substring(0, 5).toUpperCase()}</div>
+          `;
+          listaOperariosEl.appendChild(card);
+        });
+      }
+    });
+
+    document.getElementById("form-nuevo-operario").onsubmit = async (e) => {
+      e.preventDefault();
+      await addDoc(colOperarios, {
+        nombre: document.getElementById("input-nombre-operario").value.trim(),
+        oficio: document.getElementById("input-oficio-operario").value,
+        telefono: document.getElementById("input-tel-operario").value.trim(),
+        fechaCreacion: serverTimestamp()
+      });
+      document.getElementById("form-nuevo-operario").reset();
+      modalOperario.style.display = "none";
+    };
+
+    // Sincronizar HERRAMIENTAS
+    const listaHerramientasEl = document.getElementById("lista-herramientas");
+    onSnapshot(colHerramientas, (snap) => {
+      listaHerramientasEl.innerHTML = "";
+      if (snap.empty) {
+        listaHerramientasEl.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay maquinaria en el inventario.</p></div>`;
+      } else {
+        snap.forEach((doc) => {
+          const d = doc.data();
+          const card = document.createElement("div");
+          card.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between";
+          card.innerHTML = `
+            <div>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">Ubicación actual</span>
+              <p class="text-xs font-bold text-slate-700 mt-1">${d.ubicacion}</p>
+              <h3 class="text-base font-bold text-slate-900 mt-2">${d.nombre}</h3>
+              <p class="text-xs text-slate-400 mt-1">Nº Serie: ${d.serie || 'N/A'}</p>
+            </div>
+            <div class="mt-6 pt-4 border-t border-slate-100 text-xs text-slate-400">Equipo #${doc.id.substring(0, 5).toUpperCase()}</div>
+          `;
+          listaHerramientasEl.appendChild(card);
+        });
+      }
+    });
+
+    document.getElementById("form-nueva-herramienta").onsubmit = async (e) => {
+      e.preventDefault();
+      await addDoc(colHerramientas, {
+        nombre: document.getElementById("input-nombre-herramienta").value.trim(),
+        serie: document.getElementById("input-serie-herramienta").value.trim(),
+        ubicacion: selectObraHerramienta.value,
+        fechaCreacion: serverTimestamp()
+      });
+      document.getElementById("form-nueva-herramienta").reset();
+      modalHerramienta.style.display = "none";
     };
   </script>
 </body>
