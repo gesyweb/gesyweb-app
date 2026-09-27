@@ -27,7 +27,9 @@
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col md:flex-row">
 
-  <!-- Menú lateral -->
+  <!-- ======================================================== -->
+  <!-- [BLOQUE 1]: CABECERA Y MENÚ LATERAL                     -->
+  <!-- ======================================================== -->
   <aside class="w-full md:w-64 bg-slate-900 text-white p-6 flex flex-col justify-between shrink-0">
     <div>
       <div class="flex items-center gap-3">
@@ -63,10 +65,12 @@
     </div>
   </aside>
 
-  <!-- Contenedor Principal -->
+  <!-- ======================================================== -->
+  <!-- [BLOQUE 2]: VISTAS PRINCIPALES (HTML)                   -->
+  <!-- ======================================================== -->
   <main class="flex-1 p-6 md:p-10 overflow-y-auto">
 
-    <!-- SECCIÓN 1: OBRAS -->
+    <!-- 2.1: OBRAS -->
     <div id="vista-obras">
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
@@ -101,7 +105,7 @@
       </section>
     </div>
 
-    <!-- SECCIÓN 1.1: FICHA DETALLE OBRA -->
+    <!-- 2.2: DETALLE OBRA -->
     <div id="vista-detalle-obra" class="hidden">
       <div class="flex flex-wrap items-center justify-between pb-6 border-b border-slate-200 gap-3 bg-slate-100 sticky top-0 z-10 no-print">
         <button onclick="window.cambiarVista('obras')" id="btn-volver-obras" class="inline-flex items-center gap-2 text-sm font-bold text-slate-800 hover:text-amber-600 bg-white border border-slate-300 px-4 py-2 rounded-xl shadow-sm transition">
@@ -130,7 +134,7 @@
       </div>
     </div>
 
-    <!-- SECCIÓN 2: CLIENTES -->
+    <!-- 2.3: CLIENTES -->
     <div id="vista-clientes" class="hidden">
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
@@ -147,7 +151,7 @@
       </section>
     </div>
 
-    <!-- SECCIÓN 2.1: FICHA DETALLE CLIENTE -->
+    <!-- 2.4: DETALLE CLIENTE -->
     <div id="vista-detalle-cliente" class="hidden">
       <div class="flex flex-wrap items-center justify-between pb-6 border-b border-slate-200 gap-3 bg-slate-100 sticky top-0 z-10 no-print">
         <button onclick="window.cambiarVista('clientes')" id="btn-volver-clientes" class="inline-flex items-center gap-2 text-sm font-bold text-slate-800 hover:text-indigo-600 bg-white border border-slate-300 px-4 py-2 rounded-xl shadow-sm transition">
@@ -173,7 +177,7 @@
       </div>
     </div>
 
-    <!-- SECCIÓN 3: INCIDENCIAS -->
+    <!-- 2.5: INCIDENCIAS -->
     <div id="vista-incidencias" class="hidden">
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
@@ -205,7 +209,7 @@
       </section>
     </div>
 
-    <!-- SECCIÓN 3.1: FICHA DETALLE INCIDENCIA -->
+    <!-- 2.6: DETALLE INCIDENCIA -->
     <div id="vista-detalle-incidencia" class="hidden">
       <div class="flex flex-wrap items-center justify-between pb-6 border-b border-slate-200 gap-3 bg-slate-100 sticky top-0 z-10 no-print">
         <button onclick="window.cambiarVista('incidencias')" id="btn-volver-incidencias" class="inline-flex items-center gap-2 text-sm font-bold text-slate-800 hover:text-rose-600 bg-white border border-slate-300 px-4 py-2 rounded-xl shadow-sm transition">
@@ -234,7 +238,7 @@
       </div>
     </div>
 
-    <!-- SECCIÓN 4: OPERARIOS -->
+    <!-- 2.7: OPERARIOS -->
     <div id="vista-operarios" class="hidden">
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
@@ -250,7 +254,7 @@
       </section>
     </div>
 
-    <!-- SECCIÓN 5: HERRAMIENTAS -->
+    <!-- 2.8: HERRAMIENTAS -->
     <div id="vista-herramientas" class="hidden">
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
@@ -268,7 +272,11 @@
 
   </main>
 
-  <!-- MODAL: OBRA -->
+  <!-- ======================================================== -->
+  <!-- [BLOQUE 3]: MODALES Y FORMULARIOS (HTML)                -->
+  <!-- ======================================================== -->
+
+  <!-- 3.1: MODAL OBRA -->
   <div id="modal-obra" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 z-50 overflow-y-auto">
     <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-3xl w-full shadow-2xl my-8 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center pb-4 border-b border-slate-100">
@@ -422,7 +430,7 @@
     </div>
   </div>
 
-  <!-- MODAL: CLIENTE -->
+  <!-- 3.2: MODAL CLIENTE -->
   <div id="modal-cliente" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 z-50 overflow-y-auto">
     <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl my-8">
       <div class="flex justify-between items-center pb-4 border-b border-slate-100">
@@ -477,7 +485,7 @@
     </div>
   </div>
 
-  <!-- MODAL: PARTE DE INTERVENCIÓN CON FIRMA -->
+  <!-- 3.3: MODAL INCIDENCIA & CANVAS -->
   <div id="modal-incidencia" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 z-50 overflow-y-auto">
     <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-2xl w-full shadow-2xl my-8 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center pb-4 border-b border-slate-100">
@@ -632,7 +640,7 @@
     </div>
   </div>
 
-  <!-- MODALES: OPERARIOS Y HERRAMIENTAS -->
+  <!-- 3.4: MODAL OPERARIO -->
   <div id="modal-operario" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 z-50">
     <div class="bg-white rounded-2xl p-6 max-w-lg w-full shadow-2xl">
       <div class="flex justify-between items-center pb-4 border-b">
@@ -660,6 +668,7 @@
     </div>
   </div>
 
+  <!-- 3.5: MODAL HERRAMIENTA -->
   <div id="modal-herramienta" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 z-50">
     <div class="bg-white rounded-2xl p-6 max-w-lg w-full shadow-2xl">
       <div class="flex justify-between items-center pb-4 border-b">
@@ -680,7 +689,9 @@
     </div>
   </div>
 
-  <!-- SCRIPT FIREBASE Y MOTOR DE INTERVENCIÓN -->
+  <!-- ======================================================== -->
+  <!-- [BLOQUE 4]: INICIALIZACIÓN JS, NAVEGACIÓN Y ADJUNTOS    -->
+  <!-- ======================================================== -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
     import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
@@ -698,7 +709,6 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Navegación
     const vistas = {
       obras: document.getElementById("vista-obras"),
       detalleObra: document.getElementById("vista-detalle-obra"),
@@ -737,75 +747,7 @@
     let fotoAntesBase64 = null;
     let fotoDespuesBase64 = null;
 
-    // Canvas de Firma Digital
-    const canvas = document.getElementById("canvas-firma");
-    let ctx = null;
-    let dibujando = false;
-    let haFirmado = false;
-
-    if (canvas) {
-      ctx = canvas.getContext("2d");
-      ctx.strokeStyle = "#0f172a";
-      ctx.lineWidth = 2.5;
-      ctx.lineCap = "round";
-      ctx.lineJoin = "round";
-
-      function obtenerPosicion(e) {
-        const rect = canvas.getBoundingClientRect();
-        const scaleX = canvas.width / rect.width;
-        const scaleY = canvas.height / rect.height;
-        if (e.touches && e.touches[0]) {
-          return {
-            x: (e.touches[0].clientX - rect.left) * scaleX,
-            y: (e.touches[0].clientY - rect.top) * scaleY
-          };
-        }
-        return {
-          x: (e.clientX - rect.left) * scaleX,
-          y: (e.clientY - rect.top) * scaleY
-        };
-      }
-
-      function empezarTrazo(e) {
-        dibujando = true;
-        haFirmado = true;
-        const pos = obtenerPosicion(e);
-        ctx.beginPath();
-        ctx.moveTo(pos.x, pos.y);
-        if (e.type && e.type.startsWith("touch")) e.preventDefault();
-      }
-
-      function trazar(e) {
-        if (!dibujando) return;
-        const pos = obtenerPosicion(e);
-        ctx.lineTo(pos.x, pos.y);
-        ctx.stroke();
-        if (e.type && e.type.startsWith("touch")) e.preventDefault();
-      }
-
-      function pararTrazo() {
-        dibujando = false;
-      }
-
-      canvas.addEventListener("mousedown", empezarTrazo);
-      canvas.addEventListener("mousemove", trazar);
-      window.addEventListener("mouseup", pararTrazo);
-
-      canvas.addEventListener("touchstart", empezarTrazo, { passive: false });
-      canvas.addEventListener("touchmove", trazar, { passive: false });
-      canvas.addEventListener("touchend", pararTrazo);
-    }
-
-    window.limpiarCanvasFirma = () => {
-      if (ctx && canvas) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        haFirmado = false;
-      }
-    };
-    const btnLimpiar = document.getElementById("btn-limpiar-firma");
-    if (btnLimpiar) btnLimpiar.onclick = window.limpiarCanvasFirma;
-
-    // Adjuntos
+    // Adjuntos Obras
     const inArchivoObra = document.getElementById("input-archivo-obra");
     if (inArchivoObra) {
       inArchivoObra.addEventListener("change", (e) => {
@@ -830,6 +772,7 @@
       });
     }
 
+    // Adjuntos Incidencias
     const inFotoAntes = document.getElementById("input-foto-antes-incidencia");
     if (inFotoAntes) {
       inFotoAntes.addEventListener("change", (e) => {
@@ -876,33 +819,9 @@
       });
     }
 
-    // REPEATER: TRABAJOS INCIDENCIA
-    function agregarFilaTrabajoIncidencia(valor = "") {
-      const c = document.getElementById("contenedor-trabajos-incidencia");
-      if (!c) return;
-      const f = document.createElement("div");
-      f.className = "flex gap-2 items-center item-trabajo-incidencia bg-slate-50 p-2 rounded-lg border border-slate-200";
-      f.innerHTML = '<input type="text" value="' + valor + '" placeholder="Tarea / trabajo técnico..." class="flex-1 px-3 py-1.5 border rounded-lg text-sm outline-none bg-white focus:ring-1 focus:ring-rose-500">' +
-        '<button type="button" class="btn-eliminar-fila text-rose-500 hover:text-rose-700 px-2 font-bold text-lg">&times;</button>';
-      f.querySelector(".btn-eliminar-fila").onclick = () => f.remove();
-      c.appendChild(f);
-    }
-    const btnAddTrabajoInc = document.getElementById("btn-add-trabajo-incidencia");
-    if (btnAddTrabajoInc) btnAddTrabajoInc.onclick = () => agregarFilaTrabajoIncidencia("");
-
-    window.autocompletarDireccionObra = () => {
-      const nomObra = document.getElementById("select-obra-incidencia").value;
-      if (!nomObra) return;
-      const obra = cacheObras.find(o => o.nombre === nomObra);
-      if (obra) {
-        const dirEl = document.getElementById("input-dir-incidencia");
-        const telEl = document.getElementById("input-tel1-incidencia");
-        if (dirEl && !dirEl.value) dirEl.value = obra.direccion || "";
-        if (telEl && !telEl.value) telEl.value = obra.tel1 || "";
-      }
-    };
-
-    // REPEATERS DE OBRAS
+    // ========================================================
+    // [BLOQUE 5]: LÓGICA JS: OBRAS Y PRESUPUESTOS             -->
+    // ========================================================
     window.calcularPresupuestoTotal = () => {
       let sumaBase = 0;
       document.querySelectorAll("#contenedor-trabajos .item-trabajo").forEach(row => {
@@ -977,7 +896,6 @@
     const btnAddMat = document.getElementById("btn-add-material");
     if (btnAddMat) btnAddMat.onclick = () => agregarFilaMaterial("", "m²", "", "");
 
-    // Apertura y reset de modales
     const btnAbrirObra = document.getElementById("btn-abrir-modal-obra");
     if (btnAbrirObra) {
       btnAbrirObra.onclick = () => {
@@ -1005,78 +923,11 @@
       };
     }
 
-    const btnAbrirCli = document.getElementById("btn-abrir-modal-cliente");
-    if (btnAbrirCli) {
-      btnAbrirCli.onclick = () => {
-        document.getElementById("edit-cliente-id").value = "";
-        document.getElementById("titulo-modal-cliente").textContent = "Alta de Cliente";
-        document.getElementById("btn-guardar-cliente").textContent = "Guardar Cliente";
-        document.getElementById("input-nombre-cliente").value = "";
-        document.getElementById("input-cif-cliente").value = "";
-        document.getElementById("input-tel-cliente").value = "";
-        document.getElementById("input-email-cliente").value = "";
-        document.getElementById("input-dir-cliente").value = "";
-        document.getElementById("input-notas-cliente").value = "";
-        document.getElementById("modal-cliente").style.display = "flex";
-      };
-    }
-
-    const btnAbrirInc = document.getElementById("btn-abrir-modal-incidencia");
-    if (btnAbrirInc) {
-      btnAbrirInc.onclick = () => {
-        document.getElementById("edit-incidencia-id").value = "";
-        document.getElementById("titulo-modal-incidencia").textContent = "Reportar Incidencia de Obra";
-        document.getElementById("btn-guardar-incidencia").textContent = "Guardar Parte de Intervención";
-        document.getElementById("select-obra-incidencia").value = "";
-        document.getElementById("input-fecha-hora-incidencia").value = "";
-        document.getElementById("input-titulo-incidencia").value = "";
-        document.getElementById("input-desc-incidencia").value = "";
-        document.getElementById("input-dir-incidencia").value = "";
-        document.getElementById("input-tel1-incidencia").value = "";
-        document.getElementById("input-tel2-incidencia").value = "";
-        document.getElementById("input-prioridad-incidencia").value = "Normal";
-        document.getElementById("input-estado-incidencia").value = "Abierta";
-        document.getElementById("select-operario-incidencia").value = "Sin asignar";
-        document.getElementById("input-notas-operario-incidencia").value = "";
-        document.getElementById("input-firmante-nombre").value = "";
-        document.getElementById("input-firmante-dni").value = "";
-        document.getElementById("input-foto-antes-incidencia").value = "";
-        document.getElementById("input-foto-despues-incidencia").value = "";
-        document.getElementById("preview-foto-antes").classList.add("hidden");
-        document.getElementById("preview-foto-despues").classList.add("hidden");
-        fotoAntesBase64 = null;
-        fotoDespuesBase64 = null;
-        window.limpiarCanvasFirma();
-        document.getElementById("contenedor-trabajos-incidencia").innerHTML = "";
-        agregarFilaTrabajoIncidencia("");
-        document.getElementById("modal-incidencia").style.display = "flex";
-      };
-    }
-
-    const btnAbrirOp = document.getElementById("btn-abrir-modal-operario");
-    if (btnAbrirOp) btnAbrirOp.onclick = () => document.getElementById("modal-operario").style.display = "flex";
-
-    const btnAbrirHer = document.getElementById("btn-abrir-modal-herramienta");
-    if (btnAbrirHer) btnAbrirHer.onclick = () => document.getElementById("modal-herramienta").style.display = "flex";
-
-    // Firestore Collections
     const colObras = collection(db, "proyectos");
-    const colClientes = collection(db, "clientes");
-    const colIncidencias = collection(db, "incidencias");
-    const colOperarios = collection(db, "operarios");
-    const colHerramientas = collection(db, "herramientas");
-
     let cacheObras = [];
-    let cacheClientes = [];
-    let cacheIncidencias = [];
-    let cacheOperarios = [];
     let filtroEstadoActual = 'todas';
-    let filtroIncidenciasActual = 'todas';
     let obraSeleccionadaActual = null;
-    let clienteSeleccionadoActual = null;
-    let incidenciaSeleccionadaActual = null;
 
-    // Obras Logic
     window.filtrarObras = (estado, btnElement) => {
       filtroEstadoActual = estado;
       if (btnElement) {
@@ -1195,7 +1046,7 @@
         '<div class="flex flex-col sm:flex-row justify-between items-start gap-2 pb-3 border-b border-slate-200">' +
           '<div>' +
             '<div class="flex items-center gap-2">' +
-              '<span class="px-2 py-0.5 rounded-full text-xs font-semibold ' + badge + '">' + obra.estado + '</span>' +
+              '<span class="px-2.5 py-0.5 rounded-full text-xs font-semibold ' + badge + '">' + obra.estado + '</span>' +
               '<span class="text-xs text-slate-400 font-mono">PRESUPUESTO: PR-' + obra.id.substring(0, 6).toUpperCase() + '</span>' +
             '</div>' +
             '<h1 class="print-title text-xl sm:text-2xl font-extrabold text-slate-900 mt-1">' + obra.nombre + '</h1>' +
@@ -1428,7 +1279,13 @@
       };
     }
 
-    // CLIENTES LOGIC
+    // ========================================================
+    // [BLOQUE 6]: LÓGICA JS: CLIENTES                         -->
+    // ========================================================
+    const colClientes = collection(db, "clientes");
+    let cacheClientes = [];
+    let clienteSeleccionadoActual = null;
+
     function renderizarClientes() {
       const listaClientesEl = document.getElementById("lista-clientes");
       const selectClienteObra = document.getElementById("select-cliente-obra");
@@ -1631,7 +1488,111 @@
       };
     }
 
-    // INCIDENCIAS / PARTES TÉCNICOS LOGIC
+    // ========================================================
+    // [BLOQUE 7]: LÓGICA JS: INCIDENCIAS, FIRMA Y EQUIPO      -->
+    // ========================================================
+    const colIncidencias = collection(db, "incidencias");
+    const colOperarios = collection(db, "operarios");
+    const colHerramientas = collection(db, "herramientas");
+
+    let cacheIncidencias = [];
+    let cacheOperarios = [];
+    let filtroIncidenciasActual = 'todas';
+    let incidenciaSeleccionadaActual = null;
+
+    // Canvas de Firma
+    const canvas = document.getElementById("canvas-firma");
+    let ctx = null;
+    let dibujando = false;
+    let haFirmado = false;
+
+    if (canvas) {
+      ctx = canvas.getContext("2d");
+      ctx.strokeStyle = "#0f172a";
+      ctx.lineWidth = 2.5;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+
+      function obtenerPosicion(e) {
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        if (e.touches && e.touches[0]) {
+          return {
+            x: (e.touches[0].clientX - rect.left) * scaleX,
+            y: (e.touches[0].clientY - rect.top) * scaleY
+          };
+        }
+        return {
+          x: (e.clientX - rect.left) * scaleX,
+          y: (e.clientY - rect.top) * scaleY
+        };
+      }
+
+      function empezarTrazo(e) {
+        dibujando = true;
+        haFirmado = true;
+        const pos = obtenerPosicion(e);
+        ctx.beginPath();
+        ctx.moveTo(pos.x, pos.y);
+        if (e.type && e.type.startsWith("touch")) e.preventDefault();
+      }
+
+      function trazar(e) {
+        if (!dibujando) return;
+        const pos = obtenerPosicion(e);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+        if (e.type && e.type.startsWith("touch")) e.preventDefault();
+      }
+
+      function pararTrazo() {
+        dibujando = false;
+      }
+
+      canvas.addEventListener("mousedown", empezarTrazo);
+      canvas.addEventListener("mousemove", trazar);
+      window.addEventListener("mouseup", pararTrazo);
+
+      canvas.addEventListener("touchstart", empezarTrazo, { passive: false });
+      canvas.addEventListener("touchmove", trazar, { passive: false });
+      canvas.addEventListener("touchend", pararTrazo);
+    }
+
+    window.limpiarCanvasFirma = () => {
+      if (ctx && canvas) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        haFirmado = false;
+      }
+    };
+    const btnLimpiar = document.getElementById("btn-limpiar-firma");
+    if (btnLimpiar) btnLimpiar.onclick = window.limpiarCanvasFirma;
+
+    function agregarFilaTrabajoIncidencia(valor = "") {
+      const c = document.getElementById("contenedor-trabajos-incidencia");
+      if (!c) return;
+      const f = document.createElement("div");
+      f.className = "flex gap-2 items-center item-trabajo-incidencia bg-slate-50 p-2 rounded-lg border border-slate-200";
+      f.innerHTML = '<input type="text" value="' + valor + '" placeholder="Tarea / trabajo técnico..." class="flex-1 px-3 py-1.5 border rounded-lg text-sm outline-none bg-white focus:ring-1 focus:ring-rose-500">' +
+        '<button type="button" class="btn-eliminar-fila text-rose-500 hover:text-rose-700 px-2 font-bold text-lg">&times;</button>';
+      f.querySelector(".btn-eliminar-fila").onclick = () => f.remove();
+      c.appendChild(f);
+    }
+    const btnAddTrabajoInc = document.getElementById("btn-add-trabajo-incidencia");
+    if (btnAddTrabajoInc) btnAddTrabajoInc.onclick = () => agregarFilaTrabajoIncidencia("");
+
+    window.autocompletarDireccionObra = () => {
+      const nomObra = document.getElementById("select-obra-incidencia").value;
+      if (!nomObra) return;
+      const obra = cacheObras.find(o => o.nombre === nomObra);
+      if (obra) {
+        const dirEl = document.getElementById("input-dir-incidencia");
+        const telEl = document.getElementById("input-tel1-incidencia");
+        if (dirEl && !dirEl.value) dirEl.value = obra.direccion || "";
+        if (telEl && !telEl.value) telEl.value = obra.tel1 || "";
+      }
+    };
+
     window.filtrarIncidencias = (estado, btnElement) => {
       filtroIncidenciasActual = estado;
       if (btnElement) {
@@ -1736,11 +1697,13 @@
 
       let firmaHtml = '<p class="text-xs text-slate-400 italic">Pendiente de firma por el cliente al finalizar la intervención.</p>';
       if (inc.firmaCliente) {
+        const nombreSigner = inc.firmanteNombre ? inc.firmanteNombre : 'Cliente / Representante';
+        const dniSigner = inc.firmanteDni ? '<p><strong>DNI/NIF:</strong> ' + inc.firmanteDni + '</p>' : '';
         firmaHtml = '<div>' +
           '<img src="' + inc.firmaCliente + '" alt="Firma del cliente" class="h-24 object-contain bg-white p-2 rounded-lg border">' +
           '<div class="mt-2 text-xs text-slate-700">' +
-            '<p><strong>Firmante:</strong> ' + (inc.firmanteNombre || 'Cliente / Representante') + '</p>' +
-            (inc.firmanteDni ? '<p><strong>DNI/NIF:</strong> ' + inc.firmanteDni + '</p>' : '') +
+            '<p><strong>Firmante:</strong> ' + nombreSigner + '</p>' +
+            dniSigner +
             '<p class="text-[11px] text-emerald-700 font-semibold mt-1">✓ Trabajo revisado y aceptado conforme</p>' +
           '</div>' +
         '</div>';
@@ -1920,7 +1883,7 @@
       };
     }
 
-    // OPERARIOS LOGIC
+    // Operarios y Herramientas (Listeners y Altas)
     const listaOperariosEl = document.getElementById("lista-operarios");
     const contenedorCheckboxes = document.getElementById("contenedor-checkbox-operarios");
     const selectOperarioIncidencia = document.getElementById("select-operario-incidencia");
@@ -1992,7 +1955,6 @@
       };
     }
 
-    // HERRAMIENTAS LOGIC
     const listaHerramientasEl = document.getElementById("lista-herramientas");
     onSnapshot(colHerramientas, (snap) => {
       if (!listaHerramientasEl) return;
@@ -2040,13 +2002,11 @@
       };
     }
 
-    // Borrado universal
     window.borrarRegistro = async (coleccion, id) => {
       if (confirm("¿Estás seguro de que deseas eliminar este registro?")) {
         await deleteDoc(doc(db, coleccion, id));
       }
     };
   </script>
- 
 </body>
 </html>
