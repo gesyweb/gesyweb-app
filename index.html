@@ -78,7 +78,6 @@
         </button>
       </header>
 
-      <!-- Filtros de Obras -->
       <div id="contenedor-filtros-obras" class="mt-4 flex gap-2 overflow-x-auto pb-2">
         <button onclick="window.filtrarObras('todas', this)" class="btn-filtro px-3.5 py-1.5 rounded-full text-xs font-bold transition bg-slate-900 text-white shadow-sm">
           Todas
@@ -186,7 +185,6 @@
         </button>
       </header>
 
-      <!-- Filtros de Incidencias -->
       <div id="contenedor-filtros-incidencias" class="mt-4 flex gap-2 overflow-x-auto pb-2">
         <button onclick="window.filtrarIncidencias('todas', this)" class="btn-filtro-inc px-3.5 py-1.5 rounded-full text-xs font-bold transition bg-slate-900 text-white shadow-sm">
           Todas
@@ -270,7 +268,7 @@
 
   </main>
 
-  <!-- MODAL: CREAR / EDITAR OBRA Y PRESUPUESTO -->
+  <!-- MODAL: OBRA -->
   <div id="modal-obra" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 z-50 overflow-y-auto">
     <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-3xl w-full shadow-2xl my-8 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center pb-4 border-b border-slate-100">
@@ -336,15 +334,15 @@
           <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Teléfonos de Contacto (Hasta 3)</h4>
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1">Teléfono 1 (Principal)</label>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Teléfono 1</label>
               <input id="input-tel1" type="tel" placeholder="611000000" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
             </div>
             <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1">Teléfono 2 (Obra)</label>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Teléfono 2</label>
               <input id="input-tel2" type="tel" placeholder="622000000" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
             </div>
             <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1">Teléfono 3 (Adicional)</label>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Teléfono 3</label>
               <input id="input-tel3" type="tel" placeholder="633000000" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
             </div>
           </div>
@@ -615,11 +613,11 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
             <div>
               <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">Nombre y Apellidos del Firmante</label>
-              <input id="input-firmante-nombre" type="text" placeholder="Ej. Carlos Mendoza (Propietario)" class="w-full px-3 py-1.5 border rounded-lg text-xs outline-none bg-white focus:ring-1 focus:ring-rose-500">
+              <input id="input-firmante-nombre" type="text" placeholder="Ej. Carlos Mendoza (Propietario)" class="w-full px-3.5 py-1.5 border rounded-lg text-xs outline-none bg-white focus:ring-1 focus:ring-rose-500">
             </div>
             <div>
               <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">DNI / NIF del Firmante</label>
-              <input id="input-firmante-dni" type="text" placeholder="Ej. 12345678Z" class="w-full px-3 py-1.5 border rounded-lg text-xs outline-none bg-white focus:ring-1 focus:ring-rose-500">
+              <input id="input-firmante-dni" type="text" placeholder="Ej. 12345678Z" class="w-full px-3.5 py-1.5 border rounded-lg text-xs outline-none bg-white focus:ring-1 focus:ring-rose-500">
             </div>
           </div>
         </div>
@@ -774,7 +772,7 @@
         const pos = obtenerPosicion(e);
         ctx.beginPath();
         ctx.moveTo(pos.x, pos.y);
-        if (e.type.startsWith("touch")) e.preventDefault();
+        if (e.type && e.type.startsWith("touch")) e.preventDefault();
       }
 
       function trazar(e) {
@@ -782,7 +780,7 @@
         const pos = obtenerPosicion(e);
         ctx.lineTo(pos.x, pos.y);
         ctx.stroke();
-        if (e.type.startsWith("touch")) e.preventDefault();
+        if (e.type && e.type.startsWith("touch")) e.preventDefault();
       }
 
       function pararTrazo() {
@@ -824,7 +822,7 @@
         reader.onload = () => {
           archivoBase64Actual = reader.result;
           if (preview) {
-            preview.textContent = `📎 Documento cargado: ${file.name}`;
+            preview.textContent = "📎 Documento cargado: " + file.name;
             preview.classList.remove("hidden");
           }
         };
@@ -847,7 +845,7 @@
         reader.onload = () => {
           fotoAntesBase64 = reader.result;
           if (preview) {
-            preview.textContent = `📷 Foto ANTES cargada: ${file.name}`;
+            preview.textContent = "📷 Foto ANTES cargada: " + file.name;
             preview.classList.remove("hidden");
           }
         };
@@ -870,7 +868,7 @@
         reader.onload = () => {
           fotoDespuesBase64 = reader.result;
           if (preview) {
-            preview.textContent = `✅ Foto DESPUÉS cargada: ${file.name}`;
+            preview.textContent = "✅ Foto DESPUÉS cargada: " + file.name;
             preview.classList.remove("hidden");
           }
         };
@@ -884,10 +882,8 @@
       if (!c) return;
       const f = document.createElement("div");
       f.className = "flex gap-2 items-center item-trabajo-incidencia bg-slate-50 p-2 rounded-lg border border-slate-200";
-      f.innerHTML = `
-        <input type="text" value="${valor}" placeholder="Tarea / trabajo técnico..." class="flex-1 px-3 py-1.5 border rounded-lg text-sm outline-none bg-white focus:ring-1 focus:ring-rose-500">
-        <button type="button" class="btn-eliminar-fila text-rose-500 hover:text-rose-700 px-2 font-bold text-lg">&times;</button>
-      `;
+      f.innerHTML = '<input type="text" value="' + valor + '" placeholder="Tarea / trabajo técnico..." class="flex-1 px-3 py-1.5 border rounded-lg text-sm outline-none bg-white focus:ring-1 focus:ring-rose-500">' +
+        '<button type="button" class="btn-eliminar-fila text-rose-500 hover:text-rose-700 px-2 font-bold text-lg">&times;</button>';
       f.querySelector(".btn-eliminar-fila").onclick = () => f.remove();
       c.appendChild(f);
     }
@@ -932,14 +928,12 @@
       if (!c) return;
       const f = document.createElement("div");
       f.className = "flex gap-2 items-center item-trabajo bg-slate-50 p-2 rounded-lg border border-slate-200";
-      f.innerHTML = `
-        <input type="text" value="${nombre}" placeholder="Descripción de la partida..." class="flex-1 px-3 py-1.5 border rounded-lg text-sm outline-none bg-white focus:ring-1 focus:ring-amber-500">
-        <div class="relative w-28 shrink-0">
-          <input type="number" step="any" value="${precio}" placeholder="0.00" oninput="window.calcularPresupuestoTotal()" class="input-precio-trabajo w-full pl-3 pr-6 py-1.5 border rounded-lg text-sm outline-none bg-white focus:ring-1 focus:ring-amber-500 text-right font-medium">
-          <span class="absolute right-2.5 top-2 text-xs font-bold text-slate-400">€</span>
-        </div>
-        <button type="button" class="btn-eliminar-fila text-rose-500 hover:text-rose-700 px-2 font-bold text-lg">&times;</button>
-      `;
+      f.innerHTML = '<input type="text" value="' + nombre + '" placeholder="Descripción de la partida..." class="flex-1 px-3 py-1.5 border rounded-lg text-sm outline-none bg-white focus:ring-1 focus:ring-amber-500">' +
+        '<div class="relative w-28 shrink-0">' +
+          '<input type="number" step="any" value="' + precio + '" placeholder="0.00" oninput="window.calcularPresupuestoTotal()" class="input-precio-trabajo w-full pl-3 pr-6 py-1.5 border rounded-lg text-sm outline-none bg-white focus:ring-1 focus:ring-amber-500 text-right font-medium">' +
+          '<span class="absolute right-2.5 top-2 text-xs font-bold text-slate-400">€</span>' +
+        '</div>' +
+        '<button type="button" class="btn-eliminar-fila text-rose-500 hover:text-rose-700 px-2 font-bold text-lg">&times;</button>';
       f.querySelector(".btn-eliminar-fila").onclick = () => {
         f.remove();
         window.calcularPresupuestoTotal();
@@ -955,26 +949,24 @@
       if (!c) return;
       const f = document.createElement("div");
       f.className = "grid grid-cols-12 gap-2 items-center item-material bg-slate-50 p-2 rounded-lg border border-slate-200";
-      f.innerHTML = `
-        <input type="text" value="${nombre}" placeholder="Material..." class="col-span-5 px-3 py-1.5 border rounded-lg text-sm outline-none bg-white focus:ring-1 focus:ring-amber-500">
-        <input type="number" step="any" value="${cant}" placeholder="Cant." oninput="window.calcularPresupuestoTotal()" class="input-cant-material col-span-2 px-2 py-1.5 border rounded-lg text-sm outline-none bg-white focus:ring-1 focus:ring-amber-500 text-center">
-        <select class="select-unidad-material col-span-2 px-2 py-1.5 border rounded-lg text-xs outline-none bg-white focus:ring-1 focus:ring-amber-500 font-medium">
-          <option value="m²" ${unidad === 'm²' ? 'selected' : ''}>m²</option>
-          <option value="m" ${unidad === 'm' ? 'selected' : ''}>m</option>
-          <option value="m³" ${unidad === 'm³' ? 'selected' : ''}>m³</option>
-          <option value="ud" ${unidad === 'ud' ? 'selected' : ''}>ud</option>
-          <option value="kg" ${unidad === 'kg' ? 'selected' : ''}>kg</option>
-          <option value="L" ${unidad === 'L' ? 'selected' : ''}>L</option>
-          <option value="sacos" ${unidad === 'sacos' ? 'selected' : ''}>sacos</option>
-          <option value="cajas" ${unidad === 'cajas' ? 'selected' : ''}>cajas</option>
-          <option value="botes" ${unidad === 'botes' ? 'selected' : ''}>botes</option>
-        </select>
-        <div class="relative col-span-2">
-          <input type="number" step="any" value="${precioUnit}" placeholder="€/ud" oninput="window.calcularPresupuestoTotal()" class="input-precio-material w-full pl-2 pr-5 py-1.5 border rounded-lg text-sm outline-none bg-white focus:ring-1 focus:ring-amber-500 text-right font-medium">
-          <span class="absolute right-1.5 top-2 text-[11px] font-bold text-slate-400">€</span>
-        </div>
-        <button type="button" class="col-span-1 btn-eliminar-fila text-rose-500 hover:text-rose-700 font-bold text-center text-lg">&times;</button>
-      `;
+      
+      const unidades = ['m²', 'm', 'm³', 'ud', 'kg', 'L', 'sacos', 'cajas', 'botes'];
+      let opcionesUnidad = '';
+      unidades.forEach(u => {
+        opcionesUnidad += '<option value="' + u + '" ' + (unidad === u ? 'selected' : '') + '>' + u + '</option>';
+      });
+
+      f.innerHTML = '<input type="text" value="' + nombre + '" placeholder="Material..." class="col-span-5 px-3 py-1.5 border rounded-lg text-sm outline-none bg-white focus:ring-1 focus:ring-amber-500">' +
+        '<input type="number" step="any" value="' + cant + '" placeholder="Cant." oninput="window.calcularPresupuestoTotal()" class="input-cant-material col-span-2 px-2 py-1.5 border rounded-lg text-sm outline-none bg-white focus:ring-1 focus:ring-amber-500 text-center">' +
+        '<select class="select-unidad-material col-span-2 px-2 py-1.5 border rounded-lg text-xs outline-none bg-white focus:ring-1 focus:ring-amber-500 font-medium">' +
+          opcionesUnidad +
+        '</select>' +
+        '<div class="relative col-span-2">' +
+          '<input type="number" step="any" value="' + precioUnit + '" placeholder="€/ud" oninput="window.calcularPresupuestoTotal()" class="input-precio-material w-full pl-2 pr-5 py-1.5 border rounded-lg text-sm outline-none bg-white focus:ring-1 focus:ring-amber-500 text-right font-medium">' +
+          '<span class="absolute right-1.5 top-2 text-[11px] font-bold text-slate-400">€</span>' +
+        '</div>' +
+        '<button type="button" class="col-span-1 btn-eliminar-fila text-rose-500 hover:text-rose-700 font-bold text-center text-lg">&times;</button>';
+      
       f.querySelector(".btn-eliminar-fila").onclick = () => {
         f.remove();
         window.calcularPresupuestoTotal();
@@ -1103,42 +1095,35 @@
       const filtradas = filtroEstadoActual === 'todas' ? cacheObras : cacheObras.filter(o => o.estado === filtroEstadoActual);
 
       if (filtradas.length === 0) {
-        listaObrasEl.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay obras registradas bajo este filtro.</p></div>`;
+        listaObrasEl.innerHTML = '<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay obras registradas bajo este filtro.</p></div>';
         return;
       }
 
       filtradas.forEach((d) => {
         let badge = d.estado === "Finalizada" ? "bg-sky-100 text-sky-800" : d.estado === "Presupuestada" ? "bg-amber-100 text-amber-800" : d.estado === "Pausada" ? "bg-orange-100 text-orange-800" : "bg-emerald-100 text-emerald-800";
-        const urlMaps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.direccion || '')}`;
+        const urlMaps = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(d.direccion || '');
+        const precioTxt = d.totalPresupuesto ? Number(d.totalPresupuesto).toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €' : (d.presupuesto ? Number(d.presupuesto).toLocaleString('es-ES') + ' €' : '-');
+        const numPartidas = (d.trabajos ? d.trabajos.length : 0) + (d.materiales ? d.materiales.length : 0);
 
         const card = document.createElement("div");
         card.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between hover:shadow-md transition";
-        card.innerHTML = `
-          <div>
-            <div class="flex justify-between items-start mb-2">
-              <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold ${badge}">${d.estado || 'Presupuestada'}</span>
-              <span class="text-xs font-bold text-slate-800">${d.totalPresupuesto ? Number(d.totalPresupuesto).toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €' : (d.presupuesto ? Number(d.presupuesto).toLocaleString('es-ES') + ' €' : '-')}</span>
-            </div>
-
-            <h3 class="text-base font-bold text-slate-900 leading-snug">${d.nombre}</h3>
-            <p class="text-xs text-slate-500 mt-1">👤 <span class="font-semibold text-indigo-700 cursor-pointer hover:underline" onclick="window.abrirDetalleClientePorNombre('${d.cliente}')">${d.cliente || 'Particular'}</span></p>
-            <p class="text-xs text-slate-500 mt-1">📍 ${d.direccion || 'Sin dirección'}</p>
-
-            <div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-xs text-slate-500">
-              <span>Partidas: <strong>${(d.trabajos ? d.trabajos.length : 0) + (d.materiales ? d.materiales.length : 0)}</strong></span>
-              <span>IVA/IGIC: <strong>${d.tipoImpuesto ? d.tipoImpuesto + '%' : '10%'}</strong></span>
-            </div>
-          </div>
-
-          <div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
-            <a href="${urlMaps}" target="_blank" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold transition">
-              🗺️ Ruta
-            </a>
-            <button onclick="window.abrirDetalleObra('${d.id}')" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg text-xs shadow-sm transition">
-              🔍 Ver Presupuesto / Ficha
-            </button>
-          </div>
-        `;
+        card.innerHTML = '<div>' +
+            '<div class="flex justify-between items-start mb-2">' +
+              '<span class="px-2.5 py-0.5 rounded-full text-xs font-semibold ' + badge + '">' + (d.estado || 'Presupuestada') + '</span>' +
+              '<span class="text-xs font-bold text-slate-800">' + precioTxt + '</span>' +
+            '</div>' +
+            '<h3 class="text-base font-bold text-slate-900 leading-snug">' + d.nombre + '</h3>' +
+            '<p class="text-xs text-slate-500 mt-1">👤 <span class="font-semibold text-indigo-700 cursor-pointer hover:underline" onclick="window.abrirDetalleClientePorNombre(\'' + (d.cliente || '') + '\')">' + (d.cliente || 'Particular') + '</span></p>' +
+            '<p class="text-xs text-slate-500 mt-1">📍 ' + (d.direccion || 'Sin dirección') + '</p>' +
+            '<div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-xs text-slate-500">' +
+              '<span>Partidas: <strong>' + numPartidas + '</strong></span>' +
+              '<span>IVA/IGIC: <strong>' + (d.tipoImpuesto ? d.tipoImpuesto + '%' : '10%') + '</strong></span>' +
+            '</div>' +
+          '</div>' +
+          '<div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">' +
+            '<a href="' + urlMaps + '" target="_blank" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold transition">🗺️ Ruta</a>' +
+            '<button onclick="window.abrirDetalleObra(\'' + d.id + '\')" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg text-xs shadow-sm transition">🔍 Ver Presupuesto / Ficha</button>' +
+          '</div>';
         listaObrasEl.appendChild(card);
       });
     }
@@ -1150,167 +1135,98 @@
 
       const cont = document.getElementById("contenedor-detalle-obra");
       let badge = obra.estado === "Finalizada" ? "bg-sky-100 text-sky-800" : obra.estado === "Presupuestada" ? "bg-amber-100 text-amber-800" : obra.estado === "Pausada" ? "bg-orange-100 text-orange-800" : "bg-emerald-100 text-emerald-800";
-      const urlMaps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(obra.direccion || '')}`;
+      const urlMaps = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(obra.direccion || '');
 
-      const trabajosLi = obra.trabajos && obra.trabajos.length > 0
-        ? obra.trabajos.map((t, idx) => {
-            const nom = typeof t === 'object' ? t.nombre : t;
-            const precio = typeof t === 'object' && t.precio ? Number(t.precio).toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €' : '-';
-            return `
-              <li class="print-item flex items-center justify-between py-1.5 border-b border-slate-100 last:border-0">
-                <div class="flex items-start gap-1.5">
-                  <span class="w-4 h-4 rounded-full bg-amber-100 text-amber-900 text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">${idx+1}</span>
-                  <span class="text-xs sm:text-sm text-slate-800 leading-tight">${nom}</span>
-                </div>
-                <span class="text-xs font-bold text-slate-900 shrink-0 ml-2">${precio}</span>
-              </li>`;
-          }).join('')
-        : '<p class="text-xs text-slate-400 italic">No hay partidas de mano de obra definidas.</p>';
+      let trabajosLi = '<p class="text-xs text-slate-400 italic">No hay partidas de mano de obra definidas.</p>';
+      if (obra.trabajos && obra.trabajos.length > 0) {
+        trabajosLi = obra.trabajos.map((t, idx) => {
+          const nom = typeof t === 'object' ? t.nombre : t;
+          const precio = typeof t === 'object' && t.precio ? Number(t.precio).toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €' : '-';
+          return '<li class="print-item flex items-center justify-between py-1.5 border-b border-slate-100 last:border-0">' +
+            '<div class="flex items-start gap-1.5"><span class="w-4 h-4 rounded-full bg-amber-100 text-amber-900 text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">' + (idx + 1) + '</span><span class="text-xs sm:text-sm text-slate-800 leading-tight">' + nom + '</span></div>' +
+            '<span class="text-xs font-bold text-slate-900 shrink-0 ml-2">' + precio + '</span></li>';
+        }).join('');
+      }
 
-      const materialesLi = obra.materiales && obra.materiales.length > 0
-        ? obra.materiales.map(m => {
-            const displayCant = (m.cantidad ? m.cantidad : '1') + ' ' + (m.unidad ? m.unidad : 'ud');
-            const subtotal = (parseFloat(m.cantidad || 0) * parseFloat(m.precioUnitario || 0));
-            const subtotalTxt = subtotal > 0 ? subtotal.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €' : (m.precioUnitario ? Number(m.precioUnitario).toLocaleString('es-ES') + ' €' : '-');
-            return `
-              <li class="print-item flex items-center justify-between py-1.5 text-xs sm:text-sm text-slate-700 border-b border-slate-100 last:border-0">
-                <div class="truncate mr-2">
-                  <span class="font-medium text-slate-800">${m.nombre || 'Material'}</span>
-                  <span class="text-[11px] text-slate-400 ml-1">(${displayCant} ${m.precioUnitario ? 'a ' + m.precioUnitario + '€' : ''})</span>
-                </div>
-                <span class="text-xs font-bold text-slate-900 shrink-0">${subtotalTxt}</span>
-              </li>`;
-          }).join('')
-        : '<p class="text-xs text-slate-400 italic">No hay partidas de materiales registradas.</p>';
+      let materialesLi = '<p class="text-xs text-slate-400 italic">No hay partidas de materiales registradas.</p>';
+      if (obra.materiales && obra.materiales.length > 0) {
+        materialesLi = obra.materiales.map(m => {
+          const displayCant = (m.cantidad ? m.cantidad : '1') + ' ' + (m.unidad ? m.unidad : 'ud');
+          const subtotal = (parseFloat(m.cantidad || 0) * parseFloat(m.precioUnitario || 0));
+          const subtotalTxt = subtotal > 0 ? subtotal.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €' : (m.precioUnitario ? Number(m.precioUnitario).toLocaleString('es-ES') + ' €' : '-');
+          return '<li class="print-item flex items-center justify-between py-1.5 text-xs sm:text-sm text-slate-700 border-b border-slate-100 last:border-0">' +
+            '<div class="truncate mr-2"><span class="font-medium text-slate-800">' + (m.nombre || 'Material') + '</span><span class="text-[11px] text-slate-400 ml-1">(' + displayCant + (m.precioUnitario ? ' a ' + m.precioUnitario + '€' : '') + ')</span></div>' +
+            '<span class="text-xs font-bold text-slate-900 shrink-0">' + subtotalTxt + '</span></li>';
+        }).join('');
+      }
 
-      const operariosBadges = obra.operarios && obra.operarios.length > 0
-        ? obra.operarios.map(op => `<span class="bg-white border px-2 py-1 rounded text-xs font-semibold text-slate-700 shadow-sm">👷 ${op}</span>`).join('')
-        : '<p class="text-xs text-slate-400 italic">Sin operarios asignados.</p>';
+      let operariosBadges = '<p class="text-xs text-slate-400 italic">Sin operarios asignados.</p>';
+      if (obra.operarios && obra.operarios.length > 0) {
+        operariosBadges = obra.operarios.map(op => '<span class="bg-white border px-2 py-1 rounded text-xs font-semibold text-slate-700 shadow-sm">👷 ' + op + '</span>').join('');
+      }
 
       let adjuntoHtml = '<p class="text-xs text-slate-400 italic">Sin documentos adjuntos.</p>';
       if (obra.archivoAdjunto) {
         const esImg = obra.archivoAdjunto.startsWith("data:image");
         if (esImg) {
-          adjuntoHtml = `
-            <div class="space-y-1">
-              <img src="${obra.archivoAdjunto}" alt="Documento de obra" class="max-h-48 rounded-lg border shadow-sm object-cover">
-              <a href="${obra.archivoAdjunto}" download="${obra.nombreArchivo || 'documento-obra'}" class="no-print inline-block text-xs font-bold text-amber-600 hover:underline">⬇️ Descargar fotografía</a>
-            </div>`;
+          adjuntoHtml = '<div class="space-y-1">' +
+            '<img src="' + obra.archivoAdjunto + '" alt="Documento" class="max-h-48 rounded-lg border shadow-sm object-cover">' +
+            '<a href="' + obra.archivoAdjunto + '" download="' + (obra.nombreArchivo || 'documento-obra') + '" class="no-print inline-block text-xs font-bold text-amber-600 hover:underline">⬇️ Descargar fotografía</a>' +
+            '</div>';
         } else {
-          adjuntoHtml = `
-            <div class="flex items-center gap-2 p-2.5 bg-slate-50 border rounded-lg max-w-md">
-              <span class="text-xl">📄</span>
-              <div class="flex-1 overflow-hidden">
-                <p class="text-xs font-bold text-slate-800 truncate">${obra.nombreArchivo || 'Documento adjunto'}</p>
-              </div>
-              <a href="${obra.archivoAdjunto}" download="${obra.nombreArchivo || 'documento-obra.pdf'}" class="no-print px-2.5 py-1 bg-amber-500 text-slate-950 font-bold rounded text-xs hover:bg-amber-600">Descargar</a>
-            </div>`;
+          adjuntoHtml = '<div class="flex items-center gap-2 p-2.5 bg-slate-50 border rounded-lg max-w-md">' +
+            '<span class="text-xl">📄</span><div class="flex-1 overflow-hidden"><p class="text-xs font-bold text-slate-800 truncate">' + (obra.nombreArchivo || 'Documento adjunto') + '</p></div>' +
+            '<a href="' + obra.archivoAdjunto + '" download="' + (obra.nombreArchivo || 'documento.pdf') + '" class="no-print px-2.5 py-1 bg-amber-500 text-slate-950 font-bold rounded text-xs hover:bg-amber-600">Descargar</a>' +
+            '</div>';
         }
       }
 
       const telefonosArray = [];
-      if (obra.tel1) telefonosArray.push(`<a href="tel:${obra.tel1}" class="text-amber-700 font-bold hover:underline">📞 ${obra.tel1}</a>`);
-      if (obra.tel2) telefonosArray.push(`<a href="tel:${obra.tel2}" class="text-amber-700 font-bold hover:underline">📞 ${obra.tel2}</a>`);
-      if (obra.tel3) telefonosArray.push(`<a href="tel:${obra.tel3}" class="text-amber-700 font-bold hover:underline">📞 ${obra.tel3}</a>`);
+      if (obra.tel1) telefonosArray.push('<a href="tel:' + obra.tel1 + '" class="text-amber-700 font-bold hover:underline">📞 ' + obra.tel1 + '</a>');
+      if (obra.tel2) telefonosArray.push('<a href="tel:' + obra.tel2 + '" class="text-amber-700 font-bold hover:underline">📞 ' + obra.tel2 + '</a>');
+      if (obra.tel3) telefonosArray.push('<a href="tel:' + obra.tel3 + '" class="text-amber-700 font-bold hover:underline">📞 ' + obra.tel3 + '</a>');
 
       const base = Number(obra.baseImponible) || Number(obra.presupuesto) || 0;
       const pct = Number(obra.tipoImpuesto) || 10;
       const totalFinal = Number(obra.totalPresupuesto) || (base * (1 + pct / 100));
       const cuotaImpuesto = totalFinal - base;
 
-      cont.innerHTML = `
-        <div class="card-print bg-white rounded-2xl p-5 sm:p-7 border border-slate-200 shadow-sm space-y-4">
-          <div class="flex flex-col sm:flex-row justify-between items-start gap-2 pb-3 border-b border-slate-200">
-            <div>
-              <div class="flex items-center gap-2">
-                <span class="px-2 py-0.5 rounded-full text-xs font-semibold ${badge}">${obra.estado}</span>
-                <span class="text-xs text-slate-400 font-mono">PRESUPUESTO: PR-${obra.id.substring(0, 6).toUpperCase()}</span>
-              </div>
-              <h1 class="print-title text-xl sm:text-2xl font-extrabold text-slate-900 mt-1">${obra.nombre}</h1>
-              <p class="text-xs sm:text-sm text-slate-500 mt-0.5 flex items-center gap-1.5">
-                📍 ${obra.direccion}
-                <a href="${urlMaps}" target="_blank" class="no-print text-[11px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 hover:bg-amber-100">🗺️ Google Maps</a>
-              </p>
-            </div>
-            <div class="sm:text-right">
-              <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Total Presupuesto (IVA/IGIC inc.)</span>
-              <p class="print-subtitle text-xl sm:text-2xl font-black text-amber-700">${totalFinal.toLocaleString('es-ES', { minimumFractionDigits: 2 })} €</p>
-            </div>
-          </div>
-
-          <div class="print-grid-4col grid grid-cols-2 lg:grid-cols-4 gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs">
-            <div>
-              <span class="text-[10px] font-bold text-slate-400 uppercase">Cliente</span>
-              <p class="font-semibold text-indigo-700 mt-0.5 truncate cursor-pointer hover:underline" onclick="window.abrirDetalleClientePorNombre('${obra.cliente}')">👤 ${obra.cliente || 'Particular'}</p>
-            </div>
-            <div>
-              <span class="text-[10px] font-bold text-slate-400 uppercase">Fecha Prevista</span>
-              <p class="font-medium text-slate-800 mt-0.5">📅 ${obra.fechaInicio || 'A convenir'}</p>
-            </div>
-            <div>
-              <span class="text-[10px] font-bold text-slate-400 uppercase">Fin Estimado</span>
-              <p class="font-medium text-slate-800 mt-0.5">🏁 ${obra.fechaFin || 'Según ritmo'}</p>
-            </div>
-            <div>
-              <span class="text-[10px] font-bold text-slate-400 uppercase">Teléfonos</span>
-              <div class="mt-0.5 flex flex-wrap gap-2 text-xs">
-                ${telefonosArray.length > 0 ? telefonosArray.join('<span class="text-slate-300">|</span>') : '<span class="text-slate-400 italic">Sin teléfonos</span>'}
-              </div>
-            </div>
-          </div>
-
-          ${obra.descripcion ? `
-          <div class="print-section">
-            <h3 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Alcance y Condiciones</h3>
-            <p class="text-xs text-slate-700 leading-relaxed bg-slate-50 p-2.5 rounded-lg border">${obra.descripcion}</p>
-          </div>` : ''}
-
-          <div class="print-section print-grid-2col grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <div class="p-3.5 rounded-xl border border-slate-200 bg-white">
-              <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2 flex items-center justify-between pb-1.5 border-b">
-                <span>📋 Partidas y Mano de Obra</span>
-                <span class="text-[10px] bg-amber-100 text-amber-900 px-1.5 py-0.2 rounded font-semibold">${obra.trabajos ? obra.trabajos.length : 0}</span>
-              </h3>
-              <ul class="space-y-0.5">${trabajosLi}</ul>
-            </div>
-
-            <div class="p-3.5 rounded-xl border border-slate-200 bg-white">
-              <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2 flex items-center justify-between pb-1.5 border-b">
-                <span>📦 Materiales Presupuestados</span>
-                <span class="text-[10px] bg-slate-200 text-slate-800 px-1.5 py-0.2 rounded font-semibold">${obra.materiales ? obra.materiales.length : 0}</span>
-              </h3>
-              <ul class="space-y-0.5">${materialesLi}</ul>
-            </div>
-          </div>
-
-          <div class="print-section bg-slate-50 p-4 rounded-xl border border-slate-200 flex justify-end">
-            <div class="w-full sm:w-72 space-y-1.5 text-xs">
-              <div class="flex justify-between text-slate-600">
-                <span>Base Imponible (Neto):</span>
-                <span class="font-bold text-slate-800">${base.toLocaleString('es-ES', { minimumFractionDigits: 2 })} €</span>
-              </div>
-              <div class="flex justify-between text-slate-600 pb-1.5 border-b border-slate-200">
-                <span>Impuesto (${pct}% IVA/IGIC):</span>
-                <span class="font-bold text-slate-800">${cuotaImpuesto.toLocaleString('es-ES', { minimumFractionDigits: 2 })} €</span>
-              </div>
-              <div class="flex justify-between text-sm font-black text-amber-800 pt-1">
-                <span>TOTAL PRESUPUESTO:</span>
-                <span>${totalFinal.toLocaleString('es-ES', { minimumFractionDigits: 2 })} €</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="print-section">
-            <h3 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Equipo de Trabajo Asignado</h3>
-            <div class="flex flex-wrap gap-1.5">${operariosBadges}</div>
-          </div>
-
-          <div class="print-section pt-3 border-t border-slate-200">
-            <h3 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Documentación / Licencia</h3>
-            ${adjuntoHtml}
-          </div>
-        </div>
-      `;
+      cont.innerHTML = '<div class="card-print bg-white rounded-2xl p-5 sm:p-7 border border-slate-200 shadow-sm space-y-4">' +
+        '<div class="flex flex-col sm:flex-row justify-between items-start gap-2 pb-3 border-b border-slate-200">' +
+          '<div>' +
+            '<div class="flex items-center gap-2">' +
+              '<span class="px-2 py-0.5 rounded-full text-xs font-semibold ' + badge + '">' + obra.estado + '</span>' +
+              '<span class="text-xs text-slate-400 font-mono">PRESUPUESTO: PR-' + obra.id.substring(0, 6).toUpperCase() + '</span>' +
+            '</div>' +
+            '<h1 class="print-title text-xl sm:text-2xl font-extrabold text-slate-900 mt-1">' + obra.nombre + '</h1>' +
+            '<p class="text-xs sm:text-sm text-slate-500 mt-0.5 flex items-center gap-1.5">📍 ' + obra.direccion + ' <a href="' + urlMaps + '" target="_blank" class="no-print text-[11px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 hover:bg-amber-100">🗺️ Google Maps</a></p>' +
+          '</div>' +
+          '<div class="sm:text-right">' +
+            '<span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Total Presupuesto (IVA/IGIC inc.)</span>' +
+            '<p class="print-subtitle text-xl sm:text-2xl font-black text-amber-700">' + totalFinal.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €</p>' +
+          '</div>' +
+        '</div>' +
+        '<div class="print-grid-4col grid grid-cols-2 lg:grid-cols-4 gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs">' +
+          '<div><span class="text-[10px] font-bold text-slate-400 uppercase">Cliente</span><p class="font-semibold text-indigo-700 mt-0.5 truncate cursor-pointer hover:underline" onclick="window.abrirDetalleClientePorNombre(\'' + (obra.cliente || '') + '\')">👤 ' + (obra.cliente || 'Particular') + '</p></div>' +
+          '<div><span class="text-[10px] font-bold text-slate-400 uppercase">Fecha Prevista</span><p class="font-medium text-slate-800 mt-0.5">📅 ' + (obra.fechaInicio || 'A convenir') + '</p></div>' +
+          '<div><span class="text-[10px] font-bold text-slate-400 uppercase">Fin Estimado</span><p class="font-medium text-slate-800 mt-0.5">🏁 ' + (obra.fechaFin || 'Según ritmo') + '</p></div>' +
+          '<div><span class="text-[10px] font-bold text-slate-400 uppercase">Teléfonos</span><div class="mt-0.5 flex flex-wrap gap-2 text-xs">' + (telefonosArray.length > 0 ? telefonosArray.join('<span class="text-slate-300">|</span>') : '<span class="text-slate-400 italic">Sin teléfonos</span>') + '</div></div>' +
+        '</div>' +
+        (obra.descripcion ? '<div class="print-section"><h3 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Alcance y Condiciones</h3><p class="text-xs text-slate-700 leading-relaxed bg-slate-50 p-2.5 rounded-lg border">' + obra.descripcion + '</p></div>' : '') +
+        '<div class="print-section print-grid-2col grid grid-cols-1 lg:grid-cols-2 gap-4">' +
+          '<div class="p-3.5 rounded-xl border border-slate-200 bg-white"><h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2 flex items-center justify-between pb-1.5 border-b"><span>📋 Partidas y Mano de Obra</span><span class="text-[10px] bg-amber-100 text-amber-900 px-1.5 py-0.2 rounded font-semibold">' + (obra.trabajos ? obra.trabajos.length : 0) + '</span></h3><ul class="space-y-0.5">' + trabajosLi + '</ul></div>' +
+          '<div class="p-3.5 rounded-xl border border-slate-200 bg-white"><h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2 flex items-center justify-between pb-1.5 border-b"><span>📦 Materiales Presupuestados</span><span class="text-[10px] bg-slate-200 text-slate-800 px-1.5 py-0.2 rounded font-semibold">' + (obra.materiales ? obra.materiales.length : 0) + '</span></h3><ul class="space-y-0.5">' + materialesLi + '</ul></div>' +
+        '</div>' +
+        '<div class="print-section bg-slate-50 p-4 rounded-xl border border-slate-200 flex justify-end">' +
+          '<div class="w-full sm:w-72 space-y-1.5 text-xs">' +
+            '<div class="flex justify-between text-slate-600"><span>Base Imponible (Neto):</span><span class="font-bold text-slate-800">' + base.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €</span></div>' +
+            '<div class="flex justify-between text-slate-600 pb-1.5 border-b border-slate-200"><span>Impuesto (' + pct + '% IVA/IGIC):</span><span class="font-bold text-slate-800">' + cuotaImpuesto.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €</span></div>' +
+            '<div class="flex justify-between text-sm font-black text-amber-800 pt-1"><span>TOTAL PRESUPUESTO:</span><span>' + totalFinal.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €</span></div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="print-section"><h3 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Equipo de Trabajo Asignado</h3><div class="flex flex-wrap gap-1.5">' + operariosBadges + '</div></div>' +
+        '<div class="print-section pt-3 border-t border-slate-200"><h3 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Documentación / Licencia</h3>' + adjuntoHtml + '</div>' +
+      '</div>';
 
       cambiarVista('detalleObra');
     };
@@ -1341,7 +1257,7 @@
         nombreArchivoActual = d.nombreArchivo || null;
         const prev = document.getElementById("preview-archivo-seleccionado");
         if (nombreArchivoActual) {
-          prev.textContent = `📎 Documento guardado: ${nombreArchivoActual}`;
+          prev.textContent = "📎 Documento guardado: " + nombreArchivoActual;
           prev.classList.remove("hidden");
         } else {
           prev.classList.add("hidden");
@@ -1521,7 +1437,7 @@
       if (selectClienteObra) selectClienteObra.innerHTML = '<option value="Particular / Sin asignar">Particular / Sin asignar</option>';
 
       if (cacheClientes.length === 0) {
-        listaClientesEl.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay clientes dados de alta todavía.</p></div>`;
+        listaClientesEl.innerHTML = '<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay clientes dados de alta todavía.</p></div>';
         return;
       }
 
@@ -1529,7 +1445,7 @@
         if (selectClienteObra) {
           const opt = document.createElement("option");
           opt.value = d.nombre;
-          opt.textContent = d.nombre + (d.telefono ? ` (${d.telefono})` : '');
+          opt.textContent = d.nombre + (d.telefono ? ' (' + d.telefono + ')' : '');
           selectClienteObra.appendChild(opt);
         }
 
@@ -1538,40 +1454,26 @@
 
         const card = document.createElement("div");
         card.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between hover:shadow-md transition";
-        card.innerHTML = `
-          <div>
-            <div class="flex justify-between items-start mb-2">
-              <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">
-                ${d.cif ? d.cif : 'Cliente'}
-              </span>
-              <span class="text-xs font-bold text-slate-600">
-                ${obrasDelCliente.length} obra${obrasDelCliente.length === 1 ? '' : 's'}
-              </span>
-            </div>
-
-            <h3 class="text-base font-bold text-slate-900 leading-snug">${d.nombre}</h3>
-            
-            <div class="mt-3 space-y-1 text-xs text-slate-600">
-              <p>📞 <a href="tel:${d.telefono}" class="text-indigo-600 font-bold hover:underline">${d.telefono}</a></p>
-              ${d.email ? `<p>✉️ <a href="mailto:${d.email}" class="hover:underline">${d.email}</a></p>` : ''}
-              ${d.direccion ? `<p class="truncate">📍 ${d.direccion}</p>` : ''}
-            </div>
-
-            <div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-xs">
-              <span class="text-slate-400">Total presupuestado:</span>
-              <span class="font-bold text-slate-800">${totalFacturado > 0 ? totalFacturado.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €' : '-'}</span>
-            </div>
-          </div>
-
-          <div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
-            <a href="tel:${d.telefono}" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold transition">
-              📞 Llamar
-            </a>
-            <button onclick="window.abrirDetalleCliente('${d.id}')" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg text-xs shadow-sm transition">
-              🔍 Ver Ficha Completa
-            </button>
-          </div>
-        `;
+        card.innerHTML = '<div>' +
+            '<div class="flex justify-between items-start mb-2">' +
+              '<span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">' + (d.cif ? d.cif : 'Cliente') + '</span>' +
+              '<span class="text-xs font-bold text-slate-600">' + obrasDelCliente.length + ' obra' + (obrasDelCliente.length === 1 ? '' : 's') + '</span>' +
+            '</div>' +
+            '<h3 class="text-base font-bold text-slate-900 leading-snug">' + d.nombre + '</h3>' +
+            '<div class="mt-3 space-y-1 text-xs text-slate-600">' +
+              '<p>📞 <a href="tel:' + d.telefono + '" class="text-indigo-600 font-bold hover:underline">' + d.telefono + '</a></p>' +
+              (d.email ? '<p>✉️ <a href="mailto:' + d.email + '" class="hover:underline">' + d.email + '</a></p>' : '') +
+              (d.direccion ? '<p class="truncate">📍 ' + d.direccion + '</p>' : '') +
+            '</div>' +
+            '<div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-xs">' +
+              '<span class="text-slate-400">Total presupuestado:</span>' +
+              '<span class="font-bold text-slate-800">' + (totalFacturado > 0 ? totalFacturado.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €' : '-') + '</span>' +
+            '</div>' +
+          '</div>' +
+          '<div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">' +
+            '<a href="tel:' + d.telefono + '" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold transition">📞 Llamar</a>' +
+            '<button onclick="window.abrirDetalleCliente(\'' + d.id + '\')" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg text-xs shadow-sm transition">🔍 Ver Ficha Completa</button>' +
+          '</div>';
         listaClientesEl.appendChild(card);
       });
     }
@@ -1597,82 +1499,55 @@
       const cont = document.getElementById("contenedor-detalle-cliente");
       const obrasDelCliente = cacheObras.filter(o => o.cliente === cliente.nombre);
       const totalPresupuesto = obrasDelCliente.reduce((acc, curr) => acc + (Number(curr.totalPresupuesto) || Number(curr.presupuesto) || 0), 0);
-      const urlMaps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(cliente.direccion || '')}`;
+      const urlMaps = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(cliente.direccion || '');
 
-      const obrasListHtml = obrasDelCliente.length > 0
-        ? obrasDelCliente.map(o => {
-            let badge = o.estado === "Finalizada" ? "bg-sky-100 text-sky-800" : o.estado === "Presupuestada" ? "bg-amber-100 text-amber-800" : o.estado === "Pausada" ? "bg-orange-100 text-orange-800" : "bg-emerald-100 text-emerald-800";
-            return `
-              <div class="flex items-center justify-between p-3.5 bg-slate-50 border rounded-xl hover:bg-amber-50/50 transition cursor-pointer" onclick="window.abrirDetalleObra('${o.id}')">
-                <div class="space-y-0.5">
-                  <div class="flex items-center gap-2">
-                    <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ${badge}">${o.estado || 'Presupuestada'}</span>
-                    <h4 class="text-sm font-bold text-slate-900">${o.nombre}</h4>
-                  </div>
-                  <p class="text-xs text-slate-500">📍 ${o.direccion || 'Sin dirección'}</p>
-                </div>
-                <div class="text-right">
-                  <span class="text-sm font-black text-slate-800">${(Number(o.totalPresupuesto) || Number(o.presupuesto) || 0).toLocaleString('es-ES', { minimumFractionDigits: 2 })} €</span>
-                  <p class="text-[11px] text-amber-600 font-semibold hover:underline">Ver Presupuesto →</p>
-                </div>
-              </div>
-            `;
-          }).join('')
-        : '<p class="text-xs text-slate-400 italic bg-slate-50 p-4 rounded-xl border">Este cliente aún no tiene ninguna obra o presupuesto vinculado.</p>';
+      let obrasListHtml = '<p class="text-xs text-slate-400 italic bg-slate-50 p-4 rounded-xl border">Este cliente aún no tiene ninguna obra o presupuesto vinculado.</p>';
+      if (obrasDelCliente.length > 0) {
+        obrasListHtml = obrasDelCliente.map(o => {
+          let badge = o.estado === "Finalizada" ? "bg-sky-100 text-sky-800" : o.estado === "Presupuestada" ? "bg-amber-100 text-amber-800" : o.estado === "Pausada" ? "bg-orange-100 text-orange-800" : "bg-emerald-100 text-emerald-800";
+          return '<div class="flex items-center justify-between p-3.5 bg-slate-50 border rounded-xl hover:bg-amber-50/50 transition cursor-pointer" onclick="window.abrirDetalleObra(\'' + o.id + '\')">' +
+              '<div class="space-y-0.5">' +
+                '<div class="flex items-center gap-2"><span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ' + badge + '">' + (o.estado || 'Presupuestada') + '</span><h4 class="text-sm font-bold text-slate-900">' + o.nombre + '</h4></div>' +
+                '<p class="text-xs text-slate-500">📍 ' + (o.direccion || 'Sin dirección') + '</p>' +
+              '</div>' +
+              '<div class="text-right">' +
+                '<span class="text-sm font-black text-slate-800">' + (Number(o.totalPresupuesto) || Number(o.presupuesto) || 0).toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €</span>' +
+                '<p class="text-[11px] text-amber-600 font-semibold hover:underline">Ver Presupuesto →</p>' +
+              '</div>' +
+            '</div>';
+        }).join('');
+      }
 
-      cont.innerHTML = `
-        <div class="card-print bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
-          <div class="flex flex-col sm:flex-row justify-between items-start gap-4 pb-4 border-b border-slate-200">
-            <div>
-              <div class="flex items-center gap-2">
-                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">
-                  ${cliente.cif ? 'CIF/NIF: ' + cliente.cif : 'Cliente Registrado'}
-                </span>
-                <span class="text-xs text-slate-400 font-mono">ID: ${cliente.id.substring(0, 6).toUpperCase()}</span>
-              </div>
-              <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">${cliente.nombre}</h1>
-              <p class="text-xs sm:text-sm text-slate-500 mt-1 flex items-center gap-2">
-                📍 ${cliente.direccion || 'Sin dirección fiscal'}
-                ${cliente.direccion ? `<a href="${urlMaps}" target="_blank" class="no-print text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200 hover:bg-indigo-100">🗺️ Abrir Maps</a>` : ''}
-              </p>
-            </div>
-            <div class="sm:text-right">
-              <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Volumen Contratado</span>
-              <p class="text-2xl font-black text-slate-900 mt-0.5">${totalPresupuesto > 0 ? totalPresupuesto.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €' : '0,00 €'}</p>
-              <p class="text-xs text-slate-500">${obrasDelCliente.length} proyecto${obrasDelCliente.length === 1 ? '' : 's'} en total</p>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
-            <div>
-              <span class="text-xs font-bold text-slate-400 uppercase">Teléfono</span>
-              <p class="mt-1"><a href="tel:${cliente.telefono}" class="text-sm font-bold text-indigo-600 hover:underline inline-flex items-center gap-1.5">📞 ${cliente.telefono}</a></p>
-            </div>
-            <div>
-              <span class="text-xs font-bold text-slate-400 uppercase">Correo Electrónico</span>
-              <p class="mt-1">${cliente.email ? `<a href="mailto:${cliente.email}" class="text-sm font-semibold text-slate-800 hover:underline truncate inline-flex items-center gap-1.5">✉️ ${cliente.email}</a>` : '<span class="text-xs text-slate-400 italic">Sin correo</span>'}</p>
-            </div>
-            <div>
-              <span class="text-xs font-bold text-slate-400 uppercase">Documento Fiscal</span>
-              <p class="text-sm font-semibold text-slate-800 mt-1">🆔 ${cliente.cif || 'No indicado'}</p>
-            </div>
-          </div>
-
-          ${cliente.notas ? `
-          <div>
-            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Notas Comerciales</h3>
-            <div class="p-4 bg-amber-50/60 rounded-xl border border-amber-200 text-xs text-slate-700 leading-relaxed italic">"${cliente.notas}"</div>
-          </div>` : ''}
-
-          <div>
-            <div class="flex justify-between items-center mb-3">
-              <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider">Obras y Presupuestos Asociados (${obrasDelCliente.length})</h3>
-              <button onclick="document.getElementById('btn-abrir-modal-obra').click(); document.getElementById('select-cliente-obra').value='${cliente.nombre}';" class="text-xs font-bold text-amber-700 hover:underline">+ Crear presupuesto para este cliente</button>
-            </div>
-            <div class="space-y-2.5">${obrasListHtml}</div>
-          </div>
-        </div>
-      `;
+      cont.innerHTML = '<div class="card-print bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">' +
+        '<div class="flex flex-col sm:flex-row justify-between items-start gap-4 pb-4 border-b border-slate-200">' +
+          '<div>' +
+            '<div class="flex items-center gap-2">' +
+              '<span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">' + (cliente.cif ? 'CIF/NIF: ' + cliente.cif : 'Cliente Registrado') + '</span>' +
+              '<span class="text-xs text-slate-400 font-mono">ID: ' + cliente.id.substring(0, 6).toUpperCase() + '</span>' +
+            '</div>' +
+            '<h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">' + cliente.nombre + '</h1>' +
+            '<p class="text-xs sm:text-sm text-slate-500 mt-1 flex items-center gap-2">📍 ' + (cliente.direccion || 'Sin dirección fiscal') + (cliente.direccion ? ' <a href="' + urlMaps + '" target="_blank" class="no-print text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200 hover:bg-indigo-100">🗺️ Abrir Maps</a>' : '') + '</p>' +
+          '</div>' +
+          '<div class="sm:text-right">' +
+            '<span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Volumen Contratado</span>' +
+            '<p class="text-2xl font-black text-slate-900 mt-0.5">' + (totalPresupuesto > 0 ? totalPresupuesto.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €' : '0,00 €') + '</p>' +
+            '<p class="text-xs text-slate-500">' + obrasDelCliente.length + ' proyecto' + (obrasDelCliente.length === 1 ? '' : 's') + ' en total</p>' +
+          '</div>' +
+        '</div>' +
+        '<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200">' +
+          '<div><span class="text-xs font-bold text-slate-400 uppercase">Teléfono</span><p class="mt-1"><a href="tel:' + cliente.telefono + '" class="text-sm font-bold text-indigo-600 hover:underline inline-flex items-center gap-1.5">📞 ' + cliente.telefono + '</a></p></div>' +
+          '<div><span class="text-xs font-bold text-slate-400 uppercase">Correo Electrónico</span><p class="mt-1">' + (cliente.email ? '<a href="mailto:' + cliente.email + '" class="text-sm font-semibold text-slate-800 hover:underline truncate inline-flex items-center gap-1.5">✉️ ' + cliente.email + '</a>' : '<span class="text-xs text-slate-400 italic">Sin correo</span>') + '</p></div>' +
+          '<div><span class="text-xs font-bold text-slate-400 uppercase">Documento Fiscal</span><p class="text-sm font-semibold text-slate-800 mt-1">🆔 ' + (cliente.cif || 'No indicado') + '</p></div>' +
+        '</div>' +
+        (cliente.notas ? '<div class="p-4 bg-amber-50/60 rounded-xl border border-amber-200 text-xs text-slate-700 leading-relaxed italic">"' + cliente.notas + '"</div>' : '') +
+        '<div>' +
+          '<div class="flex justify-between items-center mb-3">' +
+            '<h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider">Obras y Presupuestos Asociados (' + obrasDelCliente.length + ')</h3>' +
+            '<button onclick="document.getElementById(\'btn-abrir-modal-obra\').click(); document.getElementById(\'select-cliente-obra\').value=\'' + cliente.nombre + '\';" class="text-xs font-bold text-amber-700 hover:underline">+ Crear presupuesto para este cliente</button>' +
+          '</div>' +
+          '<div class="space-y-2.5">' + obrasListHtml + '</div>' +
+        '</div>' +
+      '</div>';
 
       cambiarVista('detalleCliente');
     };
@@ -1711,7 +1586,7 @@
     const btnBorrarCliAct = document.getElementById("btn-borrar-cliente-actual");
     if (btnBorrarCliAct) {
       btnBorrarCliAct.onclick = async () => {
-        if (clienteSeleccionadoActual && confirm(`¿Deseas eliminar a ${clienteSeleccionadoActual.nombre}?`)) {
+        if (clienteSeleccionadoActual && confirm("¿Deseas eliminar a " + clienteSeleccionadoActual.nombre + "?")) {
           await deleteDoc(doc(db, "clientes", clienteSeleccionadoActual.id));
           cambiarVista('clientes');
         }
@@ -1775,47 +1650,37 @@
       const filtradas = filtroIncidenciasActual === 'todas' ? cacheIncidencias : cacheIncidencias.filter(i => i.estado === filtroIncidenciasActual);
 
       if (filtradas.length === 0) {
-        listaIncidenciasEl.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay incidencias bajo este filtro.</p></div>`;
+        listaIncidenciasEl.innerHTML = '<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay incidencias bajo este filtro.</p></div>';
         return;
       }
 
       filtradas.forEach((d) => {
         let badgeUrgencia = d.prioridad === "Urgente" ? "bg-rose-100 text-rose-800" : d.prioridad === "Baja" ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-800";
         let badgeEstado = d.estado === "Resuelta" ? "bg-emerald-100 text-emerald-800" : d.estado === "En curso" ? "bg-amber-100 text-amber-800" : "bg-rose-100 text-rose-800";
-        const urlMaps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.direccion || '')}`;
+        const urlMaps = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(d.direccion || '');
 
         const card = document.createElement("div");
         card.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between hover:shadow-md transition";
-        card.innerHTML = `
-          <div>
-            <div class="flex justify-between items-center mb-2">
-              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold ${badgeUrgencia}">${d.prioridad}</span>
-              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${badgeEstado}">${d.estado || 'Abierta'}</span>
-            </div>
-
-            <p class="text-xs font-bold text-amber-700 truncate mt-1">🏗️ ${d.obra || 'Obra general'}</p>
-            <h3 class="text-base font-bold text-slate-900 leading-snug mt-1">${d.titulo}</h3>
-            
-            ${d.fechaHora ? `<p class="text-xs text-indigo-700 font-semibold mt-1">📅 Cita: ${d.fechaHora.replace('T', ' ')}</p>` : ''}
-            ${d.direccion ? `<p class="text-xs text-slate-500 mt-1 truncate">📍 ${d.direccion}</p>` : ''}
-            
-            <p class="text-xs text-slate-500 mt-2 line-clamp-2">${d.descripcion || 'Sin descripción detallada.'}</p>
-
-            ${d.fotoAntes ? `<div class="mt-3"><img src="${d.fotoAntes}" alt="Foto avería" class="h-20 w-full object-cover rounded-lg border"></div>` : ''}
-
-            <div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-xs text-slate-500">
-              <span>Responsable: <strong>${d.operario || 'Sin asignar'}</strong></span>
-              <span>${d.firmaCliente ? '✍️ Firmado' : '⏳ Sin firma'}</span>
-            </div>
-          </div>
-
-          <div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
-            ${d.direccion ? `<a href="${urlMaps}" target="_blank" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold transition">🗺️ Ruta</a>` : `<span></span>`}
-            <button onclick="window.abrirDetalleIncidencia('${d.id}')" class="px-3 py-1.5 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-lg text-xs shadow-sm transition">
-              🔍 Ver Parte Completo
-            </button>
-          </div>
-        `;
+        card.innerHTML = '<div>' +
+            '<div class="flex justify-between items-center mb-2">' +
+              '<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold ' + badgeUrgencia + '">' + d.prioridad + '</span>' +
+              '<span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold ' + badgeEstado + '">' + (d.estado || 'Abierta') + '</span>' +
+            '</div>' +
+            '<p class="text-xs font-bold text-amber-700 truncate mt-1">🏗️ ' + (d.obra || 'Obra general') + '</p>' +
+            '<h3 class="text-base font-bold text-slate-900 leading-snug mt-1">' + d.titulo + '</h3>' +
+            (d.fechaHora ? '<p class="text-xs text-indigo-700 font-semibold mt-1">📅 Cita: ' + d.fechaHora.replace('T', ' ') + '</p>' : '') +
+            (d.direccion ? '<p class="text-xs text-slate-500 mt-1 truncate">📍 ' + d.direccion + '</p>' : '') +
+            '<p class="text-xs text-slate-500 mt-2 line-clamp-2">' + (d.descripcion || 'Sin descripción detallada.') + '</p>' +
+            (d.fotoAntes ? '<div class="mt-3"><img src="' + d.fotoAntes + '" alt="Foto avería" class="h-20 w-full object-cover rounded-lg border"></div>' : '') +
+            '<div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-xs text-slate-500">' +
+              '<span>Responsable: <strong>' + (d.operario || 'Sin asignar') + '</strong></span>' +
+              '<span>' + (d.firmaCliente ? '✍️ Firmado' : '⏳ Sin firma') + '</span>' +
+            '</div>' +
+          '</div>' +
+          '<div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">' +
+            (d.direccion ? '<a href="' + urlMaps + '" target="_blank" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold transition">🗺️ Ruta</a>' : '<span></span>') +
+            '<button onclick="window.abrirDetalleIncidencia(\'' + d.id + '\')" class="px-3 py-1.5 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-lg text-xs shadow-sm transition">🔍 Ver Parte Completo</button>' +
+          '</div>';
         listaIncidenciasEl.appendChild(card);
       });
     }
@@ -1841,115 +1706,79 @@
       const cont = document.getElementById("contenedor-detalle-incidencia");
       let badgeUrgencia = inc.prioridad === "Urgente" ? "bg-rose-100 text-rose-800" : inc.prioridad === "Baja" ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-800";
       let badgeEstado = inc.estado === "Resuelta" ? "bg-emerald-100 text-emerald-800" : inc.estado === "En curso" ? "bg-amber-100 text-amber-800" : "bg-rose-100 text-rose-800";
-      const urlMaps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(inc.direccion || '')}`;
+      const urlMaps = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(inc.direccion || '');
 
-      const tareasLi = inc.trabajos && inc.trabajos.length > 0
-        ? inc.trabajos.map((t, idx) => `<li class="print-item flex items-start gap-2 py-1 border-b border-slate-100 last:border-0"><span class="w-4 h-4 rounded-full bg-rose-100 text-rose-900 text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">${idx+1}</span><span class="text-xs sm:text-sm text-slate-800 leading-tight">${t}</span></li>`).join('')
-        : '<p class="text-xs text-slate-400 italic">No se han desglosado tareas específicas.</p>';
+      let tareasLi = '<p class="text-xs text-slate-400 italic">No se han desglosado tareas específicas.</p>';
+      if (inc.trabajos && inc.trabajos.length > 0) {
+        tareasLi = inc.trabajos.map((t, idx) => {
+          return '<li class="print-item flex items-start gap-2 py-1 border-b border-slate-100 last:border-0">' +
+            '<span class="w-4 h-4 rounded-full bg-rose-100 text-rose-900 text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">' + (idx + 1) + '</span>' +
+            '<span class="text-xs sm:text-sm text-slate-800 leading-tight">' + t + '</span>' +
+            '</li>';
+        }).join('');
+      }
 
       const telefonosArray = [];
-      if (inc.tel1) telefonosArray.push(`<a href="tel:${inc.tel1}" class="text-rose-700 font-bold hover:underline">📞 ${inc.tel1}</a>`);
-      if (inc.tel2) telefonosArray.push(`<a href="tel:${inc.tel2}" class="text-rose-700 font-bold hover:underline">📞 ${inc.tel2}</a>`);
+      if (inc.tel1) telefonosArray.push('<a href="tel:' + inc.tel1 + '" class="text-rose-700 font-bold hover:underline">📞 ' + inc.tel1 + '</a>');
+      if (inc.tel2) telefonosArray.push('<a href="tel:' + inc.tel2 + '" class="text-rose-700 font-bold hover:underline">📞 ' + inc.tel2 + '</a>');
 
-      cont.innerHTML = `
-        <div class="card-print bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
-          <div class="flex flex-col sm:flex-row justify-between items-start gap-4 pb-4 border-b border-slate-200">
-            <div>
-              <div class="flex items-center gap-2">
-                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold ${badgeUrgencia}">${inc.prioridad}</span>
-                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold ${badgeEstado}">${inc.estado || 'Abierta'}</span>
-                <span class="text-xs text-slate-400 font-mono">PARTE: INC-${inc.id.substring(0, 6).toUpperCase()}</span>
-              </div>
-              <h1 class="print-title text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">${inc.titulo}</h1>
-              <p class="text-sm font-semibold text-amber-700 mt-1">🏗️ Obra: ${inc.obra}</p>
-              ${inc.direccion ? `<p class="text-xs text-slate-500 mt-0.5 flex items-center gap-1.5">📍 ${inc.direccion} <a href="${urlMaps}" target="_blank" class="no-print text-xs font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded border border-rose-200 hover:bg-rose-100">🗺️ Cómo llegar</a></p>` : ''}
-            </div>
-            <div class="sm:text-right">
-              <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Técnico / Responsable</span>
-              <p class="text-base font-bold text-slate-900 mt-0.5">👷 ${inc.operario || 'Sin asignar'}</p>
-              ${inc.fechaHora ? `<p class="text-xs font-bold text-indigo-700 mt-1">📅 ${inc.fechaHora.replace('T', ' ')} h</p>` : ''}
-            </div>
-          </div>
+      let fotoAntesHtml = '<p class="text-xs text-slate-400 italic py-6 text-center">Sin fotografía inicial.</p>';
+      if (inc.fotoAntes) {
+        fotoAntesHtml = '<img src="' + inc.fotoAntes + '" alt="Foto antes" class="max-h-56 w-full object-cover rounded-lg border shadow-sm">' +
+          '<a href="' + inc.fotoAntes + '" download="foto-antes-' + inc.id.substring(0, 5) + '" class="no-print inline-block text-[11px] font-bold text-rose-600 hover:underline mt-1.5">⬇️ Descargar foto inicial</a>';
+      }
 
-          <div class="print-grid-4col grid grid-cols-2 lg:grid-cols-4 gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs">
-            <div>
-              <span class="text-[10px] font-bold text-slate-400 uppercase">Estado</span>
-              <p class="text-sm font-bold text-slate-800 mt-0.5">${inc.estado || 'Abierta'}</p>
-            </div>
-            <div>
-              <span class="text-[10px] font-bold text-slate-400 uppercase">Prioridad</span>
-              <p class="text-sm font-bold text-slate-800 mt-0.5">${inc.prioridad}</p>
-            </div>
-            <div>
-              <span class="text-[10px] font-bold text-slate-400 uppercase">Cita Asignada</span>
-              <p class="text-sm font-semibold text-slate-800 mt-0.5">${inc.fechaHora ? inc.fechaHora.replace('T', ' ') : 'Sin programar'}</p>
-            </div>
-            <div>
-              <span class="text-[10px] font-bold text-slate-400 uppercase">Teléfonos de Contacto</span>
-              <div class="mt-0.5 flex flex-wrap gap-2 text-xs">
-                ${telefonosArray.length > 0 ? telefonosArray.join('<span class="text-slate-300">|</span>') : '<span class="text-slate-400 italic">Sin teléfonos</span>'}
-              </div>
-            </div>
-          </div>
+      let fotoDespuesHtml = '<p class="text-xs text-slate-400 italic py-6 text-center">Pendiente de fotografía final por el operario.</p>';
+      if (inc.fotoDespues) {
+        fotoDespuesHtml = '<img src="' + inc.fotoDespues + '" alt="Foto después" class="max-h-56 w-full object-cover rounded-lg border shadow-sm">' +
+          '<a href="' + inc.fotoDespues + '" download="foto-despues-' + inc.id.substring(0, 5) + '" class="no-print inline-block text-[11px] font-bold text-emerald-700 hover:underline mt-1.5">⬇️ Descargar foto final</a>';
+      }
 
-          <div>
-            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Descripción del Problema</h3>
-            <div class="p-4 bg-slate-50 rounded-xl border text-sm text-slate-700 leading-relaxed whitespace-pre-line">
-              ${inc.descripcion || 'Sin descripción detallada registrada.'}
-            </div>
-          </div>
+      let firmaHtml = '<p class="text-xs text-slate-400 italic">Pendiente de firma por el cliente al finalizar la intervención.</p>';
+      if (inc.firmaCliente) {
+        firmaHtml = '<div>' +
+          '<img src="' + inc.firmaCliente + '" alt="Firma del cliente" class="h-24 object-contain bg-white p-2 rounded-lg border">' +
+          '<div class="mt-2 text-xs text-slate-700">' +
+            '<p><strong>Firmante:</strong> ' + (inc.firmanteNombre || 'Cliente / Representante') + '</p>' +
+            (inc.firmanteDni ? '<p><strong>DNI/NIF:</strong> ' + inc.firmanteDni + '</p>' : '') +
+            '<p class="text-[11px] text-emerald-700 font-semibold mt-1">✓ Trabajo revisado y aceptado conforme</p>' +
+          '</div>' +
+        '</div>';
+      }
 
-          <div class="p-4 bg-white rounded-xl border border-slate-200">
-            <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-3 flex items-center justify-between pb-1.5 border-b">
-              <span>📋 Trabajos Técnicos / Tareas a Ejecutar</span>
-              <span class="text-[10px] bg-rose-100 text-rose-900 px-2 py-0.5 rounded font-bold">${inc.trabajos ? inc.trabajos.length : 0}</span>
-            </h3>
-            <ul class="space-y-1">${tareasLi}</ul>
-          </div>
-
-          <div class="pt-4 border-t border-slate-200">
-            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Evidencia Fotográfica (Antes y Después)</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div class="p-3 bg-slate-50 rounded-xl border">
-                <span class="block text-xs font-bold text-slate-700 mb-2">📷 Estado Inicial / Avería (ANTES)</span>
-                ${inc.fotoAntes 
-                  ? `<img src="${inc.fotoAntes}" alt="Foto antes" class="max-h-56 w-full object-cover rounded-lg border shadow-sm">
-                     <a href="${inc.fotoAntes}" download="foto-antes-inc-${inc.id.substring(0,5)}" class="no-print inline-block text-[11px] font-bold text-rose-600 hover:underline mt-1.5">⬇️ Descargar foto inicial</a>`
-                  : '<p class="text-xs text-slate-400 italic py-6 text-center">Sin fotografía inicial.</p>'}
-              </div>
-              <div class="p-3 bg-emerald-50/50 rounded-xl border border-emerald-200">
-                <span class="block text-xs font-bold text-emerald-800 mb-2">✅ Reparación Terminada (DESPUÉS)</span>
-                ${inc.fotoDespues 
-                  ? `<img src="${inc.fotoDespues}" alt="Foto después" class="max-h-56 w-full object-cover rounded-lg border shadow-sm">
-                     <a href="${inc.fotoDespues}" download="foto-despues-inc-${inc.id.substring(0,5)}" class="no-print inline-block text-[11px] font-bold text-emerald-700 hover:underline mt-1.5">⬇️ Descargar foto final</a>`
-                  : '<p class="text-xs text-slate-400 italic py-6 text-center">Pendiente de fotografía final por el operario.</p>'}
-              </div>
-            </div>
-          </div>
-
-          <div class="pt-4 border-t border-slate-200">
-            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Informe Técnico y Aclaraciones del Operario</h3>
-            <div class="p-4 bg-slate-50 rounded-xl border text-sm text-slate-800 leading-relaxed italic">
-              ${inc.notasOperario ? `"${inc.notasOperario}"` : '<span class="text-slate-400 italic not-italic">El operario aún no ha registrado notas de cierre.</span>'}
-            </div>
-          </div>
-
-          <div class="pt-4 border-t border-slate-200">
-            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Conformidad y Firma del Cliente</h3>
-            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 max-w-md">
-              ${inc.firmaCliente 
-                ? `<div>
-                    <img src="${inc.firmaCliente}" alt="Firma del cliente" class="h-24 object-contain bg-white p-2 rounded-lg border">
-                    <div class="mt-2 text-xs text-slate-700">
-                      <p><strong>Firmante:</strong> ${inc.firmanteNombre \vert{}\vert{} 'Cliente / Representante'}</p>${inc.firmanteDni ? `<p><strong>DNI/NIF:</strong> ${inc.firmanteDni}</p>` : ''}
-                      <p class="text-[11px] text-emerald-700 font-semibold mt-1">✓ Trabajo revisado y aceptado conforme</p>
-                    </div>
-                   </div>`
-                : '<p class="text-xs text-slate-400 italic">Pendiente de firma por el cliente al finalizar la intervención.</p>'}
-            </div>
-          </div>
-        </div>
-      `;
+      cont.innerHTML = '<div class="card-print bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">' +
+        '<div class="flex flex-col sm:flex-row justify-between items-start gap-4 pb-4 border-b border-slate-200">' +
+          '<div>' +
+            '<div class="flex items-center gap-2">' +
+              '<span class="px-2.5 py-0.5 rounded-full text-xs font-bold ' + badgeUrgencia + '">' + inc.prioridad + '</span>' +
+              '<span class="px-2.5 py-0.5 rounded-full text-xs font-semibold ' + badgeEstado + '">' + (inc.estado || 'Abierta') + '</span>' +
+              '<span class="text-xs text-slate-400 font-mono">PARTE: INC-' + inc.id.substring(0, 6).toUpperCase() + '</span>' +
+            '</div>' +
+            '<h1 class="print-title text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">' + inc.titulo + '</h1>' +
+            '<p class="text-sm font-semibold text-amber-700 mt-1">🏗️ Obra: ' + inc.obra + '</p>' +
+            (inc.direccion ? '<p class="text-xs text-slate-500 mt-0.5 flex items-center gap-1.5">📍 ' + inc.direccion + ' <a href="' + urlMaps + '" target="_blank" class="no-print text-xs font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded border border-rose-200 hover:bg-rose-100">🗺️ Cómo llegar</a></p>' : '') +
+          '</div>' +
+          '<div class="sm:text-right">' +
+            '<span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Técnico / Responsable</span>' +
+            '<p class="text-base font-bold text-slate-900 mt-0.5">👷 ' + (inc.operario || 'Sin asignar') + '</p>' +
+            (inc.fechaHora ? '<p class="text-xs font-bold text-indigo-700 mt-1">📅 ' + inc.fechaHora.replace('T', ' ') + ' h</p>' : '') +
+          '</div>' +
+        '</div>' +
+        '<div class="print-grid-4col grid grid-cols-2 lg:grid-cols-4 gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs">' +
+          '<div><span class="text-[10px] font-bold text-slate-400 uppercase">Estado</span><p class="text-sm font-bold text-slate-800 mt-0.5">' + (inc.estado || 'Abierta') + '</p></div>' +
+          '<div><span class="text-[10px] font-bold text-slate-400 uppercase">Prioridad</span><p class="text-sm font-bold text-slate-800 mt-0.5">' + inc.prioridad + '</p></div>' +
+          '<div><span class="text-[10px] font-bold text-slate-400 uppercase">Cita Asignada</span><p class="text-sm font-semibold text-slate-800 mt-0.5">' + (inc.fechaHora ? inc.fechaHora.replace('T', ' ') : 'Sin programar') + '</p></div>' +
+          '<div><span class="text-[10px] font-bold text-slate-400 uppercase">Teléfonos de Contacto</span><div class="mt-0.5 flex flex-wrap gap-2 text-xs">' + (telefonosArray.length > 0 ? telefonosArray.join('<span class="text-slate-300">|</span>') : '<span class="text-slate-400 italic">Sin teléfonos</span>') + '</div></div>' +
+        '</div>' +
+        '<div><h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Descripción del Problema</h3><div class="p-4 bg-slate-50 rounded-xl border text-sm text-slate-700 leading-relaxed whitespace-pre-line">' + (inc.descripcion || 'Sin descripción detallada registrada.') + '</div></div>' +
+        '<div class="p-4 bg-white rounded-xl border border-slate-200"><h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-3 flex items-center justify-between pb-1.5 border-b"><span>📋 Trabajos Técnicos / Tareas a Ejecutar</span><span class="text-[10px] bg-rose-100 text-rose-900 px-2 py-0.5 rounded font-bold">' + (inc.trabajos ? inc.trabajos.length : 0) + '</span></h3><ul class="space-y-1">' + tareasLi + '</ul></div>' +
+        '<div class="pt-4 border-t border-slate-200"><h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Evidencia Fotográfica (Antes y Después)</h3><div class="grid grid-cols-1 sm:grid-cols-2 gap-4">' +
+          '<div class="p-3 bg-slate-50 rounded-xl border"><span class="block text-xs font-bold text-slate-700 mb-2">📷 Estado Inicial / Avería (ANTES)</span>' + fotoAntesHtml + '</div>' +
+          '<div class="p-3 bg-emerald-50/50 rounded-xl border border-emerald-200"><span class="block text-xs font-bold text-emerald-800 mb-2">✅ Reparación Terminada (DESPUÉS)</span>' + fotoDespuesHtml + '</div>' +
+        '</div></div>' +
+        '<div class="pt-4 border-t border-slate-200"><h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Informe Técnico y Aclaraciones del Operario</h3><div class="p-4 bg-slate-50 rounded-xl border text-sm text-slate-800 leading-relaxed italic">' + (inc.notasOperario ? '"' + inc.notasOperario + '"' : '<span class="text-slate-400 italic not-italic">El operario aún no ha registrado notas de cierre.</span>') + '</div></div>' +
+        '<div class="pt-4 border-t border-slate-200"><h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Conformidad y Firma del Cliente</h3><div class="p-4 bg-slate-50 rounded-xl border border-slate-200 max-w-md">' + firmaHtml + '</div></div>' +
+      '</div>';
 
       cambiarVista('detalleIncidencia');
     };
@@ -2103,8 +1932,8 @@
       cacheOperarios = [];
 
       if (snap.empty) {
-        if (listaOperariosEl) listaOperariosEl.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay operarios registrados.</p></div>`;
-        if (contenedorCheckboxes) contenedorCheckboxes.innerHTML = `<span class="text-xs text-slate-400 col-span-full">Primero registra operarios.</span>`;
+        if (listaOperariosEl) listaOperariosEl.innerHTML = '<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay operarios registrados.</p></div>';
+        if (contenedorCheckboxes) contenedorCheckboxes.innerHTML = '<span class="text-xs text-slate-400 col-span-full">Primero registra operarios.</span>';
       } else {
         snap.forEach((docSnap) => {
           const d = { id: docSnap.id, ...docSnap.data() };
@@ -2113,31 +1942,29 @@
           if (contenedorCheckboxes) {
             const lbl = document.createElement("label");
             lbl.className = "flex items-center gap-2 text-xs text-slate-700 cursor-pointer bg-white p-2 rounded border hover:bg-slate-100";
-            lbl.innerHTML = `<input type="checkbox" value="${d.nombre}" class="rounded text-amber-500"> <span>${d.nombre} (${d.oficio})</span>`;
+            lbl.innerHTML = '<input type="checkbox" value="' + d.nombre + '" class="rounded text-amber-500"> <span>' + d.nombre + ' (' + d.oficio + ')</span>';
             contenedorCheckboxes.appendChild(lbl);
           }
 
           if (selectOperarioIncidencia) {
             const optInc = document.createElement("option");
             optInc.value = d.nombre;
-            optInc.textContent = `${d.nombre} (${d.oficio})`;
+            optInc.textContent = d.nombre + " (" + d.oficio + ")";
             selectOperarioIncidencia.appendChild(optInc);
           }
 
           if (listaOperariosEl) {
             const card = document.createElement("div");
             card.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between";
-            card.innerHTML = `
-              <div>
-                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sky-100 text-sky-800">${d.oficio}</span>
-                <h3 class="text-base font-bold text-slate-900 mt-3">${d.nombre}</h3>
-                <p class="text-sm text-slate-500 mt-1">📞 <a href="tel:${d.telefono || ''}" class="text-sky-600 hover:underline font-semibold">${d.telefono || 'Sin teléfono'}</a></p>
-              </div>
-              <div class="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center text-xs">
-                <span class="text-slate-400">#${docSnap.id.substring(0, 5).toUpperCase()}</span>
-                <button onclick="window.borrarRegistro('operarios', '${docSnap.id}')" class="text-rose-500 hover:underline">Eliminar</button>
-              </div>
-            `;
+            card.innerHTML = '<div>' +
+                '<span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sky-100 text-sky-800">' + d.oficio + '</span>' +
+                '<h3 class="text-base font-bold text-slate-900 mt-3">' + d.nombre + '</h3>' +
+                '<p class="text-sm text-slate-500 mt-1">📞 <a href="tel:' + (d.telefono || '') + '" class="text-sky-600 hover:underline font-semibold">' + (d.telefono || 'Sin teléfono') + '</a></p>' +
+              '</div>' +
+              '<div class="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center text-xs">' +
+                '<span class="text-slate-400">#' + docSnap.id.substring(0, 5).toUpperCase() + '</span>' +
+                '<button onclick="window.borrarRegistro(\'operarios\', \'' + docSnap.id + '\')" class="text-rose-500 hover:underline">Eliminar</button>' +
+              '</div>';
             listaOperariosEl.appendChild(card);
           }
         });
@@ -2171,24 +1998,22 @@
       if (!listaHerramientasEl) return;
       listaHerramientasEl.innerHTML = "";
       if (snap.empty) {
-        listaHerramientasEl.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay maquinaria registrada.</p></div>`;
+        listaHerramientasEl.innerHTML = '<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay maquinaria registrada.</p></div>';
       } else {
         snap.forEach((docSnap) => {
           const d = docSnap.data();
           const card = document.createElement("div");
           card.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between";
-          card.innerHTML = `
-            <div>
-              <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">Ubicación</span>
-              <p class="text-xs font-bold text-slate-700 mt-1">${d.ubicacion}</p>
-              <h3 class="text-base font-bold text-slate-900 mt-2">${d.nombre}</h3>
-              <p class="text-xs text-slate-400 mt-1">Serie: ${d.serie || 'N/A'}</p>
-            </div>
-            <div class="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center text-xs">
-              <span class="text-slate-400">#${docSnap.id.substring(0, 5).toUpperCase()}</span>
-              <button onclick="window.borrarRegistro('herramientas', '${docSnap.id}')" class="text-rose-500 hover:underline">Eliminar</button>
-            </div>
-          `;
+          card.innerHTML = '<div>' +
+              '<span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">Ubicación</span>' +
+              '<p class="text-xs font-bold text-slate-700 mt-1">' + d.ubicacion + '</p>' +
+              '<h3 class="text-base font-bold text-slate-900 mt-2">' + d.nombre + '</h3>' +
+              '<p class="text-xs text-slate-400 mt-1">Serie: ' + (d.serie || 'N/A') + '</p>' +
+            '</div>' +
+            '<div class="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center text-xs">' +
+              '<span class="text-slate-400">#' + docSnap.id.substring(0, 5).toUpperCase() + '</span>' +
+              '<button onclick="window.borrarRegistro(\'herramientas\', \'' + docSnap.id + '\')" class="text-rose-500 hover:underline">Eliminar</button>' +
+            '</div>';
           listaHerramientasEl.appendChild(card);
         });
       }
