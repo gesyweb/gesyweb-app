@@ -57,7 +57,7 @@
           <span>🔨</span> Herramientas
         </button>
         <button id="nav-ajustes" onclick="window.cambiarVista('ajustes')" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
-          <span>⚙️</span> Mi Empresa 
+          <span>⚙️</span> Mi Empresa (Marca Blanca)
         </button>
       </nav>
     </div>
@@ -257,8 +257,7 @@
       </section>
     </div>
 
-    <!-- 2.8: HERRAMIENTAS -->
-   <!-- 2.8: HERRAMIENTAS Y MAQUINARIA -->
+    <!-- 2.8: HERRAMIENTAS Y MAQUINARIA -->
     <div id="vista-herramientas" class="hidden">
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
@@ -270,7 +269,6 @@
         </button>
       </header>
 
-      <!-- Barra de Filtros de Herramientas -->
       <div id="contenedor-filtros-herramientas" class="mt-4 flex gap-2 overflow-x-auto pb-2">
         <button onclick="window.filtrarHerramientas('todas', this)" class="btn-filtro-her px-3.5 py-1.5 rounded-full text-xs font-bold transition bg-slate-900 text-white shadow-sm">
           Todas
@@ -290,6 +288,7 @@
         <p class="text-sm text-slate-400">Cargando inventario...</p>
       </section>
     </div>
+
     <!-- 2.9: AJUSTES / MARCA BLANCA -->
     <div id="vista-ajustes" class="hidden">
       <header class="pb-6 border-b border-slate-200">
@@ -298,7 +297,6 @@
       </header>
 
       <div class="mt-8 max-w-2xl bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
-        <!-- Logo -->
         <div>
           <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Logotipo de la Empresa</label>
           <div class="flex items-center gap-4">
@@ -726,9 +724,9 @@
         <button type="button" onclick="document.getElementById('modal-operario').style.display='none'" class="text-slate-400 text-2xl font-bold">&times;</button>
       </div>
       <div class="mt-4 space-y-3">
-        <input id="input-nombre-operario" type="text" placeholder="Nombre Completo *" class="w-full px-3 py-2 border rounded-lg text-sm">
+        <input id="input-nombre-operario" type="text" placeholder="Nombre Completo *" class="w-full px-3.5 py-2 border rounded-lg text-sm">
         <div class="grid grid-cols-2 gap-2">
-          <select id="input-oficio-operario" class="w-full px-3 py-2 border rounded-lg text-sm bg-white">
+          <select id="input-oficio-operario" class="w-full px-3.5 py-2 border rounded-lg text-sm bg-white">
             <option value="Albañil">Albañilería</option>
             <option value="Fontanero">Fontanería</option>
             <option value="Electricista">Electricidad</option>
@@ -736,7 +734,7 @@
             <option value="Carpintero">Carpintería / Pladur</option>
             <option value="Encargado">Encargado de Obra</option>
           </select>
-          <input id="input-tel-operario" type="tel" placeholder="Teléfono" class="w-full px-3 py-2 border rounded-lg text-sm">
+          <input id="input-tel-operario" type="tel" placeholder="Teléfono" class="w-full px-3.5 py-2 border rounded-lg text-sm">
         </div>
         <div class="flex justify-end gap-2 pt-2">
           <button type="button" onclick="document.getElementById('modal-operario').style.display='none'" class="px-4 py-2 text-sm text-slate-600">Cancelar</button>
@@ -746,7 +744,6 @@
     </div>
   </div>
 
-  <!-- 3.5: MODAL HERRAMIENTA -->
   <!-- 3.5: MODAL HERRAMIENTA / MAQUINARIA -->
   <div id="modal-herramienta" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 z-50 overflow-y-auto">
     <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-xl w-full shadow-2xl my-8">
@@ -1129,7 +1126,7 @@
       });
     }
 
-   window.abrirDetalleObra = (id) => {
+    window.abrirDetalleObra = (id) => {
       const obra = cacheObras.find(o => o.id === id);
       if (!obra) return;
       obraSeleccionadaActual = obra;
@@ -1166,7 +1163,6 @@
         operariosBadges = obra.operarios.map(op => '<span class="bg-white border px-2 py-1 rounded text-xs font-semibold text-slate-700 shadow-sm">👷 ' + op + '</span>').join('');
       }
 
-      // Filtrar incidencias vinculadas a esta obra
       const incidenciasDeEstaObra = cacheIncidencias.filter(inc => inc.obra === obra.nombre);
       let incidenciasHtml = '<p class="text-xs text-slate-400 italic bg-slate-50 p-3 rounded-lg border">No se han registrado incidencias en esta obra.</p>';
       if (incidenciasDeEstaObra.length > 0) {
@@ -1176,8 +1172,8 @@
           return '<div class="flex items-center justify-between p-3 bg-slate-50 border rounded-xl hover:bg-rose-50/40 transition cursor-pointer" onclick="window.abrirDetalleIncidencia(\'' + inc.id + '\')">' +
             '<div>' +
               '<div class="flex items-center gap-2 mb-1">' +
-                '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold ' + bUrg + '">' + inc.prioridad + '</span>' +
-                '<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ' + bEst + '">' + (inc.estado || 'Abierta') + '</span>' +
+                '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold ' + bUrg + '">' + inc.prioridad + '</span>' +
+                '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold ' + bEst + '">' + (inc.estado || 'Abierta') + '</span>' +
                 (inc.fechaHora ? '<span class="text-[11px] text-slate-400">📅 ' + inc.fechaHora.replace('T', ' ') + '</span>' : '') +
               '</div>' +
               '<h4 class="text-xs sm:text-sm font-bold text-slate-900">' + inc.titulo + '</h4>' +
@@ -1215,7 +1211,7 @@
       const cuotaImpuesto = totalFinal - base;
 
       cont.innerHTML = '<div class="card-print bg-white rounded-2xl p-5 sm:p-7 border border-slate-200 shadow-sm space-y-4">' +
-  window.generarCabeceraMarcaBlanca() +
+        window.generarCabeceraMarcaBlanca() +
         '<div class="flex flex-col sm:flex-row justify-between items-start gap-2 pb-3 border-b border-slate-200">' +
           '<div>' +
             '<div class="flex items-center gap-2">' +
@@ -1677,7 +1673,9 @@
 
     let cacheIncidencias = [];
     let cacheOperarios = [];
+    let cacheHerramientas = [];
     let filtroIncidenciasActual = 'todas';
+    let filtroHerramientasActual = 'todas';
     let incidenciaSeleccionadaActual = null;
 
     // Canvas de Firma
@@ -1890,7 +1888,7 @@
       }
 
       cont.innerHTML = '<div class="card-print bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">' +
-  window.generarCabeceraMarcaBlanca() +
+        window.generarCabeceraMarcaBlanca() +
         '<div class="flex flex-col sm:flex-row justify-between items-start gap-4 pb-4 border-b border-slate-200">' +
           '<div>' +
             '<div class="flex items-center gap-2">' +
@@ -2064,7 +2062,7 @@
       };
     }
 
-    // Operarios y Herramientas (Listeners y Altas)
+    // OPERARIOS
     const listaOperariosEl = document.getElementById("lista-operarios");
     const contenedorCheckboxes = document.getElementById("contenedor-checkbox-operarios");
     const selectOperarioIncidencia = document.getElementById("select-operario-incidencia");
@@ -2115,6 +2113,9 @@
       }
     });
 
+    const btnAbrirOp = document.getElementById("btn-abrir-modal-operario");
+    if (btnAbrirOp) btnAbrirOp.onclick = () => document.getElementById("modal-operario").style.display = "flex";
+
     const btnGuardarOp = document.getElementById("btn-guardar-operario");
     if (btnGuardarOp) {
       btnGuardarOp.onclick = async () => {
@@ -2136,10 +2137,7 @@
       };
     }
 
-   // HERRAMIENTAS Y MAQUINARIA LOGIC
-    let cacheHerramientas = [];
-    let filtroHerramientasActual = 'todas';
-
+    // HERRAMIENTAS Y MAQUINARIA LOGIC
     window.filtrarHerramientas = (estado, btnElement) => {
       filtroHerramientasActual = estado;
       if (btnElement) {
@@ -2200,7 +2198,6 @@
       renderizarHerramientas();
     });
 
-    // Resetear y abrir modal herramienta
     const btnAbrirHer = document.getElementById("btn-abrir-modal-herramienta");
     if (btnAbrirHer) {
       btnAbrirHer.onclick = () => {
@@ -2216,7 +2213,6 @@
         document.getElementById("select-operario-herramienta").value = "Sin asignar";
         document.getElementById("input-obs-herramienta").value = "";
 
-        // Rellenar selector de operarios disponibles
         const selOp = document.getElementById("select-operario-herramienta");
         if (selOp) {
           selOp.innerHTML = '<option value="Sin asignar">Ninguno (Libre en obra/almacén)</option>';
@@ -2231,7 +2227,6 @@
       };
     }
 
-    // Editar o transferir herramienta
     window.editarHerramienta = (id) => {
       const h = cacheHerramientas.find(item => item.id === id);
       if (!h) return;
@@ -2262,7 +2257,6 @@
       document.getElementById("modal-herramienta").style.display = "flex";
     };
 
-    // Guardar / Actualizar herramienta
     const btnGuardarHer = document.getElementById("btn-guardar-herramienta");
     if (btnGuardarHer) {
       btnGuardarHer.onclick = async () => {
@@ -2300,26 +2294,8 @@
         }
       };
     }
-        modal.style.display = "none";
-        await addDoc(colHerramientas, {
-          nombre: nom,
-          serie: document.getElementById("input-serie-herramienta").value.trim() || "",
-          ubicacion: document.getElementById("select-obra-herramienta").value,
-          fechaCreacion: serverTimestamp()
-        });
-        document.getElementById("input-nombre-herramienta").value = "";
-        document.getElementById("input-serie-herramienta").value = "";
-      };
-    }
 
-    window.borrarRegistro = async (coleccion, id) => {
-      if (confirm("¿Estás seguro de que deseas eliminar este registro?")) {
-        await deleteDoc(doc(db, coleccion, id));
-      }
-    };
-    // ========================================================
     // MARCA BLANCA / AJUSTES DE EMPRESA (FIRESTORE)
-    // ========================================================
     const docConfigEmpresa = doc(db, "configuracion", "empresa");
     let datosEmpresaActual = {
       nombre: "Gesyweb Reformas",
@@ -2352,7 +2328,6 @@
       });
     }
 
-    // Escuchar datos de la empresa en tiempo real
     onSnapshot(docConfigEmpresa, (snapshot) => {
       if (snapshot.exists()) {
         datosEmpresaActual = snapshot.data();
@@ -2374,7 +2349,6 @@
       }
     });
 
-    // Guardar datos de la empresa
     const btnGuardarEmp = document.getElementById("btn-guardar-empresa");
     if (btnGuardarEmp) {
       btnGuardarEmp.onclick = async () => {
@@ -2409,7 +2383,6 @@
       };
     }
 
-    // Cabecera común de marca blanca para impresiones A4
     window.generarCabeceraMarcaBlanca = () => {
       let logoHtml = '<div class="w-10 h-10 rounded-lg bg-amber-500 flex items-center justify-center font-black text-slate-950 text-xl">G</div>';
       if (datosEmpresaActual.logo) {
@@ -2428,6 +2401,12 @@
           (datosEmpresaActual.email ? '<p>✉️ ' + datosEmpresaActual.email + '</p>' : '') +
         '</div>' +
       '</div>';
+    };
+
+    window.borrarRegistro = async (coleccion, id) => {
+      if (confirm("¿Estás seguro de que deseas eliminar este registro?")) {
+        await deleteDoc(doc(db, coleccion, id));
+      }
     };
   </script>
 </body>
