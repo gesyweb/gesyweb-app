@@ -7,23 +7,66 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @media print {
+      @page {
+        margin: 10mm 12mm;
+        size: A4 portrait;
+      }
       aside, header, #btn-volver-obras, #acciones-ficha, .no-print {
         display: none !important;
       }
       body {
         background-color: white !important;
-        color: black !important;
+        color: #0f172a !important;
+        font-size: 9.5pt !important;
+        line-height: 1.25 !important;
       }
       main {
         padding: 0 !important;
         margin: 0 !important;
+        width: 100% !important;
       }
       #vista-detalle-obra {
         display: block !important;
       }
       .card-print {
         border: 1px solid #cbd5e1 !important;
+        padding: 12px 16px !important;
         box-shadow: none !important;
+        border-radius: 6px !important;
+        margin-bottom: 0 !important;
+      }
+      .print-compact-gap {
+        gap: 6px !important;
+      }
+      .print-title {
+        font-size: 15pt !important;
+        line-height: 1.15 !important;
+      }
+      .print-subtitle {
+        font-size: 11pt !important;
+      }
+      .print-grid-2col {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 10px !important;
+      }
+      .print-grid-4col {
+        display: grid !important;
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 6px !important;
+        padding: 6px 10px !important;
+      }
+      .print-item {
+        padding-top: 2px !important;
+        padding-bottom: 2px !important;
+        font-size: 8.5pt !important;
+      }
+      .print-section {
+        margin-top: 10px !important;
+        page-break-inside: avoid;
+      }
+      img {
+        max-height: 140px !important;
       }
     }
   </style>
@@ -97,15 +140,15 @@
 
     <!-- SECCIÓN: FICHA DETALLADA A PANTALLA COMPLETA -->
     <div id="vista-detalle-obra" class="hidden">
-      <!-- Barra superior de navegación y acciones -->
-      <div class="flex flex-wrap items-center justify-between pb-6 border-b border-slate-200 gap-3 bg-slate-100 sticky top-0 z-10">
+      <!-- Barra superior no imprimible -->
+      <div class="flex flex-wrap items-center justify-between pb-6 border-b border-slate-200 gap-3 bg-slate-100 sticky top-0 z-10 no-print">
         <button onclick="window.cambiarVista('obras')" id="btn-volver-obras" class="inline-flex items-center gap-2 text-sm font-bold text-slate-800 hover:text-amber-600 bg-white border border-slate-300 px-4 py-2 rounded-xl shadow-sm transition">
           ← Volver al listado
         </button>
         
         <div id="acciones-ficha" class="flex flex-wrap gap-2">
           <button onclick="window.print()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-xl shadow-sm transition flex items-center gap-2">
-            <span>📄</span> Imprimir / PDF
+            <span>🖨️</span> Imprimir / Guardar en PDF
           </button>
           <button id="btn-editar-obra-actual" class="bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold px-4 py-2 rounded-xl transition">
             ✏️ Editar Obra
@@ -116,10 +159,10 @@
         </div>
       </div>
 
-      <div id="contenedor-detalle-obra" class="mt-6"></div>
+      <div id="contenedor-detalle-obra" class="mt-4"></div>
 
-      <div class="mt-8 pt-6 border-t border-slate-200 flex justify-start no-print">
-        <button onclick="window.cambiarVista('obras')" class="inline-flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-amber-600 bg-white border px-5 py-2.5 rounded-xl shadow-sm transition">
+      <div class="mt-6 pt-4 border-t border-slate-200 flex justify-start no-print">
+        <button onclick="window.cambiarVista('obras')" class="inline-flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-amber-600 bg-white border px-5 py-2 rounded-xl shadow-sm transition">
           ← Volver al listado
         </button>
       </div>
@@ -306,11 +349,11 @@
           <div id="contenedor-materiales" class="space-y-2"></div>
         </div>
 
-        <!-- Bloque 6: Documentos y Fotos de Obra (Permisos, Planos, Averías) -->
+        <!-- Bloque 6: Documentos y Fotos -->
         <div class="pt-4 border-t border-slate-100 space-y-3">
           <div>
             <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Documentos y Fotografías Cruciales</h4>
-            <p class="text-[11px] text-slate-400">Licencia de obra, actas, planos o imágenes clave (PDF, JPG, PNG).</p>
+            <p class="text-[11px] text-slate-400">Licencia de obra, actas, planos o imágenes clave (PDF, JPG, PNG máx. 2MB).</p>
           </div>
           <div class="p-4 bg-slate-50 rounded-xl border border-dashed border-slate-300">
             <input type="file" id="input-archivo-obra" accept="image/*,application/pdf" class="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-500 file:text-slate-950 hover:file:bg-amber-600 cursor-pointer">
@@ -485,14 +528,14 @@
     let archivoBase64Actual = null;
     let nombreArchivoActual = null;
 
-    // Lector de archivos adjuntos
+    // Adjuntos
     document.getElementById("input-archivo-obra").addEventListener("change", (e) => {
       const file = e.target.files[0];
       const preview = document.getElementById("preview-archivo-seleccionado");
       if (!file) return;
 
       if (file.size > 2 * 1024 * 1024) {
-        alert("El archivo excede el límite recomendado de 2 MB. Selecciona un archivo comprimido o foto más ligera.");
+        alert("El archivo supera 2 MB. Elige uno más ligero para optimizar la base de datos.");
         e.target.value = "";
         return;
       }
@@ -576,7 +619,7 @@
     }
     document.getElementById("btn-add-material").onclick = () => agregarFilaMaterial("", "m²", "");
 
-    // Colecciones Firestore
+    // Firestore
     const colObras = collection(db, "proyectos");
     const colClientes = collection(db, "clientes");
     const colIncidencias = collection(db, "incidencias");
@@ -639,7 +682,7 @@
       });
     }
 
-    // PANTALLA COMPLETA DETALLE OBRA (CON DOCUMENTOS Y MAQUETACIÓN A4)
+    // PANTALLA COMPLETA DETALLE OBRA OPTIMIZADA PARA IMPRESIÓN COMPACTA
     window.abrirDetalleObra = (id) => {
       const obra = cacheObras.find(o => o.id === id);
       if (!obra) return;
@@ -650,124 +693,119 @@
       const urlMaps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(obra.direccion || '')}`;
 
       const trabajosLi = obra.trabajos && obra.trabajos.length > 0
-        ? obra.trabajos.map((t, idx) => `<li class="flex items-start gap-2 py-2 border-b border-slate-100 last:border-0"><span class="w-5 h-5 rounded-full bg-amber-100 text-amber-900 text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">${idx+1}</span><span class="text-sm text-slate-700">${t}</span></li>`).join('')
-        : '<p class="text-sm text-slate-400 italic">No hay tajos definidos aún.</p>';
+        ? obra.trabajos.map((t, idx) => `<li class="print-item flex items-start gap-1.5 py-1 border-b border-slate-100 last:border-0"><span class="w-4 h-4 rounded-full bg-amber-100 text-amber-900 text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">${idx+1}</span><span class="text-xs sm:text-sm text-slate-700 leading-tight">${t}</span></li>`).join('')
+        : '<p class="text-xs text-slate-400 italic">No hay tajos definidos aún.</p>';
 
       const materialesLi = obra.materiales && obra.materiales.length > 0
         ? obra.materiales.map(m => {
             const displayCant = (m.cantidad ? m.cantidad : '') + ' ' + (m.unidad ? m.unidad : '');
             return `
-              <li class="flex items-center justify-between py-2 text-sm text-slate-700 border-b border-slate-100 last:border-0">
-                <span class="font-medium">${m.nombre || 'Material'}</span>
-                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-200">${displayCant.trim() || 'ud'}</span>
+              <li class="print-item flex items-center justify-between py-1 text-xs sm:text-sm text-slate-700 border-b border-slate-100 last:border-0">
+                <span class="font-medium truncate mr-2">${m.nombre || 'Material'}</span>
+                <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-amber-50 text-amber-900 border border-amber-200 shrink-0">${displayCant.trim() || 'ud'}</span>
               </li>`;
           }).join('')
-        : '<p class="text-sm text-slate-400 italic">No hay lista de materiales registrada.</p>';
+        : '<p class="text-xs text-slate-400 italic">No hay lista de materiales registrada.</p>';
 
       const operariosBadges = obra.operarios && obra.operarios.length > 0
-        ? obra.operarios.map(op => `<span class="bg-white border px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 shadow-sm">👷 ${op}</span>`).join('')
-        : '<p class="text-sm text-slate-400 italic">Sin operarios asignados.</p>';
+        ? obra.operarios.map(op => `<span class="bg-white border px-2 py-1 rounded text-xs font-semibold text-slate-700 shadow-sm">👷 ${op}</span>`).join('')
+        : '<p class="text-xs text-slate-400 italic">Sin operarios asignados.</p>';
 
-      // Visor de archivo adjunto
-      let adjuntoHtml = '<p class="text-sm text-slate-400 italic">Sin documentos adjuntos.</p>';
+      let adjuntoHtml = '<p class="text-xs text-slate-400 italic">Sin documentos adjuntos.</p>';
       if (obra.archivoAdjunto) {
         const esImg = obra.archivoAdjunto.startsWith("data:image");
         if (esImg) {
           adjuntoHtml = `
-            <div class="space-y-2">
-              <img src="${obra.archivoAdjunto}" alt="Documento de obra" class="max-h-72 rounded-xl border shadow-sm object-cover">
-              <a href="${obra.archivoAdjunto}" download="${obra.nombreArchivo || 'documento-obra'}" class="inline-block text-xs font-bold text-amber-600 hover:underline">⬇️ Descargar fotografía</a>
+            <div class="space-y-1">
+              <img src="${obra.archivoAdjunto}" alt="Documento de obra" class="max-h-48 rounded-lg border shadow-sm object-cover">
+              <a href="${obra.archivoAdjunto}" download="${obra.nombreArchivo || 'documento-obra'}" class="no-print inline-block text-xs font-bold text-amber-600 hover:underline">⬇️ Descargar fotografía</a>
             </div>`;
         } else {
           adjuntoHtml = `
-            <div class="flex items-center gap-3 p-4 bg-slate-50 border rounded-xl">
-              <span class="text-3xl">📄</span>
+            <div class="flex items-center gap-2 p-2.5 bg-slate-50 border rounded-lg max-w-md">
+              <span class="text-xl">📄</span>
               <div class="flex-1 overflow-hidden">
-                <p class="text-sm font-bold text-slate-800 truncate">${obra.nombreArchivo || 'Documento adjunto'}</p>
-                <p class="text-xs text-slate-400">Documento técnico / Licencia</p>
+                <p class="text-xs font-bold text-slate-800 truncate">${obra.nombreArchivo || 'Documento adjunto'}</p>
               </div>
-              <a href="${obra.archivoAdjunto}" download="${obra.nombreArchivo || 'documento-obra.pdf'}" class="px-3 py-1.5 bg-amber-500 text-slate-950 font-bold rounded-lg text-xs shadow-sm hover:bg-amber-600">Descargar</a>
+              <a href="${obra.archivoAdjunto}" download="${obra.nombreArchivo || 'documento-obra.pdf'}" class="no-print px-2.5 py-1 bg-amber-500 text-slate-950 font-bold rounded text-xs hover:bg-amber-600">Descargar</a>
             </div>`;
         }
       }
 
       cont.innerHTML = `
-        <div class="card-print bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-8">
+        <div class="card-print bg-white rounded-2xl p-5 sm:p-7 border border-slate-200 shadow-sm space-y-4">
           
-          <div class="flex flex-col sm:flex-row justify-between items-start gap-4 pb-6 border-b border-slate-200">
+          <!-- Encabezado Ficha -->
+          <div class="flex flex-col sm:flex-row justify-between items-start gap-2 pb-3 border-b border-slate-200">
             <div>
-              <div class="flex items-center gap-3">
-                <span class="px-3 py-1 rounded-full text-xs font-semibold ${badge}">${obra.estado}</span>
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded-full text-xs font-semibold ${badge}">${obra.estado}</span>
                 <span class="text-xs text-slate-400 font-mono">ID: ${obra.id.substring(0, 6).toUpperCase()}</span>
               </div>
-              <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">${obra.nombre}</h1>
-              <p class="text-sm text-slate-500 mt-1 flex items-center gap-2">
+              <h1 class="print-title text-xl sm:text-2xl font-extrabold text-slate-900 mt-1">${obra.nombre}</h1>
+              <p class="text-xs sm:text-sm text-slate-500 mt-0.5 flex items-center gap-1.5">
                 📍 ${obra.direccion}
-                <a href="${urlMaps}" target="_blank" class="no-print text-xs font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 hover:bg-amber-100">🗺️ Abrir en Google Maps</a>
+                <a href="${urlMaps}" target="_blank" class="no-print text-[11px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 hover:bg-amber-100">🗺️ Google Maps</a>
               </p>
             </div>
             <div class="sm:text-right">
-              <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Presupuesto Aceptado</span>
-              <p class="text-2xl font-black text-slate-900 mt-0.5">${obra.presupuesto ? Number(obra.presupuesto).toLocaleString('es-ES') + ' €' : 'Sin fijar'}</p>
+              <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Presupuesto</span>
+              <p class="print-subtitle text-lg sm:text-xl font-black text-slate-900">${obra.presupuesto ? Number(obra.presupuesto).toLocaleString('es-ES') + ' €' : 'Sin fijar'}</p>
             </div>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-4 bg-slate-50 rounded-xl border border-slate-200">
+          <!-- Cuadrícula 4 campos -->
+          <div class="print-grid-4col grid grid-cols-2 lg:grid-cols-4 gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs">
             <div>
-              <span class="text-xs font-bold text-slate-400 uppercase">Cliente</span>
-              <p class="text-sm font-semibold text-indigo-700 mt-1">👤 ${obra.cliente || 'Particular'}</p>
+              <span class="text-[10px] font-bold text-slate-400 uppercase">Cliente</span>
+              <p class="font-semibold text-indigo-700 mt-0.5 truncate">👤 ${obra.cliente || 'Particular'}</p>
             </div>
             <div>
-              <span class="text-xs font-bold text-slate-400 uppercase">Fecha Inicio</span>
-              <p class="text-sm font-medium text-slate-800 mt-1">📅 ${obra.fechaInicio || 'Pendiente'}</p>
+              <span class="text-[10px] font-bold text-slate-400 uppercase">Fecha Inicio</span>
+              <p class="font-medium text-slate-800 mt-0.5">📅 ${obra.fechaInicio || 'Pendiente'}</p>
             </div>
             <div>
-              <span class="text-xs font-bold text-slate-400 uppercase">Fin Estimado</span>
-              <p class="text-sm font-medium text-slate-800 mt-1">🏁 ${obra.fechaFin || 'Pendiente'}</p>
+              <span class="text-[10px] font-bold text-slate-400 uppercase">Fin Estimado</span>
+              <p class="font-medium text-slate-800 mt-0.5">🏁 ${obra.fechaFin || 'Pendiente'}</p>
             </div>
             <div>
-              <span class="text-xs font-bold text-slate-400 uppercase">Teléfonos</span>
-              <div class="text-xs text-slate-700 mt-1 space-y-0.5 font-medium">
-                ${obra.tel1 ? `<p>📞 Principal: ${obra.tel1}</p>` : ''}
-                ${obra.tel2 ? `<p>📞 Obra: ${obra.tel2}</p>` : ''}
-                ${obra.tel3 ? `<p>📞 Extra: ${obra.tel3}</p>` : ''}
-                ${!obra.tel1 && !obra.tel2 && !obra.tel3 ? '<p class="text-slate-400 italic">Sin teléfonos</p>' : ''}
-              </div>
+              <span class="text-[10px] font-bold text-slate-400 uppercase">Teléfonos</span>
+              <p class="font-medium text-slate-700 mt-0.5 truncate">📞 ${[obra.tel1, obra.tel2, obra.tel3].filter(Boolean).join(' / ') || 'Sin teléfonos'}</p>
             </div>
           </div>
 
           ${obra.descripcion ? `
-          <div>
-            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Alcance de la obra</h3>
-            <p class="text-sm text-slate-700 leading-relaxed bg-slate-50 p-4 rounded-xl border">${obra.descripcion}</p>
+          <div class="print-section">
+            <h3 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Alcance de la obra</h3>
+            <p class="text-xs text-slate-700 leading-relaxed bg-slate-50 p-2.5 rounded-lg border">${obra.descripcion}</p>
           </div>` : ''}
 
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div class="p-6 rounded-xl border border-slate-200 bg-white">
-              <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-4 flex items-center justify-between">
+          <!-- Tajos y Materiales compactos a 2 columnas en impresión -->
+          <div class="print-section print-grid-2col grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div class="p-3.5 rounded-xl border border-slate-200 bg-white">
+              <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2 flex items-center justify-between pb-1.5 border-b">
                 <span>📋 Partidas y Trabajos</span>
-                <span class="text-xs bg-amber-100 text-amber-900 px-2 py-0.5 rounded font-semibold">${obra.trabajos ? obra.trabajos.length : 0}</span>
+                <span class="text-[10px] bg-amber-100 text-amber-900 px-1.5 py-0.2 rounded font-semibold">${obra.trabajos ? obra.trabajos.length : 0}</span>
               </h3>
-              <ul class="space-y-1">${trabajosLi}</ul>
+              <ul class="space-y-0.5">${trabajosLi}</ul>
             </div>
 
-            <div class="p-6 rounded-xl border border-slate-200 bg-white">
-              <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-4 flex items-center justify-between">
+            <div class="p-3.5 rounded-xl border border-slate-200 bg-white">
+              <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2 flex items-center justify-between pb-1.5 border-b">
                 <span>📦 Lista de Materiales y Medidas</span>
-                <span class="text-xs bg-slate-200 text-slate-800 px-2 py-0.5 rounded font-semibold">${obra.materiales ? obra.materiales.length : 0}</span>
+                <span class="text-[10px] bg-slate-200 text-slate-800 px-1.5 py-0.2 rounded font-semibold">${obra.materiales ? obra.materiales.length : 0}</span>
               </h3>
-              <ul class="space-y-1">${materialesLi}</ul>
+              <ul class="space-y-0.5">${materialesLi}</ul>
             </div>
           </div>
 
-          <div>
-            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Equipo asignado</h3>
-            <div class="flex flex-wrap gap-2">${operariosBadges}</div>
+          <div class="print-section">
+            <h3 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Equipo asignado</h3>
+            <div class="flex flex-wrap gap-1.5">${operariosBadges}</div>
           </div>
 
-          <!-- Sección de Documentos adjuntos -->
-          <div class="pt-6 border-t border-slate-200">
-            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Documentación y Fotos clave</h3>
+          <div class="print-section pt-3 border-t border-slate-200">
+            <h3 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Documentación y Fotos clave</h3>
             ${adjuntoHtml}
           </div>
 
