@@ -7,64 +7,21 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @media print {
-      @page {
-        margin: 10mm 12mm;
-        size: A4 portrait;
-      }
+      @page { margin: 10mm 12mm; size: A4 portrait; }
       aside, header, #btn-volver-obras, #btn-volver-clientes, #btn-volver-incidencias, #acciones-ficha, #acciones-ficha-cliente, #acciones-ficha-incidencia, .no-print {
         display: none !important;
       }
-      body {
-        background-color: white !important;
-        color: #0f172a !important;
-        font-size: 9.5pt !important;
-        line-height: 1.25 !important;
-      }
-      main {
-        padding: 0 !important;
-        margin: 0 !important;
-        width: 100% !important;
-      }
-      #vista-detalle-obra, #vista-detalle-cliente, #vista-detalle-incidencia {
-        display: block !important;
-      }
-      .card-print {
-        border: 1px solid #cbd5e1 !important;
-        padding: 12px 16px !important;
-        box-shadow: none !important;
-        border-radius: 6px !important;
-        margin-bottom: 0 !important;
-      }
-      .print-title {
-        font-size: 15pt !important;
-        line-height: 1.15 !important;
-      }
-      .print-subtitle {
-        font-size: 11pt !important;
-      }
-      .print-grid-2col {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr !important;
-        gap: 10px !important;
-      }
-      .print-grid-4col {
-        display: grid !important;
-        grid-template-columns: repeat(4, 1fr) !important;
-        gap: 6px !important;
-        padding: 6px 10px !important;
-      }
-      .print-item {
-        padding-top: 2px !important;
-        padding-bottom: 2px !important;
-        font-size: 8.5pt !important;
-      }
-      .print-section {
-        margin-top: 10px !important;
-        page-break-inside: avoid;
-      }
-      img {
-        max-height: 130px !important;
-      }
+      body { background-color: white !important; color: #0f172a !important; font-size: 9.5pt !important; line-height: 1.25 !important; }
+      main { padding: 0 !important; margin: 0 !important; width: 100% !important; }
+      #vista-detalle-obra, #vista-detalle-cliente, #vista-detalle-incidencia { display: block !important; }
+      .card-print { border: 1px solid #cbd5e1 !important; padding: 12px 16px !important; box-shadow: none !important; border-radius: 6px !important; }
+      .print-title { font-size: 15pt !important; line-height: 1.15 !important; }
+      .print-subtitle { font-size: 11pt !important; }
+      .print-grid-2col { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+      .print-grid-4col { display: grid !important; grid-template-columns: repeat(4, 1fr) !important; gap: 6px !important; padding: 6px 10px !important; }
+      .print-item { padding-top: 2px !important; padding-bottom: 2px !important; font-size: 8.5pt !important; }
+      .print-section { margin-top: 10px !important; page-break-inside: avoid; }
+      img { max-height: 130px !important; }
     }
   </style>
 </head>
@@ -82,19 +39,19 @@
       </div>
       
       <nav class="mt-8 space-y-2">
-        <button id="nav-obras" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg bg-slate-800 text-white font-medium transition">
+        <button id="nav-obras" onclick="window.cambiarVista('obras')" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg bg-slate-800 text-white font-medium transition">
           <span>🏗️</span> Obras y Presupuestos
         </button>
-        <button id="nav-clientes" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
+        <button id="nav-clientes" onclick="window.cambiarVista('clientes')" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
           <span>👥</span> Clientes
         </button>
-        <button id="nav-incidencias" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
+        <button id="nav-incidencias" onclick="window.cambiarVista('incidencias')" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
           <span>⚠️</span> Incidencias
         </button>
-        <button id="nav-operarios" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
+        <button id="nav-operarios" onclick="window.cambiarVista('operarios')" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
           <span>👷</span> Operarios
         </button>
-        <button id="nav-herramientas" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
+        <button id="nav-herramientas" onclick="window.cambiarVista('herramientas')" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
           <span>🔨</span> Herramientas
         </button>
       </nav>
@@ -536,7 +493,6 @@
       <div class="mt-6 space-y-6">
         <input type="hidden" id="edit-incidencia-id" value="">
 
-        <!-- Datos de la Avería y Cita -->
         <div class="space-y-4">
           <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Datos de la Avería y Cita</h4>
           
@@ -589,7 +545,6 @@
           </div>
         </div>
 
-        <!-- Ubicación y Teléfonos -->
         <div class="pt-4 border-t border-slate-100 space-y-4">
           <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Ubicación y Contacto Directo</h4>
           <div>
@@ -608,7 +563,6 @@
           </div>
         </div>
 
-        <!-- Tareas Técnicas (Sin precio) -->
         <div class="pt-4 border-t border-slate-100 space-y-3">
           <div class="flex justify-between items-center">
             <div>
@@ -620,7 +574,6 @@
           <div id="contenedor-trabajos-incidencia" class="space-y-2"></div>
         </div>
 
-        <!-- Evidencias Fotográficas -->
         <div class="pt-4 border-t border-slate-100 space-y-4">
           <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Control Fotográfico (Antes y Después)</h4>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -637,19 +590,18 @@
           </div>
         </div>
 
-        <!-- Informe del Operario -->
         <div class="pt-4 border-t border-slate-100 space-y-2">
           <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Informe / Notas del Operario</h4>
           <p class="text-[11px] text-slate-400">Observaciones del técnico a pie de obra, solución ejecutada o piezas cambiadas:</p>
           <textarea id="input-notas-operario-incidencia" rows="3" placeholder="Ej. Se sustituyó el manguito picado. Verificada estanqueidad sin fugas." class="w-full px-3.5 py-2 border rounded-lg text-sm bg-slate-50 focus:bg-white focus:ring-2 focus:ring-rose-500 outline-none"></textarea>
         </div>
 
-        <!-- FIRMA DIGITAL TÁCTIL DEL CLIENTE -->
+        <!-- FIRMA DIGITAL TÁCTIL -->
         <div class="pt-4 border-t-2 border-slate-200 bg-rose-50/40 p-4 rounded-2xl border border-rose-200 space-y-3">
           <div class="flex justify-between items-center">
             <div>
               <h4 class="text-xs font-black text-rose-950 uppercase tracking-wider">Firma de Conformidad del Cliente</h4>
-              <p class="text-[11px] text-slate-500">Firme en el recuadro con el dedo (móvil/tablet) o con el ratón:</p>
+              <p class="text-[11px] text-slate-500">Firme en el recuadro con el dedo o ratón:</p>
             </div>
             <button type="button" id="btn-limpiar-firma" class="text-xs font-bold text-rose-700 bg-white border border-rose-300 px-3 py-1 rounded-lg hover:bg-rose-50 shadow-sm">
               🧹 Limpiar firma
@@ -769,156 +721,168 @@
 
     window.cambiarVista = (activa) => {
       Object.keys(vistas).forEach(k => {
-        if (k === activa) {
-          vistas[k].classList.remove("hidden");
-          if (botonesNav[k]) botonesNav[k].className = "nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg bg-slate-800 text-white font-medium transition";
-        } else {
-          vistas[k].classList.add("hidden");
-          if (botonesNav[k]) botonesNav[k].className = "nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition";
+        if (vistas[k]) {
+          if (k === activa) {
+            vistas[k].classList.remove("hidden");
+            if (botonesNav[k]) botonesNav[k].className = "nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg bg-slate-800 text-white font-medium transition";
+          } else {
+            vistas[k].classList.add("hidden");
+            if (botonesNav[k]) botonesNav[k].className = "nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition";
+          }
         }
       });
       window.scrollTo({ top: 0, behavior: 'smooth' });
     };
-
-    botonesNav.obras.onclick = () => cambiarVista('obras');
-    botonesNav.clientes.onclick = () => cambiarVista('clientes');
-    botonesNav.incidencias.onclick = () => cambiarVista('incidencias');
-    botonesNav.operarios.onclick = () => cambiarVista('operarios');
-    botonesNav.herramientas.onclick = () => cambiarVista('herramientas');
 
     let archivoBase64Actual = null;
     let nombreArchivoActual = null;
     let fotoAntesBase64 = null;
     let fotoDespuesBase64 = null;
 
-    // ==========================================
-    // CANVAS DE FIRMA DIGITAL TÁCTIL
-    // ==========================================
+    // Canvas de Firma
     const canvas = document.getElementById("canvas-firma");
-    const ctx = canvas.getContext("2d");
+    let ctx = null;
     let dibujando = false;
     let haFirmado = false;
 
-    ctx.strokeStyle = "#0f172a";
-    ctx.lineWidth = 2.5;
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
+    if (canvas) {
+      ctx = canvas.getContext("2d");
+      ctx.strokeStyle = "#0f172a";
+      ctx.lineWidth = 2.5;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
 
-    function obtenerPosicion(e) {
-      const rect = canvas.getBoundingClientRect();
-      const scaleX = canvas.width / rect.width;
-      const scaleY = canvas.height / rect.height;
-      if (e.touches && e.touches[0]) {
+      function obtenerPosicion(e) {
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        if (e.touches && e.touches[0]) {
+          return {
+            x: (e.touches[0].clientX - rect.left) * scaleX,
+            y: (e.touches[0].clientY - rect.top) * scaleY
+          };
+        }
         return {
-          x: (e.touches[0].clientX - rect.left) * scaleX,
-          y: (e.touches[0].clientY - rect.top) * scaleY
+          x: (e.clientX - rect.left) * scaleX,
+          y: (e.clientY - rect.top) * scaleY
         };
       }
-      return {
-        x: (e.clientX - rect.left) * scaleX,
-        y: (e.clientY - rect.top) * scaleY
-      };
+
+      function empezarTrazo(e) {
+        dibujando = true;
+        haFirmado = true;
+        const pos = obtenerPosicion(e);
+        ctx.beginPath();
+        ctx.moveTo(pos.x, pos.y);
+        if (e.type.startsWith("touch")) e.preventDefault();
+      }
+
+      function trazar(e) {
+        if (!dibujando) return;
+        const pos = obtenerPosicion(e);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+        if (e.type.startsWith("touch")) e.preventDefault();
+      }
+
+      function pararTrazo() {
+        dibujando = false;
+      }
+
+      canvas.addEventListener("mousedown", empezarTrazo);
+      canvas.addEventListener("mousemove", trazar);
+      window.addEventListener("mouseup", pararTrazo);
+
+      canvas.addEventListener("touchstart", empezarTrazo, { passive: false });
+      canvas.addEventListener("touchmove", trazar, { passive: false });
+      canvas.addEventListener("touchend", pararTrazo);
     }
-
-    function empezarTrazo(e) {
-      dibujando = true;
-      haFirmado = true;
-      const pos = obtenerPosicion(e);
-      ctx.beginPath();
-      ctx.moveTo(pos.x, pos.y);
-      if (e.type.startsWith("touch")) e.preventDefault();
-    }
-
-    function trazar(e) {
-      if (!dibujando) return;
-      const pos = obtenerPosicion(e);
-      ctx.lineTo(pos.x, pos.y);
-      ctx.stroke();
-      if (e.type.startsWith("touch")) e.preventDefault();
-    }
-
-    function pararTrazo() {
-      dibujando = false;
-    }
-
-    // Eventos ratón
-    canvas.addEventListener("mousedown", empezarTrazo);
-    canvas.addEventListener("mousemove", trazar);
-    window.addEventListener("mouseup", pararTrazo);
-
-    // Eventos táctiles (móvil y tablet)
-    canvas.addEventListener("touchstart", empezarTrazo, { passive: false });
-    canvas.addEventListener("touchmove", trazar, { passive: false });
-    canvas.addEventListener("touchend", pararTrazo);
 
     window.limpiarCanvasFirma = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      haFirmado = false;
+      if (ctx && canvas) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        haFirmado = false;
+      }
     };
-    document.getElementById("btn-limpiar-firma").onclick = window.limpiarCanvasFirma;
+    const btnLimpiar = document.getElementById("btn-limpiar-firma");
+    if (btnLimpiar) btnLimpiar.onclick = window.limpiarCanvasFirma;
 
     // Adjunto para Obra
-    document.getElementById("input-archivo-obra").addEventListener("change", (e) => {
-      const file = e.target.files[0];
-      const preview = document.getElementById("preview-archivo-seleccionado");
-      if (!file) return;
-
-      if (file.size > 2 * 1024 * 1024) {
-        alert("El archivo supera 2 MB. Elige uno más ligero para optimizar.");
-        e.target.value = "";
-        return;
-      }
-
-      nombreArchivoActual = file.name;
-      const reader = new FileReader();
-      reader.onload = () => {
-        archivoBase64Actual = reader.result;
-        preview.textContent = `📎 Documento cargado: ${file.name}`;
-        preview.classList.remove("hidden");
-      };
-      reader.readAsDataURL(file);
-    });
+    const inArchivoObra = document.getElementById("input-archivo-obra");
+    if (inArchivoObra) {
+      inArchivoObra.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        const preview = document.getElementById("preview-archivo-seleccionado");
+        if (!file) return;
+        if (file.size > 2 * 1024 * 1024) {
+          alert("El archivo supera 2 MB. Elige uno más ligero.");
+          e.target.value = "";
+          return;
+        }
+        nombreArchivoActual = file.name;
+        const reader = new FileReader();
+        reader.onload = () => {
+          archivoBase64Actual = reader.result;
+          if (preview) {
+            preview.textContent = `📎 Documento cargado: ${file.name}`;
+            preview.classList.remove("hidden");
+          }
+        };
+        reader.readAsDataURL(file);
+      });
+    }
 
     // Adjuntos Fotos Antes y Después para Incidencia
-    document.getElementById("input-foto-antes-incidencia").addEventListener("change", (e) => {
-      const file = e.target.files[0];
-      const preview = document.getElementById("preview-foto-antes");
-      if (!file) return;
-      if (file.size > 2 * 1024 * 1024) {
-        alert("La fotografía supera 2 MB. Sube una más ligera.");
-        e.target.value = "";
-        return;
-      }
-      const reader = new FileReader();
-      reader.onload = () => {
-        fotoAntesBase64 = reader.result;
-        preview.textContent = `📷 Foto ANTES cargada: ${file.name}`;
-        preview.classList.remove("hidden");
-      };
-      reader.readAsDataURL(file);
-    });
+    const inFotoAntes = document.getElementById("input-foto-antes-incidencia");
+    if (inFotoAntes) {
+      inFotoAntes.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        const preview = document.getElementById("preview-foto-antes");
+        if (!file) return;
+        if (file.size > 2 * 1024 * 1024) {
+          alert("La fotografía supera 2 MB.");
+          e.target.value = "";
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = () => {
+          fotoAntesBase64 = reader.result;
+          if (preview) {
+            preview.textContent = `📷 Foto ANTES cargada: ${file.name}`;
+            preview.classList.remove("hidden");
+          }
+        };
+        reader.readAsDataURL(file);
+      });
+    }
 
-    document.getElementById("input-foto-despues-incidencia").addEventListener("change", (e) => {
-      const file = e.target.files[0];
-      const preview = document.getElementById("preview-foto-despues");
-      if (!file) return;
-      if (file.size > 2 * 1024 * 1024) {
-        alert("La fotografía supera 2 MB. Sube una más ligera.");
-        e.target.value = "";
-        return;
-      }
-      const reader = new FileReader();
-      reader.onload = () => {
-        fotoDespuesBase64 = reader.result;
-        preview.textContent = `✅ Foto DESPUÉS cargada: ${file.name}`;
-        preview.classList.remove("hidden");
-      };
-      reader.readAsDataURL(file);
-    });
+    const inFotoDespues = document.getElementById("input-foto-despues-incidencia");
+    if (inFotoDespues) {
+      inFotoDespues.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        const preview = document.getElementById("preview-foto-despues");
+        if (!file) return;
+        if (file.size > 2 * 1024 * 1024) {
+          alert("La fotografía supera 2 MB.");
+          e.target.value = "";
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = () => {
+          fotoDespuesBase64 = reader.result;
+          if (preview) {
+            preview.textContent = `✅ Foto DESPUÉS cargada: ${file.name}`;
+            preview.classList.remove("hidden");
+          }
+        };
+        reader.readAsDataURL(file);
+      });
+    }
 
     // REPEATER: TRABAJOS DE INCIDENCIA
     function agregarFilaTrabajoIncidencia(valor = "") {
       const c = document.getElementById("contenedor-trabajos-incidencia");
+      if (!c) return;
       const f = document.createElement("div");
       f.className = "flex gap-2 items-center item-trabajo-incidencia bg-slate-50 p-2 rounded-lg border border-slate-200";
       f.innerHTML = `
@@ -928,25 +892,22 @@
       f.querySelector(".btn-eliminar-fila").onclick = () => f.remove();
       c.appendChild(f);
     }
-    document.getElementById("btn-add-trabajo-incidencia").onclick = () => agregarFilaTrabajoIncidencia("");
+    const btnAddTrabajoInc = document.getElementById("btn-add-trabajo-incidencia");
+    if (btnAddTrabajoInc) btnAddTrabajoInc.onclick = () => agregarFilaTrabajoIncidencia("");
 
     window.autocompletarDireccionObra = () => {
       const nomObra = document.getElementById("select-obra-incidencia").value;
       if (!nomObra) return;
       const obra = cacheObras.find(o => o.nombre === nomObra);
       if (obra) {
-        if (!document.getElementById("input-dir-incidencia").value) {
-          document.getElementById("input-dir-incidencia").value = obra.direccion || "";
-        }
-        if (!document.getElementById("input-tel1-incidencia").value) {
-          document.getElementById("input-tel1-incidencia").value = obra.tel1 || "";
-        }
+        const dirEl = document.getElementById("input-dir-incidencia");
+        const telEl = document.getElementById("input-tel1-incidencia");
+        if (dirEl && !dirEl.value) dirEl.value = obra.direccion || "";
+        if (telEl && !telEl.value) telEl.value = obra.tel1 || "";
       }
     };
 
-    // ==========================================
-    // REPEATERS DE OBRAS & PRESUPUESTOS
-    // ==========================================
+    // REPEATERS DE OBRAS
     window.calcularPresupuestoTotal = () => {
       let sumaBase = 0;
       document.querySelectorAll("#contenedor-trabajos .item-trabajo").forEach(row => {
@@ -961,12 +922,15 @@
       const pctImpuesto = parseFloat(document.getElementById("select-tipo-impuesto").value) || 0;
       const totalConImpuesto = sumaBase * (1 + pctImpuesto / 100);
 
-      document.getElementById("calc-base-imponible").textContent = sumaBase.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
-      document.getElementById("calc-total-presupuesto").textContent = totalConImpuesto.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+      const bEl = document.getElementById("calc-base-imponible");
+      const tEl = document.getElementById("calc-total-presupuesto");
+      if (bEl) bEl.textContent = sumaBase.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+      if (tEl) tEl.textContent = totalConImpuesto.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
     };
 
     function agregarFilaTrabajo(nombre = "", precio = "") {
       const c = document.getElementById("contenedor-trabajos");
+      if (!c) return;
       const f = document.createElement("div");
       f.className = "flex gap-2 items-center item-trabajo bg-slate-50 p-2 rounded-lg border border-slate-200";
       f.innerHTML = `
@@ -984,10 +948,12 @@
       c.appendChild(f);
       window.calcularPresupuestoTotal();
     }
-    document.getElementById("btn-add-trabajo").onclick = () => agregarFilaTrabajo("", "");
+    const btnAddTrabajo = document.getElementById("btn-add-trabajo");
+    if (btnAddTrabajo) btnAddTrabajo.onclick = () => agregarFilaTrabajo("", "");
 
     function agregarFilaMaterial(nombre = "", unidad = "m²", cant = "", precioUnit = "") {
       const c = document.getElementById("contenedor-materiales");
+      if (!c) return;
       const f = document.createElement("div");
       f.className = "grid grid-cols-12 gap-2 items-center item-material bg-slate-50 p-2 rounded-lg border border-slate-200";
       f.innerHTML = `
@@ -1017,77 +983,90 @@
       c.appendChild(f);
       window.calcularPresupuestoTotal();
     }
-    document.getElementById("btn-add-material").onclick = () => agregarFilaMaterial("", "m²", "", "");
+    const btnAddMat = document.getElementById("btn-add-material");
+    if (btnAddMat) btnAddMat.onclick = () => agregarFilaMaterial("", "m²", "", "");
 
-    // Apertura y reset de modales
-    document.getElementById("btn-abrir-modal-obra").onclick = () => {
-      document.getElementById("edit-obra-id").value = "";
-      document.getElementById("titulo-modal-obra").textContent = "Nueva Obra y Presupuesto";
-      document.getElementById("btn-submit-obra").textContent = "Guardar Obra y Presupuesto";
-      document.getElementById("input-nombre").value = "";
-      document.getElementById("input-direccion").value = "";
-      document.getElementById("input-fecha-inicio").value = "";
-      document.getElementById("input-fecha-fin").value = "";
-      document.getElementById("input-descripcion").value = "";
-      document.getElementById("input-tel1").value = "";
-      document.getElementById("input-tel2").value = "";
-      document.getElementById("input-tel3").value = "";
-      document.getElementById("select-tipo-impuesto").value = "10";
-      document.getElementById("input-archivo-obra").value = "";
-      document.getElementById("preview-archivo-seleccionado").classList.add("hidden");
-      archivoBase64Actual = null;
-      nombreArchivoActual = null;
-      document.getElementById("contenedor-trabajos").innerHTML = "";
-      document.getElementById("contenedor-materiales").innerHTML = "";
-      agregarFilaTrabajo("", "");
-      agregarFilaMaterial("", "m²", "", "");
-      document.getElementById("modal-obra").style.display = "flex";
-    };
+    // Botones de Modales
+    const btnAbrirObra = document.getElementById("btn-abrir-modal-obra");
+    if (btnAbrirObra) {
+      btnAbrirObra.onclick = () => {
+        document.getElementById("edit-obra-id").value = "";
+        document.getElementById("titulo-modal-obra").textContent = "Nueva Obra y Presupuesto";
+        document.getElementById("btn-submit-obra").textContent = "Guardar Obra y Presupuesto";
+        document.getElementById("input-nombre").value = "";
+        document.getElementById("input-direccion").value = "";
+        document.getElementById("input-fecha-inicio").value = "";
+        document.getElementById("input-fecha-fin").value = "";
+        document.getElementById("input-descripcion").value = "";
+        document.getElementById("input-tel1").value = "";
+        document.getElementById("input-tel2").value = "";
+        document.getElementById("input-tel3").value = "";
+        document.getElementById("select-tipo-impuesto").value = "10";
+        document.getElementById("input-archivo-obra").value = "";
+        document.getElementById("preview-archivo-seleccionado").classList.add("hidden");
+        archivoBase64Actual = null;
+        nombreArchivoActual = null;
+        document.getElementById("contenedor-trabajos").innerHTML = "";
+        document.getElementById("contenedor-materiales").innerHTML = "";
+        agregarFilaTrabajo("", "");
+        agregarFilaMaterial("", "m²", "", "");
+        document.getElementById("modal-obra").style.display = "flex";
+      };
+    }
 
-    document.getElementById("btn-abrir-modal-cliente").onclick = () => {
-      document.getElementById("edit-cliente-id").value = "";
-      document.getElementById("titulo-modal-cliente").textContent = "Alta de Cliente";
-      document.getElementById("btn-guardar-cliente").textContent = "Guardar Cliente";
-      document.getElementById("input-nombre-cliente").value = "";
-      document.getElementById("input-cif-cliente").value = "";
-      document.getElementById("input-tel-cliente").value = "";
-      document.getElementById("input-email-cliente").value = "";
-      document.getElementById("input-dir-cliente").value = "";
-      document.getElementById("input-notas-cliente").value = "";
-      document.getElementById("modal-cliente").style.display = "flex";
-    };
+    const btnAbrirCli = document.getElementById("btn-abrir-modal-cliente");
+    if (btnAbrirCli) {
+      btnAbrirCli.onclick = () => {
+        document.getElementById("edit-cliente-id").value = "";
+        document.getElementById("titulo-modal-cliente").textContent = "Alta de Cliente";
+        document.getElementById("btn-guardar-cliente").textContent = "Guardar Cliente";
+        document.getElementById("input-nombre-cliente").value = "";
+        document.getElementById("input-cif-cliente").value = "";
+        document.getElementById("input-tel-cliente").value = "";
+        document.getElementById("input-email-cliente").value = "";
+        document.getElementById("input-dir-cliente").value = "";
+        document.getElementById("input-notas-cliente").value = "";
+        document.getElementById("modal-cliente").style.display = "flex";
+      };
+    }
 
-    document.getElementById("btn-abrir-modal-incidencia").onclick = () => {
-      document.getElementById("edit-incidencia-id").value = "";
-      document.getElementById("titulo-modal-incidencia").textContent = "Reportar Incidencia de Obra";
-      document.getElementById("btn-guardar-incidencia").textContent = "Guardar Parte de Intervención";
-      document.getElementById("select-obra-incidencia").value = "";
-      document.getElementById("input-fecha-hora-incidencia").value = "";
-      document.getElementById("input-titulo-incidencia").value = "";
-      document.getElementById("input-desc-incidencia").value = "";
-      document.getElementById("input-dir-incidencia").value = "";
-      document.getElementById("input-tel1-incidencia").value = "";
-      document.getElementById("input-tel2-incidencia").value = "";
-      document.getElementById("input-prioridad-incidencia").value = "Normal";
-      document.getElementById("input-estado-incidencia").value = "Abierta";
-      document.getElementById("select-operario-incidencia").value = "Sin asignar";
-      document.getElementById("input-notas-operario-incidencia").value = "";
-      document.getElementById("input-firmante-nombre").value = "";
-      document.getElementById("input-firmante-dni").value = "";
-      document.getElementById("input-foto-antes-incidencia").value = "";
-      document.getElementById("input-foto-despues-incidencia").value = "";
-      document.getElementById("preview-foto-antes").classList.add("hidden");
-      document.getElementById("preview-foto-despues").classList.add("hidden");
-      fotoAntesBase64 = null;
-      fotoDespuesBase64 = null;
-      window.limpiarCanvasFirma();
-      document.getElementById("contenedor-trabajos-incidencia").innerHTML = "";
-      agregarFilaTrabajoIncidencia("");
-      document.getElementById("modal-incidencia").style.display = "flex";
-    };
+    const btnAbrirInc = document.getElementById("btn-abrir-modal-incidencia");
+    if (btnAbrirInc) {
+      btnAbrirInc.onclick = () => {
+        document.getElementById("edit-incidencia-id").value = "";
+        document.getElementById("titulo-modal-incidencia").textContent = "Reportar Incidencia de Obra";
+        document.getElementById("btn-guardar-incidencia").textContent = "Guardar Parte de Intervención";
+        document.getElementById("select-obra-incidencia").value = "";
+        document.getElementById("input-fecha-hora-incidencia").value = "";
+        document.getElementById("input-titulo-incidencia").value = "";
+        document.getElementById("input-desc-incidencia").value = "";
+        document.getElementById("input-dir-incidencia").value = "";
+        document.getElementById("input-tel1-incidencia").value = "";
+        document.getElementById("input-tel2-incidencia").value = "";
+        document.getElementById("input-prioridad-incidencia").value = "Normal";
+        document.getElementById("input-estado-incidencia").value = "Abierta";
+        document.getElementById("select-operario-incidencia").value = "Sin asignar";
+        document.getElementById("input-notas-operario-incidencia").value = "";
+        document.getElementById("input-firmante-nombre").value = "";
+        document.getElementById("input-firmante-dni").value = "";
+        document.getElementById("input-foto-antes-incidencia").value = "";
+        document.getElementById("input-foto-despues-incidencia").value = "";
+        document.getElementById("preview-foto-antes").classList.add("hidden");
+        document.getElementById("preview-foto-despues").classList.add("hidden");
+        fotoAntesBase64 = null;
+        fotoDespuesBase64 = null;
+        window.limpiarCanvasFirma();
+        document.getElementById("contenedor-trabajos-incidencia").innerHTML = "";
+        agregarFilaTrabajoIncidencia("");
+        document.getElementById("modal-incidencia").style.display = "flex";
+      };
+    }
 
-    document.getElementById("btn-abrir-modal-operario").onclick = () => document.getElementById("modal-operario").style.display = "flex";
-    document.getElementById("btn-abrir-modal-herramienta").onclick = () => document.getElementById("modal-herramienta").style.display = "flex";
+    const btnAbrirOp = document.getElementById("btn-abrir-modal-operario");
+    if (btnAbrirOp) btnAbrirOp.onclick = () => document.getElementById("modal-operario").style.display = "flex";
+
+    const btnAbrirHer = document.getElementById("btn-abrir-modal-herramienta");
+    if (btnAbrirHer) btnAbrirHer.onclick = () => document.getElementById("modal-herramienta").style.display = "flex";
 
     // Firestore Collections
     const colObras = collection(db, "proyectos");
@@ -1106,9 +1085,7 @@
     let clienteSeleccionadoActual = null;
     let incidenciaSeleccionadaActual = null;
 
-    // ==========================================
-    // OBRAS & PRESUPUESTOS
-    // ==========================================
+    // Obras Logic
     window.filtrarObras = (estado, btnElement) => {
       filtroEstadoActual = estado;
       if (btnElement) {
@@ -1122,6 +1099,7 @@
 
     function renderizarObras() {
       const listaObrasEl = document.getElementById("lista-proyectos");
+      if (!listaObrasEl) return;
       listaObrasEl.innerHTML = "";
       const filtradas = filtroEstadoActual === 'todas' ? cacheObras : cacheObras.filter(o => o.estado === filtroEstadoActual);
 
@@ -1338,93 +1316,103 @@
       cambiarVista('detalleObra');
     };
 
-    document.getElementById("btn-editar-obra-actual").onclick = () => {
-      if (!obraSeleccionadaActual) return;
-      const d = obraSeleccionadaActual;
+    const btnEditObraAct = document.getElementById("btn-editar-obra-actual");
+    if (btnEditObraAct) {
+      btnEditObraAct.onclick = () => {
+        if (!obraSeleccionadaActual) return;
+        const d = obraSeleccionadaActual;
 
-      document.getElementById("edit-obra-id").value = d.id;
-      document.getElementById("titulo-modal-obra").textContent = "Editar Obra y Presupuesto";
-      document.getElementById("btn-submit-obra").textContent = "Actualizar Presupuesto";
+        document.getElementById("edit-obra-id").value = d.id;
+        document.getElementById("titulo-modal-obra").textContent = "Editar Obra y Presupuesto";
+        document.getElementById("btn-submit-obra").textContent = "Actualizar Presupuesto";
 
-      document.getElementById("input-nombre").value = d.nombre || "";
-      document.getElementById("select-cliente-obra").value = d.cliente || "Particular / Sin asignar";
-      document.getElementById("input-direccion").value = d.direccion || "";
-      document.getElementById("input-estado").value = d.estado || "Presupuestada";
-      document.getElementById("input-fecha-inicio").value = d.fechaInicio || "";
-      document.getElementById("input-fecha-fin").value = d.fechaFin || "";
-      document.getElementById("input-descripcion").value = d.descripcion || "";
-      document.getElementById("input-tel1").value = d.tel1 || "";
-      document.getElementById("input-tel2").value = d.tel2 || "";
-      document.getElementById("input-tel3").value = d.tel3 || "";
-      document.getElementById("select-tipo-impuesto").value = d.tipoImpuesto || "10";
+        document.getElementById("input-nombre").value = d.nombre || "";
+        document.getElementById("select-cliente-obra").value = d.cliente || "Particular / Sin asignar";
+        document.getElementById("input-direccion").value = d.direccion || "";
+        document.getElementById("input-estado").value = d.estado || "Presupuestada";
+        document.getElementById("input-fecha-inicio").value = d.fechaInicio || "";
+        document.getElementById("input-fecha-fin").value = d.fechaFin || "";
+        document.getElementById("input-descripcion").value = d.descripcion || "";
+        document.getElementById("input-tel1").value = d.tel1 || "";
+        document.getElementById("input-tel2").value = d.tel2 || "";
+        document.getElementById("input-tel3").value = d.tel3 || "";
+        document.getElementById("select-tipo-impuesto").value = d.tipoImpuesto || "10";
 
-      archivoBase64Actual = d.archivoAdjunto || null;
-      nombreArchivoActual = d.nombreArchivo || null;
-      const prev = document.getElementById("preview-archivo-seleccionado");
-      if (nombreArchivoActual) {
-        prev.textContent = `📎 Documento guardado: ${nombreArchivoActual}`;
-        prev.classList.remove("hidden");
-      } else {
-        prev.classList.add("hidden");
-      }
+        archivoBase64Actual = d.archivoAdjunto || null;
+        nombreArchivoActual = d.nombreArchivo || null;
+        const prev = document.getElementById("preview-archivo-seleccionado");
+        if (nombreArchivoActual) {
+          prev.textContent = `📎 Documento guardado: ${nombreArchivoActual}`;
+          prev.classList.remove("hidden");
+        } else {
+          prev.classList.add("hidden");
+        }
 
-      const cTrabajos = document.getElementById("contenedor-trabajos");
-      cTrabajos.innerHTML = "";
-      if (d.trabajos && d.trabajos.length > 0) {
-        d.trabajos.forEach(t => {
-          if (typeof t === 'object') {
-            agregarFilaTrabajo(t.nombre || "", t.precio || "");
-          } else {
-            agregarFilaTrabajo(t, "");
-          }
+        const cTrabajos = document.getElementById("contenedor-trabajos");
+        cTrabajos.innerHTML = "";
+        if (d.trabajos && d.trabajos.length > 0) {
+          d.trabajos.forEach(t => {
+            if (typeof t === 'object') {
+              agregarFilaTrabajo(t.nombre || "", t.precio || "");
+            } else {
+              agregarFilaTrabajo(t, "");
+            }
+          });
+        } else {
+          agregarFilaTrabajo("", "");
+        }
+
+        const cMateriales = document.getElementById("contenedor-materiales");
+        cMateriales.innerHTML = "";
+        if (d.materiales && d.materiales.length > 0) {
+          d.materiales.forEach(m => {
+            if (typeof m === 'object') {
+              agregarFilaMaterial(m.nombre || "", m.unidad || "m²", m.cantidad || "", m.precioUnitario || "");
+            } else {
+              agregarFilaMaterial(m, "m²", "", "");
+            }
+          });
+        } else {
+          agregarFilaMaterial("", "m²", "", "");
+        }
+
+        document.querySelectorAll("#contenedor-checkbox-operarios input").forEach(chk => {
+          chk.checked = d.operarios && d.operarios.includes(chk.value);
         });
-      } else {
-        agregarFilaTrabajo("", "");
-      }
 
-      const cMateriales = document.getElementById("contenedor-materiales");
-      cMateriales.innerHTML = "";
-      if (d.materiales && d.materiales.length > 0) {
-        d.materiales.forEach(m => {
-          if (typeof m === 'object') {
-            agregarFilaMaterial(m.nombre || "", m.unidad || "m²", m.cantidad || "", m.precioUnitario || "");
-          } else {
-            agregarFilaMaterial(m, "m²", "", "");
-          }
-        });
-      } else {
-        agregarFilaMaterial("", "m²", "", "");
-      }
+        window.calcularPresupuestoTotal();
+        document.getElementById("modal-obra").style.display = "flex";
+      };
+    }
 
-      document.querySelectorAll("#contenedor-checkbox-operarios input").forEach(chk => {
-        chk.checked = d.operarios && d.operarios.includes(chk.value);
-      });
-
-      window.calcularPresupuestoTotal();
-      document.getElementById("modal-obra").style.display = "flex";
-    };
-
-    document.getElementById("btn-borrar-obra-actual").onclick = async () => {
-      if (obraSeleccionadaActual && confirm("¿Deseas eliminar definitivamente este proyecto y su presupuesto?")) {
-        await deleteDoc(doc(db, "proyectos", obraSeleccionadaActual.id));
-        cambiarVista('obras');
-      }
-    };
+    const btnBorrarObraAct = document.getElementById("btn-borrar-obra-actual");
+    if (btnBorrarObraAct) {
+      btnBorrarObraAct.onclick = async () => {
+        if (obraSeleccionadaActual && confirm("¿Deseas eliminar definitivamente este proyecto y su presupuesto?")) {
+          await deleteDoc(doc(db, "proyectos", obraSeleccionadaActual.id));
+          cambiarVista('obras');
+        }
+      };
+    }
 
     onSnapshot(colObras, (snap) => {
       cacheObras = [];
       const selectObraIncidencia = document.getElementById("select-obra-incidencia");
       const selectObraHerramienta = document.getElementById("select-obra-herramienta");
-      selectObraIncidencia.innerHTML = '<option value="">Selecciona una obra...</option>';
-      selectObraHerramienta.innerHTML = '<option value="Almacén central">📦 Almacén central</option>';
+      if (selectObraIncidencia) selectObraIncidencia.innerHTML = '<option value="">Selecciona una obra...</option>';
+      if (selectObraHerramienta) selectObraHerramienta.innerHTML = '<option value="Almacén central">📦 Almacén central</option>';
 
       snap.forEach(docSnap => {
         const data = { id: docSnap.id, ...docSnap.data() };
         cacheObras.push(data);
-        const opt1 = document.createElement("option"); opt1.value = data.nombre; opt1.textContent = data.nombre;
-        selectObraIncidencia.appendChild(opt1);
-        const opt2 = document.createElement("option"); opt2.value = data.nombre; opt2.textContent = "🏗️ " + data.nombre;
-        selectObraHerramienta.appendChild(opt2);
+        if (selectObraIncidencia) {
+          const opt1 = document.createElement("option"); opt1.value = data.nombre; opt1.textContent = data.nombre;
+          selectObraIncidencia.appendChild(opt1);
+        }
+        if (selectObraHerramienta) {
+          const opt2 = document.createElement("option"); opt2.value = data.nombre; opt2.textContent = "🏗️ " + data.nombre;
+          selectObraHerramienta.appendChild(opt2);
+        }
       });
 
       renderizarObras();
@@ -1438,98 +1426,100 @@
       }
     });
 
-    document.getElementById("btn-submit-obra").onclick = async () => {
-      const modal = document.getElementById("modal-obra");
-      const nombre = document.getElementById("input-nombre").value.trim();
-      const direccion = document.getElementById("input-direccion").value.trim();
+    const btnSubmitObra = document.getElementById("btn-submit-obra");
+    if (btnSubmitObra) {
+      btnSubmitObra.onclick = async () => {
+        const modal = document.getElementById("modal-obra");
+        const nombre = document.getElementById("input-nombre").value.trim();
+        const direccion = document.getElementById("input-direccion").value.trim();
 
-      if (!nombre || !direccion) {
-        alert("Por favor introduce al menos el Nombre y la Dirección del proyecto.");
-        return;
-      }
-
-      modal.style.display = "none";
-      const editId = document.getElementById("edit-obra-id").value;
-
-      let sumaBase = 0;
-      const trabajos = [];
-      document.querySelectorAll("#contenedor-trabajos .item-trabajo").forEach(row => {
-        const txt = row.querySelector("input[type='text']").value.trim();
-        const precio = parseFloat(row.querySelector(".input-precio-trabajo").value) || 0;
-        if (txt) {
-          trabajos.push({ nombre: txt, precio: precio });
-          sumaBase += precio;
+        if (!nombre || !direccion) {
+          alert("Por favor introduce al menos el Nombre y la Dirección del proyecto.");
+          return;
         }
-      });
 
-      const materiales = [];
-      document.querySelectorAll("#contenedor-materiales .item-material").forEach(row => {
-        const txtNombre = row.querySelector("input[type='text']").value.trim();
-        const numCant = parseFloat(row.querySelector(".input-cant-material").value) || 1;
-        const selUnidad = row.querySelector(".select-unidad-material").value;
-        const pUnit = parseFloat(row.querySelector(".input-precio-material").value) || 0;
-        if (txtNombre) {
-          materiales.push({
-            nombre: txtNombre,
-            cantidad: numCant,
-            unidad: selUnidad || "m²",
-            precioUnitario: pUnit
-          });
-          sumaBase += (numCant * pUnit);
+        modal.style.display = "none";
+        const editId = document.getElementById("edit-obra-id").value;
+
+        let sumaBase = 0;
+        const trabajos = [];
+        document.querySelectorAll("#contenedor-trabajos .item-trabajo").forEach(row => {
+          const txt = row.querySelector("input[type='text']").value.trim();
+          const precio = parseFloat(row.querySelector(".input-precio-trabajo").value) || 0;
+          if (txt) {
+            trabajos.push({ nombre: txt, precio: precio });
+            sumaBase += precio;
+          }
+        });
+
+        const materiales = [];
+        document.querySelectorAll("#contenedor-materiales .item-material").forEach(row => {
+          const txtNombre = row.querySelector("input[type='text']").value.trim();
+          const numCant = parseFloat(row.querySelector(".input-cant-material").value) || 1;
+          const selUnidad = row.querySelector(".select-unidad-material").value;
+          const pUnit = parseFloat(row.querySelector(".input-precio-material").value) || 0;
+          if (txtNombre) {
+            materiales.push({
+              nombre: txtNombre,
+              cantidad: numCant,
+              unidad: selUnidad || "m²",
+              precioUnitario: pUnit
+            });
+            sumaBase += (numCant * pUnit);
+          }
+        });
+
+        const pctImpuesto = parseFloat(document.getElementById("select-tipo-impuesto").value) || 0;
+        const totalPresupuesto = sumaBase * (1 + pctImpuesto / 100);
+
+        const operariosSeleccionados = [];
+        document.querySelectorAll("#contenedor-checkbox-operarios input:checked").forEach(chk => {
+          operariosSeleccionados.push(chk.value);
+        });
+
+        const obraData = {
+          nombre: nombre,
+          cliente: document.getElementById("select-cliente-obra").value || "Particular",
+          direccion: direccion,
+          estado: document.getElementById("input-estado").value || "Presupuestada",
+          fechaInicio: document.getElementById("input-fecha-inicio").value || "",
+          fechaFin: document.getElementById("input-fecha-fin").value || "",
+          baseImponible: sumaBase,
+          tipoImpuesto: pctImpuesto,
+          totalPresupuesto: totalPresupuesto,
+          presupuesto: totalPresupuesto,
+          descripcion: document.getElementById("input-descripcion").value.trim() || "",
+          tel1: document.getElementById("input-tel1").value.trim() || "",
+          tel2: document.getElementById("input-tel2").value.trim() || "",
+          tel3: document.getElementById("input-tel3").value.trim() || "",
+          operarios: operariosSeleccionados,
+          trabajos: trabajos,
+          materiales: materiales,
+          archivoAdjunto: archivoBase64Actual || "",
+          nombreArchivo: nombreArchivoActual || "",
+          fechaModificacion: serverTimestamp()
+        };
+
+        try {
+          if (editId) {
+            await updateDoc(doc(db, "proyectos", editId), obraData);
+          } else {
+            obraData.fechaCreacion = serverTimestamp();
+            await addDoc(colObras, obraData);
+          }
+        } catch (err) {
+          console.error("Error guardando:", err);
         }
-      });
-
-      const pctImpuesto = parseFloat(document.getElementById("select-tipo-impuesto").value) || 0;
-      const totalPresupuesto = sumaBase * (1 + pctImpuesto / 100);
-
-      const operariosSeleccionados = [];
-      document.querySelectorAll("#contenedor-checkbox-operarios input:checked").forEach(chk => {
-        operariosSeleccionados.push(chk.value);
-      });
-
-      const obraData = {
-        nombre: nombre,
-        cliente: document.getElementById("select-cliente-obra").value || "Particular",
-        direccion: direccion,
-        estado: document.getElementById("input-estado").value || "Presupuestada",
-        fechaInicio: document.getElementById("input-fecha-inicio").value || "",
-        fechaFin: document.getElementById("input-fecha-fin").value || "",
-        baseImponible: sumaBase,
-        tipoImpuesto: pctImpuesto,
-        totalPresupuesto: totalPresupuesto,
-        presupuesto: totalPresupuesto,
-        descripcion: document.getElementById("input-descripcion").value.trim() || "",
-        tel1: document.getElementById("input-tel1").value.trim() || "",
-        tel2: document.getElementById("input-tel2").value.trim() || "",
-        tel3: document.getElementById("input-tel3").value.trim() || "",
-        operarios: operariosSeleccionados,
-        trabajos: trabajos,
-        materiales: materiales,
-        archivoAdjunto: archivoBase64Actual || "",
-        nombreArchivo: nombreArchivoActual || "",
-        fechaModificacion: serverTimestamp()
       };
+    }
 
-      try {
-        if (editId) {
-          await updateDoc(doc(db, "proyectos", editId), obraData);
-        } else {
-          obraData.fechaCreacion = serverTimestamp();
-          await addDoc(colObras, obraData);
-        }
-      } catch (err) {
-        console.error("Error guardando:", err);
-      }
-    };
-
-    // ==========================================
-    // CLIENTES
-    // ==========================================
+    // CLIENTES LOGIC
     function renderizarClientes() {
       const listaClientesEl = document.getElementById("lista-clientes");
       const selectClienteObra = document.getElementById("select-cliente-obra");
+      if (!listaClientesEl) return;
       listaClientesEl.innerHTML = "";
-      selectClienteObra.innerHTML = '<option value="Particular / Sin asignar">Particular / Sin asignar</option>';
+      if (selectClienteObra) selectClienteObra.innerHTML = '<option value="Particular / Sin asignar">Particular / Sin asignar</option>';
 
       if (cacheClientes.length === 0) {
         listaClientesEl.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay clientes dados de alta todavía.</p></div>`;
@@ -1537,10 +1527,12 @@
       }
 
       cacheClientes.forEach((d) => {
-        const opt = document.createElement("option");
-        opt.value = d.nombre;
-        opt.textContent = d.nombre + (d.telefono ? ` (${d.telefono})` : '');
-        selectClienteObra.appendChild(opt);
+        if (selectClienteObra) {
+          const opt = document.createElement("option");
+          opt.value = d.nombre;
+          opt.textContent = d.nombre + (d.telefono ? ` (${d.telefono})` : '');
+          selectClienteObra.appendChild(opt);
+        }
 
         const obrasDelCliente = cacheObras.filter(o => o.cliente === d.nombre);
         const totalFacturado = obrasDelCliente.reduce((acc, curr) => acc + (Number(curr.totalPresupuesto) || Number(curr.presupuesto) || 0), 0);
@@ -1696,69 +1688,76 @@
       }
     };
 
-    document.getElementById("btn-editar-cliente-actual").onclick = () => {
-      if (!clienteSeleccionadoActual) return;
-      const d = clienteSeleccionadoActual;
+    const btnEditCliAct = document.getElementById("btn-editar-cliente-actual");
+    if (btnEditCliAct) {
+      btnEditCliAct.onclick = () => {
+        if (!clienteSeleccionadoActual) return;
+        const d = clienteSeleccionadoActual;
 
-      document.getElementById("edit-cliente-id").value = d.id;
-      document.getElementById("titulo-modal-cliente").textContent = "Editar Cliente";
-      document.getElementById("btn-guardar-cliente").textContent = "Actualizar Ficha";
+        document.getElementById("edit-cliente-id").value = d.id;
+        document.getElementById("titulo-modal-cliente").textContent = "Editar Cliente";
+        document.getElementById("btn-guardar-cliente").textContent = "Actualizar Ficha";
 
-      document.getElementById("input-nombre-cliente").value = d.nombre || "";
-      document.getElementById("input-cif-cliente").value = d.cif || "";
-      document.getElementById("input-tel-cliente").value = d.telefono || "";
-      document.getElementById("input-email-cliente").value = d.email || "";
-      document.getElementById("input-dir-cliente").value = d.direccion || "";
-      document.getElementById("input-notas-cliente").value = d.notas || "";
+        document.getElementById("input-nombre-cliente").value = d.nombre || "";
+        document.getElementById("input-cif-cliente").value = d.cif || "";
+        document.getElementById("input-tel-cliente").value = d.telefono || "";
+        document.getElementById("input-email-cliente").value = d.email || "";
+        document.getElementById("input-dir-cliente").value = d.direccion || "";
+        document.getElementById("input-notas-cliente").value = d.notas || "";
 
-      document.getElementById("modal-cliente").style.display = "flex";
-    };
-
-    document.getElementById("btn-borrar-cliente-actual").onclick = async () => {
-      if (clienteSeleccionadoActual && confirm(`¿Deseas eliminar a ${clienteSeleccionadoActual.nombre}?`)) {
-        await deleteDoc(doc(db, "clientes", clienteSeleccionadoActual.id));
-        cambiarVista('clientes');
-      }
-    };
-
-    document.getElementById("btn-guardar-cliente").onclick = async () => {
-      const modal = document.getElementById("modal-cliente");
-      const nom = document.getElementById("input-nombre-cliente").value.trim();
-      const tel = document.getElementById("input-tel-cliente").value.trim();
-
-      if (!nom || !tel) {
-        alert("Introduce el nombre y teléfono del cliente.");
-        return;
-      }
-
-      modal.style.display = "none";
-      const editId = document.getElementById("edit-cliente-id").value;
-
-      const clienteData = {
-        nombre: nom,
-        cif: document.getElementById("input-cif-cliente").value.trim() || "",
-        telefono: tel,
-        email: document.getElementById("input-email-cliente").value.trim() || "",
-        direccion: document.getElementById("input-dir-cliente").value.trim() || "",
-        notas: document.getElementById("input-notas-cliente").value.trim() || "",
-        fechaModificacion: serverTimestamp()
+        document.getElementById("modal-cliente").style.display = "flex";
       };
+    }
 
-      try {
-        if (editId) {
-          await updateDoc(doc(db, "clientes", editId), clienteData);
-        } else {
-          clienteData.fechaCreacion = serverTimestamp();
-          await addDoc(colClientes, clienteData);
+    const btnBorrarCliAct = document.getElementById("btn-borrar-cliente-actual");
+    if (btnBorrarCliAct) {
+      btnBorrarCliAct.onclick = async () => {
+        if (clienteSeleccionadoActual && confirm(`¿Deseas eliminar a ${clienteSeleccionadoActual.nombre}?`)) {
+          await deleteDoc(doc(db, "clientes", clienteSeleccionadoActual.id));
+          cambiarVista('clientes');
         }
-      } catch (err) {
-        console.error("Error guardando cliente:", err);
-      }
-    };
+      };
+    }
 
-    // ==========================================
-    // INCIDENCIAS / PARTES TÉCNICOS & FIRMA
-    // ==========================================
+    const btnGuardarCli = document.getElementById("btn-guardar-cliente");
+    if (btnGuardarCli) {
+      btnGuardarCli.onclick = async () => {
+        const modal = document.getElementById("modal-cliente");
+        const nom = document.getElementById("input-nombre-cliente").value.trim();
+        const tel = document.getElementById("input-tel-cliente").value.trim();
+
+        if (!nom || !tel) {
+          alert("Introduce el nombre y teléfono del cliente.");
+          return;
+        }
+
+        modal.style.display = "none";
+        const editId = document.getElementById("edit-cliente-id").value;
+
+        const clienteData = {
+          nombre: nom,
+          cif: document.getElementById("input-cif-cliente").value.trim() || "",
+          telefono: tel,
+          email: document.getElementById("input-email-cliente").value.trim() || "",
+          direccion: document.getElementById("input-dir-cliente").value.trim() || "",
+          notas: document.getElementById("input-notas-cliente").value.trim() || "",
+          fechaModificacion: serverTimestamp()
+        };
+
+        try {
+          if (editId) {
+            await updateDoc(doc(db, "clientes", editId), clienteData);
+          } else {
+            clienteData.fechaCreacion = serverTimestamp();
+            await addDoc(colClientes, clienteData);
+          }
+        } catch (err) {
+          console.error("Error guardando cliente:", err);
+        }
+      };
+    }
+
+    // INCIDENCIAS LOGIC
     window.filtrarIncidencias = (estado, btnElement) => {
       filtroIncidenciasActual = estado;
       if (btnElement) {
@@ -1772,6 +1771,7 @@
 
     function renderizarIncidencias() {
       const listaIncidenciasEl = document.getElementById("lista-incidencias");
+      if (!listaIncidenciasEl) return;
       listaIncidenciasEl.innerHTML = "";
       const filtradas = filtroIncidenciasActual === 'todas' ? cacheIncidencias : cacheIncidencias.filter(i => i.estado === filtroIncidenciasActual);
 
@@ -1834,7 +1834,6 @@
       }
     });
 
-    // PANTALLA COMPLETA PARTE TÉCNICO DE INCIDENCIA
     window.abrirDetalleIncidencia = (id) => {
       const inc = cacheIncidencias.find(i => i.id === id);
       if (!inc) return;
@@ -1855,7 +1854,6 @@
 
       cont.innerHTML = `
         <div class="card-print bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
-          
           <div class="flex flex-col sm:flex-row justify-between items-start gap-4 pb-4 border-b border-slate-200">
             <div>
               <div class="flex items-center gap-2">
@@ -1910,7 +1908,6 @@
             <ul class="space-y-1">${tareasLi}</ul>
           </div>
 
-          <!-- COMPARATIVA ANTES Y DESPUÉS -->
           <div class="pt-4 border-t border-slate-200">
             <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Evidencia Fotográfica (Antes y Después)</h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1931,7 +1928,6 @@
             </div>
           </div>
 
-          <!-- Notas del Operario -->
           <div class="pt-4 border-t border-slate-200">
             <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Informe Técnico y Aclaraciones del Operario</h3>
             <div class="p-4 bg-slate-50 rounded-xl border text-sm text-slate-800 leading-relaxed italic">
@@ -1939,7 +1935,6 @@
             </div>
           </div>
 
-          <!-- BLOQUE DE FIRMA DEL CLIENTE EN LA FICHA -->
           <div class="pt-4 border-t border-slate-200">
             <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Conformidad y Firma del Cliente</h3>
             <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 max-w-md">
@@ -1954,218 +1949,227 @@
                 : '<p class="text-xs text-slate-400 italic">Pendiente de firma por el cliente al finalizar la intervención.</p>'}
             </div>
           </div>
-
         </div>
       `;
 
       cambiarVista('detalleIncidencia');
     };
 
-    // EDITAR INCIDENCIA
-    document.getElementById("btn-editar-incidencia-actual").onclick = () => {
-      if (!incidenciaSeleccionadaActual) return;
-      const d = incidenciaSeleccionadaActual;
+    const btnEditIncAct = document.getElementById("btn-editar-incidencia-actual");
+    if (btnEditIncAct) {
+      btnEditIncAct.onclick = () => {
+        if (!incidenciaSeleccionadaActual) return;
+        const d = incidenciaSeleccionadaActual;
 
-      document.getElementById("edit-incidencia-id").value = d.id;
-      document.getElementById("titulo-modal-incidencia").textContent = "Editar / Resolver Incidencia";
-      document.getElementById("btn-guardar-incidencia").textContent = "Actualizar Parte Técnico";
+        document.getElementById("edit-incidencia-id").value = d.id;
+        document.getElementById("titulo-modal-incidencia").textContent = "Editar / Resolver Incidencia";
+        document.getElementById("btn-guardar-incidencia").textContent = "Actualizar Parte Técnico";
 
-      document.getElementById("select-obra-incidencia").value = d.obra || "";
-      document.getElementById("input-fecha-hora-incidencia").value = d.fechaHora || "";
-      document.getElementById("input-titulo-incidencia").value = d.titulo || "";
-      document.getElementById("input-desc-incidencia").value = d.descripcion || "";
-      document.getElementById("input-dir-incidencia").value = d.direccion || "";
-      document.getElementById("input-tel1-incidencia").value = d.tel1 || "";
-      document.getElementById("input-tel2-incidencia").value = d.tel2 || "";
-      document.getElementById("input-prioridad-incidencia").value = d.prioridad || "Normal";
-      document.getElementById("input-estado-incidencia").value = d.estado || "Abierta";
-      document.getElementById("select-operario-incidencia").value = d.operario || "Sin asignar";
-      document.getElementById("input-notas-operario-incidencia").value = d.notasOperario || "";
-      document.getElementById("input-firmante-nombre").value = d.firmanteNombre || "";
-      document.getElementById("input-firmante-dni").value = d.firmanteDni || "";
+        document.getElementById("select-obra-incidencia").value = d.obra || "";
+        document.getElementById("input-fecha-hora-incidencia").value = d.fechaHora || "";
+        document.getElementById("input-titulo-incidencia").value = d.titulo || "";
+        document.getElementById("input-desc-incidencia").value = d.descripcion || "";
+        document.getElementById("input-dir-incidencia").value = d.direccion || "";
+        document.getElementById("input-tel1-incidencia").value = d.tel1 || "";
+        document.getElementById("input-tel2-incidencia").value = d.tel2 || "";
+        document.getElementById("input-prioridad-incidencia").value = d.prioridad || "Normal";
+        document.getElementById("input-estado-incidencia").value = d.estado || "Abierta";
+        document.getElementById("select-operario-incidencia").value = d.operario || "Sin asignar";
+        document.getElementById("input-notas-operario-incidencia").value = d.notasOperario || "";
+        document.getElementById("input-firmante-nombre").value = d.firmanteNombre || "";
+        document.getElementById("input-firmante-dni").value = d.firmanteDni || "";
 
-      // Precargar tareas
-      const cTrabajos = document.getElementById("contenedor-trabajos-incidencia");
-      cTrabajos.innerHTML = "";
-      if (d.trabajos && d.trabajos.length > 0) {
-        d.trabajos.forEach(t => agregarFilaTrabajoIncidencia(t));
-      } else {
-        agregarFilaTrabajoIncidencia("");
-      }
-
-      fotoAntesBase64 = d.fotoAntes || null;
-      fotoDespuesBase64 = d.fotoDespues || null;
-
-      const prevAntes = document.getElementById("preview-foto-antes");
-      if (fotoAntesBase64) {
-        prevAntes.textContent = "📷 Foto inicial guardada";
-        prevAntes.classList.remove("hidden");
-      } else {
-        prevAntes.classList.add("hidden");
-      }
-
-      const prevDespues = document.getElementById("preview-foto-despues");
-      if (fotoDespuesBase64) {
-        prevDespues.textContent = "✅ Foto final guardada";
-        prevDespues.classList.remove("hidden");
-      } else {
-        prevDespues.classList.add("hidden");
-      }
-
-      // Cargar firma previa en el canvas si existe
-      window.limpiarCanvasFirma();
-      if (d.firmaCliente) {
-        const imgFirma = new Image();
-        imgFirma.onload = () => {
-          ctx.drawImage(imgFirma, 0, 0, canvas.width, canvas.height);
-          haFirmado = true;
-        };
-        imgFirma.src = d.firmaCliente;
-      }
-
-      document.getElementById("modal-incidencia").style.display = "flex";
-    };
-
-    document.getElementById("btn-borrar-incidencia-actual").onclick = async () => {
-      if (incidenciaSeleccionadaActual && confirm("¿Deseas eliminar definitivamente esta incidencia?")) {
-        await deleteDoc(doc(db, "incidencias", incidenciaSeleccionadaActual.id));
-        cambiarVista('incidencias');
-      }
-    };
-
-    // GUARDAR INCIDENCIA CON FIRMA
-    document.getElementById("btn-guardar-incidencia").onclick = async () => {
-      const modal = document.getElementById("modal-incidencia");
-      const tit = document.getElementById("input-titulo-incidencia").value.trim();
-      const obr = document.getElementById("select-obra-incidencia").value;
-
-      if (!tit || !obr) {
-        alert("Selecciona la obra e introduce el título de la incidencia.");
-        return;
-      }
-
-      modal.style.display = "none";
-      const editId = document.getElementById("edit-incidencia-id").value;
-
-      const trabajos = [];
-      document.querySelectorAll("#contenedor-trabajos-incidencia .item-trabajo-incidencia input").forEach(inp => {
-        const v = inp.value.trim();
-        if (v) trabajos.push(v);
-      });
-
-      // Extraer la firma si el usuario ha firmado
-      let firmaDataUrl = "";
-      if (haFirmado) {
-        firmaDataUrl = canvas.toDataURL("image/png");
-      } else if (editId && incidenciaSeleccionadaActual && incidenciaSeleccionadaActual.firmaCliente) {
-        firmaDataUrl = incidenciaSeleccionadaActual.firmaCliente;
-      }
-
-      const incData = {
-        obra: obr,
-        titulo: tit,
-        fechaHora: document.getElementById("input-fecha-hora-incidencia").value || "",
-        descripcion: document.getElementById("input-desc-incidencia").value.trim() || "",
-        direccion: document.getElementById("input-dir-incidencia").value.trim() || "",
-        tel1: document.getElementById("input-tel1-incidencia").value.trim() || "",
-        tel2: document.getElementById("input-tel2-incidencia").value.trim() || "",
-        prioridad: document.getElementById("input-prioridad-incidencia").value,
-        estado: document.getElementById("input-estado-incidencia").value,
-        operario: document.getElementById("select-operario-incidencia").value,
-        trabajos: trabajos,
-        fotoAntes: fotoAntesBase64 || "",
-        fotoDespues: fotoDespuesBase64 || "",
-        notasOperario: document.getElementById("input-notas-operario-incidencia").value.trim() || "",
-        firmaCliente: firmaDataUrl,
-        firmanteNombre: document.getElementById("input-firmante-nombre").value.trim() || "",
-        firmanteDni: document.getElementById("input-firmante-dni").value.trim() || "",
-        fechaModificacion: serverTimestamp()
-      };
-
-      try {
-        if (editId) {
-          await updateDoc(doc(db, "incidencias", editId), incData);
+        const cTrabajos = document.getElementById("contenedor-trabajos-incidencia");
+        cTrabajos.innerHTML = "";
+        if (d.trabajos && d.trabajos.length > 0) {
+          d.trabajos.forEach(t => agregarFilaTrabajoIncidencia(t));
         } else {
-          incData.fechaCreacion = serverTimestamp();
-          await addDoc(colIncidencias, incData);
+          agregarFilaTrabajoIncidencia("");
         }
-      } catch (err) {
-        console.error("Error guardando incidencia:", err);
-      }
-    };
 
-    // ==========================================
-    // OPERARIOS
-    // ==========================================
+        fotoAntesBase64 = d.fotoAntes || null;
+        fotoDespuesBase64 = d.fotoDespues || null;
+
+        const prevAntes = document.getElementById("preview-foto-antes");
+        if (fotoAntesBase64) {
+          prevAntes.textContent = "📷 Foto inicial guardada";
+          prevAntes.classList.remove("hidden");
+        } else {
+          prevAntes.classList.add("hidden");
+        }
+
+        const prevDespues = document.getElementById("preview-foto-despues");
+        if (fotoDespuesBase64) {
+          prevDespues.textContent = "✅ Foto final guardada";
+          prevDespues.classList.remove("hidden");
+        } else {
+          prevDespues.classList.add("hidden");
+        }
+
+        window.limpiarCanvasFirma();
+        if (d.firmaCliente && ctx && canvas) {
+          const imgFirma = new Image();
+          imgFirma.onload = () => {
+            ctx.drawImage(imgFirma, 0, 0, canvas.width, canvas.height);
+            haFirmado = true;
+          };
+          imgFirma.src = d.firmaCliente;
+        }
+
+        document.getElementById("modal-incidencia").style.display = "flex";
+      };
+    }
+
+    const btnBorrarIncAct = document.getElementById("btn-borrar-incidencia-actual");
+    if (btnBorrarIncAct) {
+      btnBorrarIncAct.onclick = async () => {
+        if (incidenciaSeleccionadaActual && confirm("¿Deseas eliminar definitivamente esta incidencia?")) {
+          await deleteDoc(doc(db, "incidencias", incidenciaSeleccionadaActual.id));
+          cambiarVista('incidencias');
+        }
+      };
+    }
+
+    const btnGuardarInc = document.getElementById("btn-guardar-incidencia");
+    if (btnGuardarInc) {
+      btnGuardarInc.onclick = async () => {
+        const modal = document.getElementById("modal-incidencia");
+        const tit = document.getElementById("input-titulo-incidencia").value.trim();
+        const obr = document.getElementById("select-obra-incidencia").value;
+
+        if (!tit || !obr) {
+          alert("Selecciona la obra e introduce el título de la incidencia.");
+          return;
+        }
+
+        modal.style.display = "none";
+        const editId = document.getElementById("edit-incidencia-id").value;
+
+        const trabajos = [];
+        document.querySelectorAll("#contenedor-trabajos-incidencia .item-trabajo-incidencia input").forEach(inp => {
+          const v = inp.value.trim();
+          if (v) trabajos.push(v);
+        });
+
+        let firmaDataUrl = "";
+        if (haFirmado && canvas) {
+          firmaDataUrl = canvas.toDataURL("image/png");
+        } else if (editId && incidenciaSeleccionadaActual && incidenciaSeleccionadaActual.firmaCliente) {
+          firmaDataUrl = incidenciaSeleccionadaActual.firmaCliente;
+        }
+
+        const incData = {
+          obra: obr,
+          titulo: tit,
+          fechaHora: document.getElementById("input-fecha-hora-incidencia").value || "",
+          descripcion: document.getElementById("input-desc-incidencia").value.trim() || "",
+          direccion: document.getElementById("input-dir-incidencia").value.trim() || "",
+          tel1: document.getElementById("input-tel1-incidencia").value.trim() || "",
+          tel2: document.getElementById("input-tel2-incidencia").value.trim() || "",
+          prioridad: document.getElementById("input-prioridad-incidencia").value,
+          estado: document.getElementById("input-estado-incidencia").value,
+          operario: document.getElementById("select-operario-incidencia").value,
+          trabajos: trabajos,
+          fotoAntes: fotoAntesBase64 || "",
+          fotoDespues: fotoDespuesBase64 || "",
+          notasOperario: document.getElementById("input-notas-operario-incidencia").value.trim() || "",
+          firmaCliente: firmaDataUrl,
+          firmanteNombre: document.getElementById("input-firmante-nombre").value.trim() || "",
+          firmanteDni: document.getElementById("input-firmante-dni").value.trim() || "",
+          fechaModificacion: serverTimestamp()
+        };
+
+        try {
+          if (editId) {
+            await updateDoc(doc(db, "incidencias", editId), incData);
+          } else {
+            incData.fechaCreacion = serverTimestamp();
+            await addDoc(colIncidencias, incData);
+          }
+        } catch (err) {
+          console.error("Error guardando incidencia:", err);
+        }
+      };
+    }
+
+    // OPERARIOS LOGIC
     const listaOperariosEl = document.getElementById("lista-operarios");
     const contenedorCheckboxes = document.getElementById("contenedor-checkbox-operarios");
     const selectOperarioIncidencia = document.getElementById("select-operario-incidencia");
 
     onSnapshot(colOperarios, (snap) => {
-      listaOperariosEl.innerHTML = "";
-      contenedorCheckboxes.innerHTML = "";
-      selectOperarioIncidencia.innerHTML = '<option value="Sin asignar">Sin asignar / Equipo general</option>';
+      if (listaOperariosEl) listaOperariosEl.innerHTML = "";
+      if (contenedorCheckboxes) contenedorCheckboxes.innerHTML = "";
+      if (selectOperarioIncidencia) selectOperarioIncidencia.innerHTML = '<option value="Sin asignar">Sin asignar / Equipo general</option>';
       cacheOperarios = [];
 
       if (snap.empty) {
-        listaOperariosEl.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay operarios registrados.</p></div>`;
-        contenedorCheckboxes.innerHTML = `<span class="text-xs text-slate-400 col-span-full">Primero registra operarios.</span>`;
+        if (listaOperariosEl) listaOperariosEl.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay operarios registrados.</p></div>`;
+        if (contenedorCheckboxes) contenedorCheckboxes.innerHTML = `<span class="text-xs text-slate-400 col-span-full">Primero registra operarios.</span>`;
       } else {
         snap.forEach((docSnap) => {
           const d = { id: docSnap.id, ...docSnap.data() };
           cacheOperarios.push(d);
 
-          const lbl = document.createElement("label");
-          lbl.className = "flex items-center gap-2 text-xs text-slate-700 cursor-pointer bg-white p-2 rounded border hover:bg-slate-100";
-          lbl.innerHTML = `<input type="checkbox" value="${d.nombre}" class="rounded text-amber-500"> <span>${d.nombre} (${d.oficio})</span>`;
-          contenedorCheckboxes.appendChild(lbl);
+          if (contenedorCheckboxes) {
+            const lbl = document.createElement("label");
+            lbl.className = "flex items-center gap-2 text-xs text-slate-700 cursor-pointer bg-white p-2 rounded border hover:bg-slate-100";
+            lbl.innerHTML = `<input type="checkbox" value="${d.nombre}" class="rounded text-amber-500"> <span>${d.nombre} (${d.oficio})</span>`;
+            contenedorCheckboxes.appendChild(lbl);
+          }
 
-          const optInc = document.createElement("option");
-          optInc.value = d.nombre;
-          optInc.textContent = `${d.nombre} (${d.oficio})`;
-          selectOperarioIncidencia.appendChild(optInc);
+          if (selectOperarioIncidencia) {
+            const optInc = document.createElement("option");
+            optInc.value = d.nombre;
+            optInc.textContent = `${d.nombre} (${d.oficio})`;
+            selectOperarioIncidencia.appendChild(optInc);
+          }
 
-          const card = document.createElement("div");
-          card.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between";
-          card.innerHTML = `
-            <div>
-              <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sky-100 text-sky-800">${d.oficio}</span>
-              <h3 class="text-base font-bold text-slate-900 mt-3">${d.nombre}</h3>
-              <p class="text-sm text-slate-500 mt-1">📞 <a href="tel:${d.telefono || ''}" class="text-sky-600 hover:underline font-semibold">${d.telefono || 'Sin teléfono'}</a></p>
-            </div>
-            <div class="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center text-xs">
-              <span class="text-slate-400">#${docSnap.id.substring(0, 5).toUpperCase()}</span>
-              <button onclick="window.borrarRegistro('operarios', '${docSnap.id}')" class="text-rose-500 hover:underline">Eliminar</button>
-            </div>
-          `;
-          listaOperariosEl.appendChild(card);
+          if (listaOperariosEl) {
+            const card = document.createElement("div");
+            card.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between";
+            card.innerHTML = `
+              <div>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sky-100 text-sky-800">${d.oficio}</span>
+                <h3 class="text-base font-bold text-slate-900 mt-3">${d.nombre}</h3>
+                <p class="text-sm text-slate-500 mt-1">📞 <a href="tel:${d.telefono || ''}" class="text-sky-600 hover:underline font-semibold">${d.telefono || 'Sin teléfono'}</a></p>
+              </div>
+              <div class="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center text-xs">
+                <span class="text-slate-400">#${docSnap.id.substring(0, 5).toUpperCase()}</span>
+                <button onclick="window.borrarRegistro('operarios', '${docSnap.id}')" class="text-rose-500 hover:underline">Eliminar</button>
+              </div>
+            `;
+            listaOperariosEl.appendChild(card);
+          }
         });
       }
     });
 
-    document.getElementById("btn-guardar-operario").onclick = async () => {
-      const modal = document.getElementById("modal-operario");
-      const nom = document.getElementById("input-nombre-operario").value.trim();
-      if (!nom) {
-        alert("Introduce el nombre del operario.");
-        return;
-      }
-      modal.style.display = "none";
-      await addDoc(colOperarios, {
-        nombre: nom,
-        oficio: document.getElementById("input-oficio-operario").value,
-        telefono: document.getElementById("input-tel-operario").value.trim() || "",
-        fechaCreacion: serverTimestamp()
-      });
-      document.getElementById("input-nombre-operario").value = "";
-      document.getElementById("input-tel-operario").value = "";
-    };
+    const btnGuardarOp = document.getElementById("btn-guardar-operario");
+    if (btnGuardarOp) {
+      btnGuardarOp.onclick = async () => {
+        const modal = document.getElementById("modal-operario");
+        const nom = document.getElementById("input-nombre-operario").value.trim();
+        if (!nom) {
+          alert("Introduce el nombre del operario.");
+          return;
+        }
+        modal.style.display = "none";
+        await addDoc(colOperarios, {
+          nombre: nom,
+          oficio: document.getElementById("input-oficio-operario").value,
+          telefono: document.getElementById("input-tel-operario").value.trim() || "",
+          fechaCreacion: serverTimestamp()
+        });
+        document.getElementById("input-nombre-operario").value = "";
+        document.getElementById("input-tel-operario").value = "";
+      };
+    }
 
-    // ==========================================
-    // HERRAMIENTAS
-    // ==========================================
+    // HERRAMIENTAS LOGIC
     const listaHerramientasEl = document.getElementById("lista-herramientas");
     onSnapshot(colHerramientas, (snap) => {
+      if (!listaHerramientasEl) return;
       listaHerramientasEl.innerHTML = "";
       if (snap.empty) {
         listaHerramientasEl.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay maquinaria registrada.</p></div>`;
@@ -2191,23 +2195,26 @@
       }
     });
 
-    document.getElementById("btn-guardar-herramienta").onclick = async () => {
-      const modal = document.getElementById("modal-herramienta");
-      const nom = document.getElementById("input-nombre-herramienta").value.trim();
-      if (!nom) {
-        alert("Introduce el nombre de la herramienta.");
-        return;
-      }
-      modal.style.display = "none";
-      await addDoc(colHerramientas, {
-        nombre: nom,
-        serie: document.getElementById("input-serie-herramienta").value.trim() || "",
-        ubicacion: document.getElementById("select-obra-herramienta").value,
-        fechaCreacion: serverTimestamp()
-      });
-      document.getElementById("input-nombre-herramienta").value = "";
-      document.getElementById("input-serie-herramienta").value = "";
-    };
+    const btnGuardarHer = document.getElementById("btn-guardar-herramienta");
+    if (btnGuardarHer) {
+      btnGuardarHer.onclick = async () => {
+        const modal = document.getElementById("modal-herramienta");
+        const nom = document.getElementById("input-nombre-herramienta").value.trim();
+        if (!nom) {
+          alert("Introduce el nombre de la herramienta.");
+          return;
+        }
+        modal.style.display = "none";
+        await addDoc(colHerramientas, {
+          nombre: nom,
+          serie: document.getElementById("input-serie-herramienta").value.trim() || "",
+          ubicacion: document.getElementById("select-obra-herramienta").value,
+          fechaCreacion: serverTimestamp()
+        });
+        document.getElementById("input-nombre-herramienta").value = "";
+        document.getElementById("input-serie-herramienta").value = "";
+      };
+    }
 
     // Borrado universal
     window.borrarRegistro = async (coleccion, id) => {
