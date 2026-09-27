@@ -124,13 +124,23 @@
         </button>
       </header>
 
-      <!-- Filtros -->
-      <div class="mt-4 flex gap-2 overflow-x-auto pb-2">
-        <button onclick="window.filtrarObras('todas')" class="px-3 py-1 rounded-full text-xs font-semibold bg-slate-800 text-white">Todas</button>
-        <button onclick="window.filtrarObras('En curso')" class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">🟢 En curso</button>
-        <button onclick="window.filtrarObras('Presupuestada')" class="px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800">🟡 Presupuestadas</button>
-        <button onclick="window.filtrarObras('Pausada')" class="px-3 py-1 rounded-full text-xs font-semibold bg-orange-100 text-orange-800">🟠 Pausadas</button>
-        <button onclick="window.filtrarObras('Finalizada')" class="px-3 py-1 rounded-full text-xs font-semibold bg-sky-100 text-sky-800">🔵 Finalizadas</button>
+      <!-- Barra de Filtros Dinámicos -->
+      <div id="contenedor-filtros-obras" class="mt-4 flex gap-2 overflow-x-auto pb-2">
+        <button onclick="window.filtrarObras('todas', this)" class="btn-filtro px-3.5 py-1.5 rounded-full text-xs font-bold transition bg-slate-900 text-white shadow-sm">
+          Todas
+        </button>
+        <button onclick="window.filtrarObras('En curso', this)" class="btn-filtro px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100">
+          🟢 En curso
+        </button>
+        <button onclick="window.filtrarObras('Presupuestada', this)" class="btn-filtro px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100">
+          🟡 Presupuestadas
+        </button>
+        <button onclick="window.filtrarObras('Pausada', this)" class="btn-filtro px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-orange-50 text-orange-800 border border-orange-200 hover:bg-orange-100">
+          🟠 Pausadas
+        </button>
+        <button onclick="window.filtrarObras('Finalizada', this)" class="btn-filtro px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-sky-50 text-sky-800 border border-sky-200 hover:bg-sky-100">
+          🔵 Finalizadas
+        </button>
       </div>
 
       <section id="lista-proyectos" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -630,8 +640,16 @@
     let filtroEstadoActual = 'todas';
     let obraSeleccionadaActual = null;
 
-    window.filtrarObras = (estado) => {
+    window.filtrarObras = (estado, btnElement) => {
       filtroEstadoActual = estado;
+
+      if (btnElement) {
+        document.querySelectorAll("#contenedor-filtros-obras .btn-filtro").forEach(b => {
+          b.className = "btn-filtro px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-white text-slate-600 border border-slate-200 hover:bg-slate-50";
+        });
+        btnElement.className = "btn-filtro px-3.5 py-1.5 rounded-full text-xs font-bold transition bg-slate-900 text-white shadow-sm";
+      }
+
       renderizarObras();
     };
 
@@ -682,7 +700,7 @@
       });
     }
 
-    // PANTALLA COMPLETA DETALLE OBRA OPTIMIZADA PARA IMPRESIÓN COMPACTA
+    // PANTALLA COMPLETA DETALLE OBRA (CON TELÉFONOS CLICABLES)
     window.abrirDetalleObra = (id) => {
       const obra = cacheObras.find(o => o.id === id);
       if (!obra) return;
@@ -732,6 +750,12 @@
         }
       }
 
+      // Teléfonos formateados clicables para llamadas
+      const telefonosArray = [];
+      if (obra.tel1) telefonosArray.push(`<a href="tel:${obra.tel1}" class="text-amber-700 font-bold hover:underline">📞 ${obra.tel1}</a>`);
+      if (obra.tel2) telefonosArray.push(`<a href="tel:${obra.tel2}" class="text-amber-700 font-bold hover:underline">📞 ${obra.tel2}</a>`);
+      if (obra.tel3) telefonosArray.push(`<a href="tel:${obra.tel3}" class="text-amber-700 font-bold hover:underline">📞 ${obra.tel3}</a>`);
+
       cont.innerHTML = `
         <div class="card-print bg-white rounded-2xl p-5 sm:p-7 border border-slate-200 shadow-sm space-y-4">
           
@@ -769,8 +793,10 @@
               <p class="font-medium text-slate-800 mt-0.5">🏁 ${obra.fechaFin || 'Pendiente'}</p>
             </div>
             <div>
-              <span class="text-[10px] font-bold text-slate-400 uppercase">Teléfonos</span>
-              <p class="font-medium text-slate-700 mt-0.5 truncate">📞 ${[obra.tel1, obra.tel2, obra.tel3].filter(Boolean).join(' / ') || 'Sin teléfonos'}</p>
+              <span class="text-[10px] font-bold text-slate-400 uppercase">Teléfonos Clicables</span>
+              <div class="mt-0.5 flex flex-wrap gap-2 text-xs">
+                ${telefonosArray.length > 0 ? telefonosArray.join('<span class="text-slate-300">|</span>') : '<span class="text-slate-400 italic">Sin teléfonos</span>'}
+              </div>
             </div>
           </div>
 
@@ -780,7 +806,7 @@
             <p class="text-xs text-slate-700 leading-relaxed bg-slate-50 p-2.5 rounded-lg border">${obra.descripcion}</p>
           </div>` : ''}
 
-          <!-- Tajos y Materiales compactos a 2 columnas en impresión -->
+          <!-- Tajos y Materiales -->
           <div class="print-section print-grid-2col grid grid-cols-1 lg:grid-cols-2 gap-4">
             <div class="p-3.5 rounded-xl border border-slate-200 bg-white">
               <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2 flex items-center justify-between pb-1.5 border-b">
@@ -1005,8 +1031,8 @@
             <div>
               <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-800">Cliente</span>
               <h3 class="text-base font-bold text-slate-900 mt-2">${d.nombre}</h3>
-              <p class="text-xs text-slate-600 mt-2">📞 ${d.telefono}</p>
-              ${d.email ? `<p class="text-xs text-slate-500 mt-1">✉️ ${d.email}</p>` : ''}
+              <p class="text-xs text-slate-600 mt-2">📞 <a href="tel:${d.telefono}" class="text-indigo-600 hover:underline font-bold">${d.telefono}</a></p>
+              ${d.email ? `<p class="text-xs text-slate-500 mt-1">✉️ <a href="mailto:${d.email}" class="hover:underline">${d.email}</a></p>` : ''}
               ${d.direccion ? `<p class="text-xs text-slate-500 mt-1">📍 ${d.direccion}</p>` : ''}
               ${d.notas ? `<p class="text-xs bg-slate-50 p-2.5 rounded-lg border text-slate-600 mt-3 italic">"${d.notas}"</p>` : ''}
             </div>
@@ -1067,7 +1093,7 @@
             <div>
               <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sky-100 text-sky-800">${d.oficio}</span>
               <h3 class="text-base font-bold text-slate-900 mt-3">${d.nombre}</h3>
-              <p class="text-sm text-slate-500 mt-1">📞 ${d.telefono || 'Sin teléfono'}</p>
+              <p class="text-sm text-slate-500 mt-1">📞 <a href="tel:${d.telefono || ''}" class="text-sky-600 hover:underline font-semibold">${d.telefono || 'Sin teléfono'}</a></p>
             </div>
             <div class="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center text-xs">
               <span class="text-slate-400">#${docSnap.id.substring(0, 5).toUpperCase()}</span>
