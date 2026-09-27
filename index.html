@@ -23,6 +23,9 @@
         <button id="nav-obras" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg bg-slate-800 text-white font-medium transition">
           <span>🏗️</span> Obras y Proyectos
         </button>
+        <button id="nav-clientes" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
+          <span>👥</span> Clientes
+        </button>
         <button id="nav-incidencias" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
           <span>⚠️</span> Incidencias
         </button>
@@ -49,18 +52,45 @@
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
           <h2 class="text-2xl font-bold text-slate-900">Obras y Proyectos</h2>
-          <p class="text-sm text-slate-500">Supervisa las reformas, presupuestos y estados en tiempo real.</p>
+          <p class="text-sm text-slate-500">Supervisa reformas, presupuestos y clientes asociados.</p>
         </div>
-        <button id="btn-abrir-modal-obra" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-semibold px-4 py-2.5 rounded-lg shadow-sm transition">
-          + Nueva Obra
-        </button>
+        <div class="flex gap-2">
+          <button id="btn-abrir-modal-obra" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-semibold px-4 py-2.5 rounded-lg shadow-sm transition">
+            + Nueva Obra
+          </button>
+        </div>
       </header>
-      <section id="lista-proyectos" class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <!-- Barra de filtros rápidos -->
+      <div class="mt-4 flex gap-2 overflow-x-auto pb-2">
+        <button onclick="window.filtrarObras('todas')" class="px-3 py-1 rounded-full text-xs font-semibold bg-slate-800 text-white">Todas</button>
+        <button onclick="window.filtrarObras('En curso')" class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">🟢 En curso</button>
+        <button onclick="window.filtrarObras('Presupuestada')" class="px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800">🟡 Presupuestadas</button>
+        <button onclick="window.filtrarObras('Finalizada')" class="px-3 py-1 rounded-full text-xs font-semibold bg-sky-100 text-sky-800">🔵 Finalizadas</button>
+      </div>
+
+      <section id="lista-proyectos" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <p class="text-sm text-slate-400">Cargando proyectos...</p>
       </section>
     </div>
 
-    <!-- SECCIÓN 2: INCIDENCIAS -->
+    <!-- SECCIÓN 2: CLIENTES -->
+    <div id="vista-clientes" class="hidden">
+      <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
+        <div>
+          <h2 class="text-2xl font-bold text-slate-900">Directorio de Clientes</h2>
+          <p class="text-sm text-slate-500">Historial de contactos, datos de facturación y seguimiento comercial.</p>
+        </div>
+        <button id="btn-abrir-modal-cliente" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2.5 rounded-lg shadow-sm transition">
+          + Nuevo Cliente
+        </button>
+      </header>
+      <section id="lista-clientes" class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <p class="text-sm text-slate-400">Cargando clientes...</p>
+      </section>
+    </div>
+
+    <!-- SECCIÓN 3: INCIDENCIAS -->
     <div id="vista-incidencias" class="hidden">
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
@@ -76,7 +106,7 @@
       </section>
     </div>
 
-    <!-- SECCIÓN 3: OPERARIOS -->
+    <!-- SECCIÓN 4: OPERARIOS -->
     <div id="vista-operarios" class="hidden">
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
@@ -92,11 +122,11 @@
       </section>
     </div>
 
-    <!-- SECCIÓN 4: HERRAMIENTAS -->
+    <!-- SECCIÓN 5: HERRAMIENTAS -->
     <div id="vista-herramientas" class="hidden">
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
-          <h2 class="text-2xl font-bold text-slate-900">Parque de Maquinaria y Herramientas</h2>
+          <h2 class="text-2xl font-bold text-slate-900">Parque de Maquinaria</h2>
           <p class="text-sm text-slate-500">Inventario de equipos pesados, maquinaria y localización actual.</p>
         </div>
         <button id="btn-abrir-modal-herramienta" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 py-2.5 rounded-lg shadow-sm transition">
@@ -110,7 +140,7 @@
 
   </main>
 
-  <!-- MODAL 1: NUEVA OBRA -->
+  <!-- MODAL: NUEVA OBRA -->
   <div id="modal-obra" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 z-50">
     <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl">
       <div class="flex justify-between items-center pb-4 border-b border-slate-100">
@@ -120,12 +150,14 @@
       <form id="form-nueva-obra" class="mt-6 space-y-4">
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre o Dirección *</label>
-          <input id="input-nombre" type="text" required placeholder="Ej. Reforma Integral Gran Vía 14" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+          <input id="input-nombre" type="text" required placeholder="Ej. Reforma C/ Mayor 14" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Cliente / Teléfono</label>
-            <input id="input-cliente" type="text" placeholder="Ej. Carlos - 611223344" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Cliente Vinculado</label>
+            <select id="select-cliente-obra" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none bg-white">
+              <option value="Cliente particular">Cliente general / Sin vincular</option>
+            </select>
           </div>
           <div>
             <label class="block text-xs font-semibold text-slate-600 mb-1">Presupuesto (€)</label>
@@ -148,7 +180,45 @@
     </div>
   </div>
 
-  <!-- MODAL 2: NUEVA INCIDENCIA -->
+  <!-- MODAL: NUEVO CLIENTE -->
+  <div id="modal-cliente" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl">
+      <div class="flex justify-between items-center pb-4 border-b border-slate-100">
+        <h3 class="text-lg font-bold text-slate-900">Alta de Cliente</h3>
+        <button id="btn-cerrar-modal-cliente" class="text-slate-400 hover:text-slate-700 text-xl font-bold">&times;</button>
+      </div>
+      <form id="form-nuevo-cliente" class="mt-6 space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre Completo o Razón Social *</label>
+          <input id="input-nombre-cliente" type="text" required placeholder="Ej. Ana Fernández / Proyectos SL" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Teléfono *</label>
+            <input id="input-tel-cliente" type="tel" required placeholder="612345678" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Email</label>
+            <input id="input-email-cliente" type="email" placeholder="cliente@correo.com" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Dirección de Contacto / Fiscal</label>
+          <input id="input-dir-cliente" type="text" placeholder="Calle, número, ciudad" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Notas de seguimiento</label>
+          <textarea id="input-notas-cliente" rows="2" placeholder="Ej. Interesado en reforma de baño en octubre..." class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none"></textarea>
+        </div>
+        <div class="mt-6 flex justify-end gap-3 pt-4 border-t border-slate-100">
+          <button type="button" id="btn-cancelar-cliente" class="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg">Cancelar</button>
+          <button type="submit" class="px-5 py-2 text-sm bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg">Guardar Cliente</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: NUEVA INCIDENCIA -->
   <div id="modal-incidencia" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 z-50">
     <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl">
       <div class="flex justify-between items-center pb-4 border-b border-slate-100">
@@ -164,11 +234,11 @@
         </div>
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1">Título de la Incidencia *</label>
-          <input id="input-titulo-incidencia" type="text" required placeholder="Ej. Fuga en bajante principal" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-rose-500 outline-none">
+          <input id="input-titulo-incidencia" type="text" required placeholder="Ej. Fuga en tubería" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-rose-500 outline-none">
         </div>
         <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Descripción detallada</label>
-          <textarea id="input-desc-incidencia" rows="3" placeholder="Explica el problema..." class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-rose-500 outline-none"></textarea>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Descripción</label>
+          <textarea id="input-desc-incidencia" rows="3" placeholder="Detalla el problema..." class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-rose-500 outline-none"></textarea>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
@@ -190,27 +260,27 @@
         </div>
         <div class="mt-6 flex justify-end gap-3 pt-4 border-t border-slate-100">
           <button type="button" id="btn-cancelar-incidencia" class="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg">Cancelar</button>
-          <button type="submit" class="px-5 py-2 text-sm bg-rose-500 hover:bg-rose-600 text-white font-semibold rounded-lg">Guardar Incidencia</button>
+          <button type="submit" class="px-5 py-2 text-sm bg-rose-500 hover:bg-rose-600 text-white font-semibold rounded-lg">Guardar</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- MODAL 3: NUEVO OPERARIO -->
+  <!-- MODAL: NUEVO OPERARIO -->
   <div id="modal-operario" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 z-50">
     <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl">
       <div class="flex justify-between items-center pb-4 border-b border-slate-100">
-        <h3 class="text-lg font-bold text-slate-900">Registrar Nuevo Operario</h3>
+        <h3 class="text-lg font-bold text-slate-900">Alta de Operario</h3>
         <button id="btn-cerrar-modal-operario" class="text-slate-400 hover:text-slate-700 text-xl font-bold">&times;</button>
       </div>
       <form id="form-nuevo-operario" class="mt-6 space-y-4">
         <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre y Apellidos *</label>
-          <input id="input-nombre-operario" type="text" required placeholder="Ej. Manuel García López" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-sky-500 outline-none">
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre Completo *</label>
+          <input id="input-nombre-operario" type="text" required placeholder="Ej. Manuel García" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-sky-500 outline-none">
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Especialidad / Oficio *</label>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Oficio</label>
             <select id="input-oficio-operario" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-sky-500 outline-none bg-white">
               <option value="Albañil">Albañilería</option>
               <option value="Fontanero">Fontanería</option>
@@ -233,25 +303,25 @@
     </div>
   </div>
 
-  <!-- MODAL 4: NUEVA HERRAMIENTA -->
+  <!-- MODAL: NUEVA HERRAMIENTA -->
   <div id="modal-herramienta" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 z-50">
     <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl">
       <div class="flex justify-between items-center pb-4 border-b border-slate-100">
-        <h3 class="text-lg font-bold text-slate-900">Registrar Herramienta / Maquinaria</h3>
+        <h3 class="text-lg font-bold text-slate-900">Registrar Herramienta</h3>
         <button id="btn-cerrar-modal-herramienta" class="text-slate-400 hover:text-slate-700 text-xl font-bold">&times;</button>
       </div>
       <form id="form-nueva-herramienta" class="mt-6 space-y-4">
         <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre o Equipo *</label>
-          <input id="input-nombre-herramienta" type="text" required placeholder="Ej. Martillo demoledor Bosch GSH 11 E" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre o Máquina *</label>
+          <input id="input-nombre-herramienta" type="text" required placeholder="Ej. Martillo demoledor Bosch" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Número de Serie / Código</label>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Nº Serie</label>
             <input id="input-serie-herramienta" type="text" placeholder="SER-9842" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
           </div>
           <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Ubicación / Obra</label>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Ubicación</label>
             <select id="select-obra-herramienta" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none bg-white">
               <option value="Almacén central">📦 Almacén central</option>
             </select>
@@ -259,7 +329,7 @@
         </div>
         <div class="mt-6 flex justify-end gap-3 pt-4 border-t border-slate-100">
           <button type="button" id="btn-cancelar-herramienta" class="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg">Cancelar</button>
-          <button type="submit" class="px-5 py-2 text-sm bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg">Guardar Herramienta</button>
+          <button type="submit" class="px-5 py-2 text-sm bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg">Guardar</button>
         </div>
       </form>
     </div>
@@ -268,7 +338,7 @@
   <!-- SCRIPT FIREBASE -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDerRNJAbwBr8G7sjp7guj3HmKBBh0S6UE",
@@ -283,15 +353,17 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Navegación modular
+    // Navegación
     const vistas = {
       obras: document.getElementById("vista-obras"),
+      clientes: document.getElementById("vista-clientes"),
       incidencias: document.getElementById("vista-incidencias"),
       operarios: document.getElementById("vista-operarios"),
       herramientas: document.getElementById("vista-herramientas")
     };
     const botonesNav = {
       obras: document.getElementById("nav-obras"),
+      clientes: document.getElementById("nav-clientes"),
       incidencias: document.getElementById("nav-incidencias"),
       operarios: document.getElementById("nav-operarios"),
       herramientas: document.getElementById("nav-herramientas")
@@ -310,11 +382,11 @@
     }
 
     botonesNav.obras.onclick = () => cambiarVista('obras');
+    botonesNav.clientes.onclick = () => cambiarVista('clientes');
     botonesNav.incidencias.onclick = () => cambiarVista('incidencias');
     botonesNav.operarios.onclick = () => cambiarVista('operarios');
     botonesNav.herramientas.onclick = () => cambiarVista('herramientas');
 
-    // Manejo de Modales
     function vincularModal(btnAbrirId, modalId, btnCerrarId, btnCancelarId) {
       const modal = document.getElementById(modalId);
       document.getElementById(btnAbrirId).onclick = () => modal.style.display = "flex";
@@ -324,53 +396,76 @@
     }
 
     const modalObra = vincularModal("btn-abrir-modal-obra", "modal-obra", "btn-cerrar-modal-obra", "btn-cancelar-obra");
+    const modalCliente = vincularModal("btn-abrir-modal-cliente", "modal-cliente", "btn-cerrar-modal-cliente", "btn-cancelar-cliente");
     const modalIncidencia = vincularModal("btn-abrir-modal-incidencia", "modal-incidencia", "btn-cerrar-modal-incidencia", "btn-cancelar-incidencia");
     const modalOperario = vincularModal("btn-abrir-modal-operario", "modal-operario", "btn-cerrar-modal-operario", "btn-cancelar-operario");
     const modalHerramienta = vincularModal("btn-abrir-modal-herramienta", "modal-herramienta", "btn-cerrar-modal-herramienta", "btn-cancelar-herramienta");
 
     // Colecciones Firestore
     const colObras = collection(db, "proyectos");
+    const colClientes = collection(db, "clientes");
     const colIncidencias = collection(db, "incidencias");
     const colOperarios = collection(db, "operarios");
     const colHerramientas = collection(db, "herramientas");
 
-    // Sincronizar OBRAS + Desplegables
-    const listaObrasEl = document.getElementById("lista-proyectos");
-    const selectObraIncidencia = document.getElementById("select-obra-incidencia");
-    const selectObraHerramienta = document.getElementById("select-obra-herramienta");
+    let cacheObras = [];
+    let filtroEstadoActual = 'todas';
 
-    onSnapshot(colObras, (snap) => {
+    // Función global de filtro
+    window.filtrarObras = (estado) => {
+      filtroEstadoActual = estado;
+      renderizarObras();
+    };
+
+    function renderizarObras() {
+      const listaObrasEl = document.getElementById("lista-proyectos");
       listaObrasEl.innerHTML = "";
+      const filtradas = filtroEstadoActual === 'todas' ? cacheObras : cacheObras.filter(o => o.estado === filtroEstadoActual);
+
+      if (filtradas.length === 0) {
+        listaObrasEl.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay obras bajo este filtro.</p></div>`;
+        return;
+      }
+
+      filtradas.forEach((d) => {
+        let badge = d.estado === "Finalizada" ? "bg-sky-100 text-sky-800" : d.estado === "Presupuestada" ? "bg-amber-100 text-amber-800" : "bg-emerald-100 text-emerald-800";
+        const card = document.createElement("div");
+        card.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between";
+        card.innerHTML = `
+          <div>
+            <div class="flex justify-between items-start mb-3">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold ${badge}">${d.estado || 'En curso'}</span>
+              <span class="text-xs font-bold text-slate-700">${d.presupuesto ? Number(d.presupuesto).toLocaleString('es-ES') + ' €' : '-'}</span>
+            </div>
+            <h3 class="text-base font-bold text-slate-900">${d.nombre}</h3>
+            <p class="text-xs text-slate-500 mt-2">👤 ${d.cliente || 'Sin cliente'}</p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center text-xs">
+            <span class="text-slate-400">Ref: ${d.id.substring(0, 5).toUpperCase()}</span>
+            <button onclick="window.borrarRegistro('proyectos', '${d.id}')" class="text-rose-500 hover:underline">Eliminar</button>
+          </div>
+        `;
+        listaObrasEl.appendChild(card);
+      });
+    }
+
+    // Escuchar Obras
+    onSnapshot(colObras, (snap) => {
+      cacheObras = [];
+      const selectObraIncidencia = document.getElementById("select-obra-incidencia");
+      const selectObraHerramienta = document.getElementById("select-obra-herramienta");
       selectObraIncidencia.innerHTML = '<option value="">Selecciona una obra...</option>';
       selectObraHerramienta.innerHTML = '<option value="Almacén central">📦 Almacén central</option>';
 
-      if (snap.empty) {
-        listaObrasEl.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay obras registradas aún.</p></div>`;
-      } else {
-        snap.forEach((doc) => {
-          const d = doc.data();
-          const opt1 = document.createElement("option"); opt1.value = d.nombre; opt1.textContent = d.nombre;
-          selectObraIncidencia.appendChild(opt1);
-          const opt2 = document.createElement("option"); opt2.value = d.nombre; opt2.textContent = "🏗️ " + d.nombre;
-          selectObraHerramienta.appendChild(opt2);
-
-          let badge = d.estado === "Finalizada" ? "bg-sky-100 text-sky-800" : d.estado === "Presupuestada" ? "bg-amber-100 text-amber-800" : "bg-emerald-100 text-emerald-800";
-          const card = document.createElement("div");
-          card.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between";
-          card.innerHTML = `
-            <div>
-              <div class="flex justify-between items-start mb-3">
-                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold ${badge}">${d.estado || 'En curso'}</span>
-                <span class="text-xs font-bold text-slate-700">${d.presupuesto ? Number(d.presupuesto).toLocaleString('es-ES') + ' €' : '-'}</span>
-              </div>
-              <h3 class="text-base font-bold text-slate-900">${d.nombre}</h3>
-              <p class="text-xs text-slate-500 mt-2">👤 ${d.cliente || 'Sin cliente'}</p>
-            </div>
-            <div class="mt-6 pt-4 border-t border-slate-100 text-xs text-slate-400">Ref: ${doc.id.substring(0, 5).toUpperCase()}</div>
-          `;
-          listaObrasEl.appendChild(card);
-        });
-      }
+      snap.forEach(doc => {
+        const data = { id: doc.id, ...doc.data() };
+        cacheObras.push(data);
+        const opt1 = document.createElement("option"); opt1.value = data.nombre; opt1.textContent = data.nombre;
+        selectObraIncidencia.appendChild(opt1);
+        const opt2 = document.createElement("option"); opt2.value = data.nombre; opt2.textContent = "🏗️ " + data.nombre;
+        selectObraHerramienta.appendChild(opt2);
+      });
+      renderizarObras();
     });
 
     // Guardar Obra
@@ -378,13 +473,67 @@
       e.preventDefault();
       await addDoc(colObras, {
         nombre: document.getElementById("input-nombre").value.trim(),
-        cliente: document.getElementById("input-cliente").value.trim(),
+        cliente: document.getElementById("select-cliente-obra").value,
         presupuesto: document.getElementById("input-presupuesto").value,
         estado: document.getElementById("input-estado").value,
         fechaCreacion: serverTimestamp()
       });
       document.getElementById("form-nueva-obra").reset();
       modalObra.style.display = "none";
+    };
+
+    // Sincronizar CLIENTES
+    const listaClientesEl = document.getElementById("lista-clientes");
+    const selectClienteObra = document.getElementById("select-cliente-obra");
+    onSnapshot(colClientes, (snap) => {
+      listaClientesEl.innerHTML = "";
+      selectClienteObra.innerHTML = '<option value="Cliente particular">Cliente general / Sin vincular</option>';
+
+      if (snap.empty) {
+        listaClientesEl.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay clientes dados de alta.</p></div>`;
+      } else {
+        snap.forEach((doc) => {
+          const d = doc.data();
+          const opt = document.createElement("option");
+          opt.value = d.nombre;
+          opt.textContent = d.nombre + (d.telefono ? ` (${d.telefono})` : '');
+          selectClienteObra.appendChild(opt);
+
+          const card = document.createElement("div");
+          card.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between";
+          card.innerHTML = `
+            <div>
+              <div class="flex justify-between items-start mb-2">
+                <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-800">Cliente</span>
+                <span class="text-xs text-slate-400">#${doc.id.substring(0, 5).toUpperCase()}</span>
+              </div>
+              <h3 class="text-base font-bold text-slate-900">${d.nombre}</h3>
+              <p class="text-xs text-slate-600 mt-2">📞 ${d.telefono}</p>
+              ${d.email ? `<p class="text-xs text-slate-500 mt-1">✉️ ${d.email}</p>` : ''}
+              ${d.direccion ? `<p class="text-xs text-slate-500 mt-1">📍 ${d.direccion}</p>` : ''}
+              ${d.notas ? `<p class="text-xs bg-slate-50 p-2.5 rounded-lg border text-slate-600 mt-3 italic">"${d.notas}"</p>` : ''}
+            </div>
+            <div class="mt-6 pt-4 border-t border-slate-100 flex justify-end">
+              <button onclick="window.borrarRegistro('clientes', '${doc.id}')" class="text-xs text-rose-500 hover:underline">Eliminar</button>
+            </div>
+          `;
+          listaClientesEl.appendChild(card);
+        });
+      }
+    });
+
+    document.getElementById("form-nuevo-cliente").onsubmit = async (e) => {
+      e.preventDefault();
+      await addDoc(colClientes, {
+        nombre: document.getElementById("input-nombre-cliente").value.trim(),
+        telefono: document.getElementById("input-tel-cliente").value.trim(),
+        email: document.getElementById("input-email-cliente").value.trim(),
+        direccion: document.getElementById("input-dir-cliente").value.trim(),
+        notas: document.getElementById("input-notas-cliente").value.trim(),
+        fechaCreacion: serverTimestamp()
+      });
+      document.getElementById("form-nuevo-cliente").reset();
+      modalCliente.style.display = "none";
     };
 
     // Sincronizar INCIDENCIAS
@@ -409,7 +558,10 @@
               <h3 class="text-base font-bold text-slate-900">${d.titulo}</h3>
               <p class="text-sm text-slate-500 mt-2">${d.descripcion || 'Sin descripción.'}</p>
             </div>
-            <div class="mt-6 pt-4 border-t border-slate-100 text-xs text-slate-400">Parte #${doc.id.substring(0, 5).toUpperCase()}</div>
+            <div class="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center text-xs">
+              <span class="text-slate-400">#${doc.id.substring(0, 5).toUpperCase()}</span>
+              <button onclick="window.borrarRegistro('incidencias', '${doc.id}')" class="text-rose-500 hover:underline">Eliminar</button>
+            </div>
           `;
           listaIncidenciasEl.appendChild(card);
         });
@@ -419,7 +571,7 @@
     document.getElementById("form-nueva-incidencia").onsubmit = async (e) => {
       e.preventDefault();
       await addDoc(colIncidencias, {
-        obra: selectObraIncidencia.value,
+        obra: document.getElementById("select-obra-incidencia").value,
         titulo: document.getElementById("input-titulo-incidencia").value.trim(),
         descripcion: document.getElementById("input-desc-incidencia").value.trim(),
         prioridad: document.getElementById("input-prioridad-incidencia").value,
@@ -435,7 +587,7 @@
     onSnapshot(colOperarios, (snap) => {
       listaOperariosEl.innerHTML = "";
       if (snap.empty) {
-        listaOperariosEl.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay operarios registrados en el equipo.</p></div>`;
+        listaOperariosEl.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay operarios registrados.</p></div>`;
       } else {
         snap.forEach((doc) => {
           const d = doc.data();
@@ -447,7 +599,10 @@
               <h3 class="text-base font-bold text-slate-900 mt-3">${d.nombre}</h3>
               <p class="text-sm text-slate-500 mt-1">📞 ${d.telefono || 'Sin teléfono'}</p>
             </div>
-            <div class="mt-6 pt-4 border-t border-slate-100 text-xs text-slate-400">Ficha #${doc.id.substring(0, 5).toUpperCase()}</div>
+            <div class="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center text-xs">
+              <span class="text-slate-400">#${doc.id.substring(0, 5).toUpperCase()}</span>
+              <button onclick="window.borrarRegistro('operarios', '${doc.id}')" class="text-rose-500 hover:underline">Eliminar</button>
+            </div>
           `;
           listaOperariosEl.appendChild(card);
         });
@@ -471,7 +626,7 @@
     onSnapshot(colHerramientas, (snap) => {
       listaHerramientasEl.innerHTML = "";
       if (snap.empty) {
-        listaHerramientasEl.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay maquinaria en el inventario.</p></div>`;
+        listaHerramientasEl.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay maquinaria registrada.</p></div>`;
       } else {
         snap.forEach((doc) => {
           const d = doc.data();
@@ -479,12 +634,15 @@
           card.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between";
           card.innerHTML = `
             <div>
-              <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">Ubicación actual</span>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">Ubicación</span>
               <p class="text-xs font-bold text-slate-700 mt-1">${d.ubicacion}</p>
               <h3 class="text-base font-bold text-slate-900 mt-2">${d.nombre}</h3>
-              <p class="text-xs text-slate-400 mt-1">Nº Serie: ${d.serie || 'N/A'}</p>
+              <p class="text-xs text-slate-400 mt-1">Serie: ${d.serie || 'N/A'}</p>
             </div>
-            <div class="mt-6 pt-4 border-t border-slate-100 text-xs text-slate-400">Equipo #${doc.id.substring(0, 5).toUpperCase()}</div>
+            <div class="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center text-xs">
+              <span class="text-slate-400">#${doc.id.substring(0, 5).toUpperCase()}</span>
+              <button onclick="window.borrarRegistro('herramientas', '${doc.id}')" class="text-rose-500 hover:underline">Eliminar</button>
+            </div>
           `;
           listaHerramientasEl.appendChild(card);
         });
@@ -496,11 +654,18 @@
       await addDoc(colHerramientas, {
         nombre: document.getElementById("input-nombre-herramienta").value.trim(),
         serie: document.getElementById("input-serie-herramienta").value.trim(),
-        ubicacion: selectObraHerramienta.value,
+        ubicacion: document.getElementById("select-obra-herramienta").value,
         fechaCreacion: serverTimestamp()
       });
       document.getElementById("form-nueva-herramienta").reset();
       modalHerramienta.style.display = "none";
+    };
+
+    // Función universal para borrar
+    window.borrarRegistro = async (coleccion, id) => {
+      if (confirm("¿Estás seguro de que quieres eliminar este registro?")) {
+        await deleteDoc(doc(db, coleccion, id));
+      }
     };
   </script>
 </body>
