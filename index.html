@@ -52,7 +52,7 @@
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
           <h2 class="text-2xl font-bold text-slate-900">Obras y Proyectos</h2>
-          <p class="text-sm text-slate-500">Planificación de tajos, partidas, materiales y rutas.</p>
+          <p class="text-sm text-slate-500">Planificación de tajos, partidas, materiales con medidas y rutas.</p>
         </div>
         <button id="btn-abrir-modal-obra" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-4 py-2.5 rounded-lg shadow-sm transition">
           + Nueva Obra
@@ -73,23 +73,31 @@
       </section>
     </div>
 
-    <!-- SECCIÓN: FICHA DETALLADA A PANTALLA COMPLETA -->
+    <!-- SECCIÓN: PANTALLA COMPLETA DETALLE OBRA -->
     <div id="vista-detalle-obra" class="hidden">
-      <div class="flex items-center justify-between pb-6 border-b border-slate-200">
-        <button id="btn-volver-obras" class="inline-flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-amber-600 transition bg-white border px-4 py-2 rounded-lg shadow-sm">
-          ← Volver al listado
+      <!-- Barra superior fija de navegación -->
+      <div class="flex items-center justify-between pb-6 border-b border-slate-200 bg-slate-100 sticky top-0 z-10">
+        <button onclick="window.cambiarVista('obras')" class="inline-flex items-center gap-2 text-sm font-bold text-slate-800 hover:text-amber-600 bg-white border border-slate-300 px-4 py-2 rounded-xl shadow-sm transition">
+          ← Volver al listado de obras
         </button>
         <div class="flex gap-2">
-          <button id="btn-editar-obra-actual" class="bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold px-4 py-2 rounded-lg transition">
+          <button id="btn-editar-obra-actual" class="bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold px-4 py-2 rounded-xl transition">
             ✏️ Editar Obra
           </button>
-          <button id="btn-borrar-obra-actual" class="bg-rose-50 hover:bg-rose-100 text-rose-700 text-sm font-semibold px-4 py-2 rounded-lg border border-rose-200 transition">
+          <button id="btn-borrar-obra-actual" class="bg-rose-50 hover:bg-rose-100 text-rose-700 text-sm font-semibold px-4 py-2 rounded-xl border border-rose-200 transition">
             Eliminar
           </button>
         </div>
       </div>
 
       <div id="contenedor-detalle-obra" class="mt-6"></div>
+
+      <!-- Botón secundario inferior de volver -->
+      <div class="mt-8 pt-6 border-t border-slate-200 flex justify-start">
+        <button onclick="window.cambiarVista('obras')" class="inline-flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-amber-600 bg-white border px-5 py-2.5 rounded-xl shadow-sm transition">
+          ← Volver al listado
+        </button>
+      </div>
     </div>
 
     <!-- SECCIÓN: CLIENTES -->
@@ -158,7 +166,7 @@
 
   </main>
 
-  <!-- MODAL: CREAR / EDITAR OBRA -->
+  <!-- MODAL: CREAR / EDITAR OBRA (CONTROL DIRECTO SIN CONFLICTOS) -->
   <div id="modal-obra" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 z-50 overflow-y-auto">
     <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-3xl w-full shadow-2xl my-8 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center pb-4 border-b border-slate-100">
@@ -166,10 +174,10 @@
           <h3 id="titulo-modal-obra" class="text-lg font-bold text-slate-900">Registrar Nueva Obra</h3>
           <p class="text-xs text-slate-500">Detalles técnicos, contactos, tajos y materiales.</p>
         </div>
-        <button type="button" id="btn-cerrar-modal-obra" class="text-slate-400 hover:text-slate-700 text-2xl font-bold">&times;</button>
+        <button type="button" onclick="document.getElementById('modal-obra').style.display='none'" class="text-slate-400 hover:text-slate-700 text-2xl font-bold">&times;</button>
       </div>
 
-      <form id="form-nueva-obra" class="mt-6 space-y-6">
+      <div class="mt-6 space-y-6">
         <input type="hidden" id="edit-obra-id" value="">
 
         <!-- Bloque 1: General -->
@@ -178,12 +186,12 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre del Proyecto *</label>
-              <input id="input-nombre" type="text" required placeholder="Ej. Reforma C/ Mayor 12" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+              <input id="input-nombre" type="text" placeholder="Ej. Reforma C/ Mayor 12" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
             </div>
             <div>
               <label class="block text-xs font-semibold text-slate-600 mb-1">Cliente Vinculado</label>
               <select id="select-cliente-obra" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none bg-white">
-                <option value="Particular / Sin asignar">Selecciona cliente o particular...</option>
+                <option value="Particular / Sin asignar">Particular / Sin asignar</option>
               </select>
             </div>
           </div>
@@ -191,7 +199,7 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-semibold text-slate-600 mb-1">Dirección de la obra *</label>
-              <input id="input-direccion" type="text" required placeholder="Calle, número y ciudad" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+              <input id="input-direccion" type="text" placeholder="Calle, número y ciudad" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
             </div>
             <div>
               <label class="block text-xs font-semibold text-slate-600 mb-1">Estado</label>
@@ -261,20 +269,26 @@
           <div id="contenedor-trabajos" class="space-y-2"></div>
         </div>
 
-        <!-- Bloque 5: Repeater Materiales con Unidades -->
+        <!-- Bloque 5: Repeater Materiales (Material + Cantidad + Select de Medida) -->
         <div class="pt-4 border-t border-slate-100 space-y-3">
           <div class="flex justify-between items-center">
-            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Lista de Materiales Necesarios</h4>
+            <div>
+              <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Lista de Materiales</h4>
+              <p class="text-[11px] text-slate-400">Indica el material, la cantidad y la unidad (metros, kilos, litros, piezas...)</p>
+            </div>
             <button type="button" id="btn-add-material" class="text-xs bg-slate-200 text-slate-800 font-semibold px-2.5 py-1 rounded hover:bg-slate-300">+ Añadir Material</button>
           </div>
           <div id="contenedor-materiales" class="space-y-2"></div>
         </div>
 
+        <!-- Botones de Acción directos -->
         <div class="mt-8 flex justify-end gap-3 pt-4 border-t border-slate-100">
-          <button type="button" id="btn-cancelar-obra" class="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg">Cancelar</button>
-          <button type="submit" id="btn-submit-obra" class="px-6 py-2.5 text-sm bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg shadow-sm">Guardar Ficha</button>
+          <button type="button" onclick="document.getElementById('modal-obra').style.display='none'" class="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg">Cancelar</button>
+          <button type="button" id="btn-submit-obra" class="px-6 py-2.5 text-sm bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg shadow-sm transition">
+            Guardar Ficha
+          </button>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 
@@ -283,21 +297,21 @@
     <div class="bg-white rounded-2xl p-6 max-w-lg w-full shadow-2xl">
       <div class="flex justify-between items-center pb-4 border-b">
         <h3 class="text-lg font-bold">Alta de Cliente</h3>
-        <button type="button" id="btn-cerrar-modal-cliente" class="text-slate-400 text-2xl font-bold">&times;</button>
+        <button type="button" onclick="document.getElementById('modal-cliente').style.display='none'" class="text-slate-400 text-2xl font-bold">&times;</button>
       </div>
-      <form id="form-nuevo-cliente" class="mt-4 space-y-3">
-        <input id="input-nombre-cliente" type="text" required placeholder="Nombre o Razón Social *" class="w-full px-3 py-2 border rounded-lg text-sm">
+      <div class="mt-4 space-y-3">
+        <input id="input-nombre-cliente" type="text" placeholder="Nombre o Razón Social *" class="w-full px-3 py-2 border rounded-lg text-sm">
         <div class="grid grid-cols-2 gap-2">
-          <input id="input-tel-cliente" type="tel" required placeholder="Teléfono *" class="w-full px-3 py-2 border rounded-lg text-sm">
+          <input id="input-tel-cliente" type="tel" placeholder="Teléfono *" class="w-full px-3 py-2 border rounded-lg text-sm">
           <input id="input-email-cliente" type="email" placeholder="Email" class="w-full px-3 py-2 border rounded-lg text-sm">
         </div>
         <input id="input-dir-cliente" type="text" placeholder="Dirección" class="w-full px-3 py-2 border rounded-lg text-sm">
         <textarea id="input-notas-cliente" rows="2" placeholder="Notas..." class="w-full px-3 py-2 border rounded-lg text-sm"></textarea>
         <div class="flex justify-end gap-2 pt-2">
-          <button type="button" id="btn-cancelar-cliente" class="px-4 py-2 text-sm text-slate-600">Cancelar</button>
-          <button type="submit" class="px-5 py-2 text-sm bg-indigo-600 text-white font-semibold rounded-lg">Guardar</button>
+          <button type="button" onclick="document.getElementById('modal-cliente').style.display='none'" class="px-4 py-2 text-sm text-slate-600">Cancelar</button>
+          <button type="button" id="btn-guardar-cliente" class="px-5 py-2 text-sm bg-indigo-600 text-white font-semibold rounded-lg">Guardar</button>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 
@@ -305,11 +319,11 @@
     <div class="bg-white rounded-2xl p-6 max-w-lg w-full shadow-2xl">
       <div class="flex justify-between items-center pb-4 border-b">
         <h3 class="text-lg font-bold">Reportar Incidencia</h3>
-        <button type="button" id="btn-cerrar-modal-incidencia" class="text-slate-400 text-2xl font-bold">&times;</button>
+        <button type="button" onclick="document.getElementById('modal-incidencia').style.display='none'" class="text-slate-400 text-2xl font-bold">&times;</button>
       </div>
-      <form id="form-nueva-incidencia" class="mt-4 space-y-3">
-        <select id="select-obra-incidencia" required class="w-full px-3 py-2 border rounded-lg text-sm bg-white"></select>
-        <input id="input-titulo-incidencia" type="text" required placeholder="Título del problema *" class="w-full px-3 py-2 border rounded-lg text-sm">
+      <div class="mt-4 space-y-3">
+        <select id="select-obra-incidencia" class="w-full px-3 py-2 border rounded-lg text-sm bg-white"></select>
+        <input id="input-titulo-incidencia" type="text" placeholder="Título del problema *" class="w-full px-3 py-2 border rounded-lg text-sm">
         <textarea id="input-desc-incidencia" rows="3" placeholder="Detalles de lo sucedido..." class="w-full px-3 py-2 border rounded-lg text-sm"></textarea>
         <div class="grid grid-cols-2 gap-2">
           <select id="input-prioridad-incidencia" class="w-full px-3 py-2 border rounded-lg text-sm bg-white">
@@ -324,10 +338,10 @@
           </select>
         </div>
         <div class="flex justify-end gap-2 pt-2">
-          <button type="button" id="btn-cancelar-incidencia" class="px-4 py-2 text-sm text-slate-600">Cancelar</button>
-          <button type="submit" class="px-5 py-2 text-sm bg-rose-500 text-white font-semibold rounded-lg">Guardar</button>
+          <button type="button" onclick="document.getElementById('modal-incidencia').style.display='none'" class="px-4 py-2 text-sm text-slate-600">Cancelar</button>
+          <button type="button" id="btn-guardar-incidencia" class="px-5 py-2 text-sm bg-rose-500 text-white font-semibold rounded-lg">Guardar</button>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 
@@ -335,10 +349,10 @@
     <div class="bg-white rounded-2xl p-6 max-w-lg w-full shadow-2xl">
       <div class="flex justify-between items-center pb-4 border-b">
         <h3 class="text-lg font-bold">Alta de Operario</h3>
-        <button type="button" id="btn-cerrar-modal-operario" class="text-slate-400 text-2xl font-bold">&times;</button>
+        <button type="button" onclick="document.getElementById('modal-operario').style.display='none'" class="text-slate-400 text-2xl font-bold">&times;</button>
       </div>
-      <form id="form-nuevo-operario" class="mt-4 space-y-3">
-        <input id="input-nombre-operario" type="text" required placeholder="Nombre Completo *" class="w-full px-3 py-2 border rounded-lg text-sm">
+      <div class="mt-4 space-y-3">
+        <input id="input-nombre-operario" type="text" placeholder="Nombre Completo *" class="w-full px-3 py-2 border rounded-lg text-sm">
         <div class="grid grid-cols-2 gap-2">
           <select id="input-oficio-operario" class="w-full px-3 py-2 border rounded-lg text-sm bg-white">
             <option value="Albañil">Albañilería</option>
@@ -351,10 +365,10 @@
           <input id="input-tel-operario" type="tel" placeholder="Teléfono" class="w-full px-3 py-2 border rounded-lg text-sm">
         </div>
         <div class="flex justify-end gap-2 pt-2">
-          <button type="button" id="btn-cancelar-operario" class="px-4 py-2 text-sm text-slate-600">Cancelar</button>
-          <button type="submit" class="px-5 py-2 text-sm bg-sky-500 text-white font-semibold rounded-lg">Guardar</button>
+          <button type="button" onclick="document.getElementById('modal-operario').style.display='none'" class="px-4 py-2 text-sm text-slate-600">Cancelar</button>
+          <button type="button" id="btn-guardar-operario" class="px-5 py-2 text-sm bg-sky-500 text-white font-semibold rounded-lg">Guardar</button>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 
@@ -362,19 +376,19 @@
     <div class="bg-white rounded-2xl p-6 max-w-lg w-full shadow-2xl">
       <div class="flex justify-between items-center pb-4 border-b">
         <h3 class="text-lg font-bold">Registrar Herramienta</h3>
-        <button type="button" id="btn-cerrar-modal-herramienta" class="text-slate-400 text-2xl font-bold">&times;</button>
+        <button type="button" onclick="document.getElementById('modal-herramienta').style.display='none'" class="text-slate-400 text-2xl font-bold">&times;</button>
       </div>
-      <form id="form-nueva-herramienta" class="mt-4 space-y-3">
-        <input id="input-nombre-herramienta" type="text" required placeholder="Nombre de herramienta *" class="w-full px-3 py-2 border rounded-lg text-sm">
+      <div class="mt-4 space-y-3">
+        <input id="input-nombre-herramienta" type="text" placeholder="Nombre de herramienta *" class="w-full px-3 py-2 border rounded-lg text-sm">
         <div class="grid grid-cols-2 gap-2">
           <input id="input-serie-herramienta" type="text" placeholder="Nº Serie" class="w-full px-3 py-2 border rounded-lg text-sm">
           <select id="select-obra-herramienta" class="w-full px-3 py-2 border rounded-lg text-sm bg-white"></select>
         </div>
         <div class="flex justify-end gap-2 pt-2">
-          <button type="button" id="btn-cancelar-herramienta" class="px-4 py-2 text-sm text-slate-600">Cancelar</button>
-          <button type="submit" class="px-5 py-2 text-sm bg-emerald-600 text-white font-semibold rounded-lg">Guardar</button>
+          <button type="button" onclick="document.getElementById('modal-herramienta').style.display='none'" class="px-4 py-2 text-sm text-slate-600">Cancelar</button>
+          <button type="button" id="btn-guardar-herramienta" class="px-5 py-2 text-sm bg-emerald-600 text-white font-semibold rounded-lg">Guardar</button>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 
@@ -396,7 +410,7 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Navegación
+    // Navegación modular
     const vistas = {
       obras: document.getElementById("vista-obras"),
       detalleObra: document.getElementById("vista-detalle-obra"),
@@ -423,6 +437,7 @@
           if (botonesNav[k]) botonesNav[k].className = "nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition";
         }
       });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     botonesNav.obras.onclick = () => cambiarVista('obras');
@@ -430,34 +445,32 @@
     botonesNav.incidencias.onclick = () => cambiarVista('incidencias');
     botonesNav.operarios.onclick = () => cambiarVista('operarios');
     botonesNav.herramientas.onclick = () => cambiarVista('herramientas');
-    document.getElementById("btn-volver-obras").onclick = () => cambiarVista('obras');
 
-    // Modales con cierre garantizado
-    function vincularModal(btnAbrirId, modalId, btnCerrarId, btnCancelarId) {
-      const modal = document.getElementById(modalId);
-      document.getElementById(btnAbrirId).onclick = () => {
-        if (modalId === "modal-obra") {
-          document.getElementById("form-nueva-obra").reset();
-          document.getElementById("edit-obra-id").value = "";
-          document.getElementById("titulo-modal-obra").textContent = "Registrar Nueva Obra";
-          document.getElementById("btn-submit-obra").textContent = "Guardar Ficha de Obra";
-          document.getElementById("contenedor-trabajos").innerHTML = "";
-          document.getElementById("contenedor-materiales").innerHTML = "";
-          agregarFilaTrabajo("");
-          agregarFilaMaterial("", "ud", "");
-        }
-        modal.style.display = "flex";
-      };
-      document.getElementById(btnCerrarId).onclick = () => modal.style.display = "none";
-      document.getElementById(btnCancelarId).onclick = () => modal.style.display = "none";
-      return modal;
-    }
+    // Apertura de modales
+    document.getElementById("btn-abrir-modal-obra").onclick = () => {
+      document.getElementById("edit-obra-id").value = "";
+      document.getElementById("titulo-modal-obra").textContent = "Registrar Nueva Obra";
+      document.getElementById("btn-submit-obra").textContent = "Guardar Ficha";
+      document.getElementById("input-nombre").value = "";
+      document.getElementById("input-direccion").value = "";
+      document.getElementById("input-fecha-inicio").value = "";
+      document.getElementById("input-fecha-fin").value = "";
+      document.getElementById("input-presupuesto").value = "";
+      document.getElementById("input-descripcion").value = "";
+      document.getElementById("input-tel1").value = "";
+      document.getElementById("input-tel2").value = "";
+      document.getElementById("input-tel3").value = "";
+      document.getElementById("contenedor-trabajos").innerHTML = "";
+      document.getElementById("contenedor-materiales").innerHTML = "";
+      agregarFilaTrabajo("");
+      agregarFilaMaterial("", "m²", "");
+      document.getElementById("modal-obra").style.display = "flex";
+    };
 
-    const modalObra = vincularModal("btn-abrir-modal-obra", "modal-obra", "btn-cerrar-modal-obra", "btn-cancelar-obra");
-    const modalCliente = vincularModal("btn-abrir-modal-cliente", "modal-cliente", "btn-cerrar-modal-cliente", "btn-cancelar-cliente");
-    const modalIncidencia = vincularModal("btn-abrir-modal-incidencia", "modal-incidencia", "btn-cerrar-modal-incidencia", "btn-cancelar-incidencia");
-    const modalOperario = vincularModal("btn-abrir-modal-operario", "modal-operario", "btn-cerrar-modal-operario", "btn-cancelar-operario");
-    const modalHerramienta = vincularModal("btn-abrir-modal-herramienta", "modal-herramienta", "btn-cerrar-modal-herramienta", "btn-cancelar-herramienta");
+    document.getElementById("btn-abrir-modal-cliente").onclick = () => document.getElementById("modal-cliente").style.display = "flex";
+    document.getElementById("btn-abrir-modal-incidencia").onclick = () => document.getElementById("modal-incidencia").style.display = "flex";
+    document.getElementById("btn-abrir-modal-operario").onclick = () => document.getElementById("modal-operario").style.display = "flex";
+    document.getElementById("btn-abrir-modal-herramienta").onclick = () => document.getElementById("modal-herramienta").style.display = "flex";
 
     // REPEATER: TRABAJOS
     function agregarFilaTrabajo(valor = "") {
@@ -465,7 +478,7 @@
       const f = document.createElement("div");
       f.className = "flex gap-2 item-trabajo";
       f.innerHTML = `
-        <input type="text" value="${valor}" placeholder="Ej. Demolición de tabiquería y desescombro" class="w-full px-3 py-1.5 border rounded-lg text-sm outline-none focus:ring-1 focus:ring-amber-500">
+        <input type="text" value="${valor}" placeholder="Ej. Alicatado y solado de baño" class="w-full px-3 py-1.5 border rounded-lg text-sm outline-none focus:ring-1 focus:ring-amber-500">
         <button type="button" class="btn-eliminar-fila text-rose-500 hover:text-rose-700 px-2 font-bold text-lg">&times;</button>
       `;
       f.querySelector(".btn-eliminar-fila").onclick = () => f.remove();
@@ -473,31 +486,31 @@
     }
     document.getElementById("btn-add-trabajo").onclick = () => agregarFilaTrabajo("");
 
-    // REPEATER: MATERIALES (CON CANTIDAD Y SELECT DE UNIDAD)
-    function agregarFilaMaterial(cant = "", unidad = "ud", desc = "") {
+    // REPEATER: MATERIALES (CON SELECT DE UNIDAD: METROS, KILOS, LITROS, PIEZAS...)
+    function agregarFilaMaterial(nombre = "", unidad = "m²", cant = "") {
       const c = document.getElementById("contenedor-materiales");
       const f = document.createElement("div");
-      f.className = "flex gap-2 items-center item-material";
+      f.className = "grid grid-cols-12 gap-2 items-center item-material bg-slate-50 p-2 rounded-lg border border-slate-200";
       f.innerHTML = `
-        <input type="number" step="any" value="${cant}" placeholder="Cant." class="w-20 px-2 py-1.5 border rounded-lg text-sm outline-none focus:ring-1 focus:ring-amber-500">
-        <select class="px-2 py-1.5 border rounded-lg text-sm outline-none bg-white focus:ring-1 focus:ring-amber-500">
-          <option value="ud" ${unidad === 'ud' ? 'selected' : ''}>ud</option>
-          <option value="m" ${unidad === 'm' ? 'selected' : ''}>m (metros)</option>
-          <option value="m²" ${unidad === 'm²' ? 'selected' : ''}>m²</option>
-          <option value="m³" ${unidad === 'm³' ? 'selected' : ''}>m³</option>
+        <input type="text" value="${nombre}" placeholder="Nombre de material (ej. Losetas 60x60)" class="col-span-6 px-3 py-1.5 border rounded-lg text-sm outline-none bg-white focus:ring-1 focus:ring-amber-500">
+        <input type="number" step="any" value="${cant}" placeholder="Cant." class="col-span-2 px-2 py-1.5 border rounded-lg text-sm outline-none bg-white focus:ring-1 focus:ring-amber-500 text-center">
+        <select class="col-span-3 px-2 py-1.5 border rounded-lg text-xs outline-none bg-white focus:ring-1 focus:ring-amber-500 font-medium">
+          <option value="m²" ${unidad === 'm²' ? 'selected' : ''}>m² (m. cuadrados)</option>
+          <option value="m" ${unidad === 'm' ? 'selected' : ''}>m (m. lineales)</option>
+          <option value="m³" ${unidad === 'm³' ? 'selected' : ''}>m³ (m. cúbicos)</option>
+          <option value="ud" ${unidad === 'ud' ? 'selected' : ''}>ud (unidades)</option>
+          <option value="kg" ${unidad === 'kg' ? 'selected' : ''}>kg (kilos)</option>
           <option value="L" ${unidad === 'L' ? 'selected' : ''}>L (litros)</option>
-          <option value="kg" ${unidad === 'kg' ? 'selected' : ''}>kg</option>
           <option value="sacos" ${unidad === 'sacos' ? 'selected' : ''}>sacos</option>
           <option value="cajas" ${unidad === 'cajas' ? 'selected' : ''}>cajas</option>
           <option value="botes" ${unidad === 'botes' ? 'selected' : ''}>botes</option>
         </select>
-        <input type="text" value="${desc}" placeholder="Ej. Mortero autonivelante" class="flex-1 px-3 py-1.5 border rounded-lg text-sm outline-none focus:ring-1 focus:ring-amber-500">
-        <button type="button" class="btn-eliminar-fila text-rose-500 hover:text-rose-700 px-2 font-bold text-lg">&times;</button>
+        <button type="button" class="col-span-1 btn-eliminar-fila text-rose-500 hover:text-rose-700 font-bold text-center text-lg">&times;</button>
       `;
       f.querySelector(".btn-eliminar-fila").onclick = () => f.remove();
       c.appendChild(f);
     }
-    document.getElementById("btn-add-material").onclick = () => agregarFilaMaterial("", "ud", "");
+    document.getElementById("btn-add-material").onclick = () => agregarFilaMaterial("", "m²", "");
 
     // Colecciones Firestore
     const colObras = collection(db, "proyectos");
@@ -578,8 +591,12 @@
 
       const materialesLi = obra.materiales && obra.materiales.length > 0
         ? obra.materiales.map(m => {
-            const texto = typeof m === 'object' ? `<strong>${m.cantidad || ''} ${m.unidad || ''}</strong> — ${m.nombre || ''}` : m;
-            return `<li class="flex items-center gap-2 py-1.5 text-sm text-slate-700 border-b border-slate-100 last:border-0"><span class="text-amber-500 font-bold">▪</span> <span>${texto}</span></li>`;
+            const displayCant = (m.cantidad ? m.cantidad : '') + ' ' + (m.unidad ? m.unidad : '');
+            return `
+              <li class="flex items-center justify-between py-2 text-sm text-slate-700 border-b border-slate-100 last:border-0">
+                <span class="font-medium">${m.nombre || 'Material sin nombre'}</span>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-200">${displayCant.trim() || 'ud'}</span>
+              </li>`;
           }).join('')
         : '<p class="text-sm text-slate-400 italic">No hay lista de materiales registrada.</p>';
 
@@ -649,7 +666,7 @@
 
             <div class="p-6 rounded-xl border border-slate-200 bg-white">
               <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-4 flex items-center justify-between">
-                <span>📦 Lista de Materiales</span>
+                <span>📦 Lista de Materiales y Medidas</span>
                 <span class="text-xs bg-slate-200 text-slate-800 px-2 py-0.5 rounded font-semibold">${obra.materiales ? obra.materiales.length : 0}</span>
               </h3>
               <ul class="space-y-1">${materialesLi}</ul>
@@ -667,7 +684,7 @@
       cambiarVista('detalleObra');
     };
 
-    // BOTÓN EDITAR OBRA (CARGA PREVIA CON NUEVO FORMATO DE MATERIALES)
+    // BOTÓN EDITAR OBRA (CARGA PREVIA CON EL SELECT DE UNIDADES)
     document.getElementById("btn-editar-obra-actual").onclick = () => {
       if (!obraSeleccionadaActual) return;
       const d = obraSeleccionadaActual;
@@ -688,7 +705,7 @@
       document.getElementById("input-tel2").value = d.tel2 || "";
       document.getElementById("input-tel3").value = d.tel3 || "";
 
-      // Precargar Trabajos
+      // Precargar Tajos
       const cTrabajos = document.getElementById("contenedor-trabajos");
       cTrabajos.innerHTML = "";
       if (d.trabajos && d.trabajos.length > 0) {
@@ -697,19 +714,19 @@
         agregarFilaTrabajo("");
       }
 
-      // Precargar Materiales
+      // Precargar Materiales con su select de medida
       const cMateriales = document.getElementById("contenedor-materiales");
       cMateriales.innerHTML = "";
       if (d.materiales && d.materiales.length > 0) {
         d.materiales.forEach(m => {
           if (typeof m === 'object') {
-            agregarFilaMaterial(m.cantidad || "", m.unidad || "ud", m.nombre || "");
+            agregarFilaMaterial(m.nombre || "", m.unidad || "m²", m.cantidad || "");
           } else {
-            agregarFilaMaterial("", "ud", m);
+            agregarFilaMaterial(m, "m²", "");
           }
         });
       } else {
-        agregarFilaMaterial("", "ud", "");
+        agregarFilaMaterial("", "m²", "");
       }
 
       // Checkboxes operarios
@@ -717,7 +734,7 @@
         chk.checked = d.operarios && d.operarios.includes(chk.value);
       });
 
-      modalObra.style.display = "flex";
+      document.getElementById("modal-obra").style.display = "flex";
     };
 
     // BOTÓN BORRAR OBRA ACTUAL
@@ -753,15 +770,22 @@
       }
     });
 
-    // GUARDAR OBRA (CIERRE INMEDIATO Y LIMPIEZA DE DATOS)
-    document.getElementById("form-nueva-obra").addEventListener("submit", async (e) => {
-      e.preventDefault();
+    // BOTÓN GUARDAR OBRA (CIERRE FORZADO INMEDIATO Y ENVÍO A FIRESTORE)
+    document.getElementById("btn-submit-obra").onclick = async () => {
       const modal = document.getElementById("modal-obra");
       const btn = document.getElementById("btn-submit-obra");
-      const editId = document.getElementById("edit-obra-id").value;
+      const nombre = document.getElementById("input-nombre").value.trim();
+      const direccion = document.getElementById("input-direccion").value.trim();
 
-      btn.disabled = true;
-      btn.textContent = "Guardando...";
+      if (!nombre || !direccion) {
+        alert("Por favor introduce al menos el Nombre y la Dirección del proyecto.");
+        return;
+      }
+
+      // CIERRE INMEDIATO DEL MODAL
+      modal.style.display = "none";
+
+      const editId = document.getElementById("edit-obra-id").value;
 
       // Recoger tajos
       const trabajos = [];
@@ -770,17 +794,17 @@
         if (v) trabajos.push(v);
       });
 
-      // Recoger materiales con select de unidades
+      // Recoger materiales con unidad seleccionada
       const materiales = [];
       document.querySelectorAll("#contenedor-materiales .item-material").forEach(row => {
-        const cant = row.querySelector("input[type='number']").value.trim();
-        const unidad = row.querySelector("select").value;
-        const nombre = row.querySelector("input[type='text']").value.trim();
-        if (nombre) {
+        const txtNombre = row.querySelector("input[type='text']").value.trim();
+        const numCant = row.querySelector("input[type='number']").value.trim();
+        const selUnidad = row.querySelector("select").value;
+        if (txtNombre) {
           materiales.push({
-            cantidad: cant || "1",
-            unidad: unidad || "ud",
-            nombre: nombre
+            nombre: txtNombre,
+            cantidad: numCant || "1",
+            unidad: selUnidad || "m²"
           });
         }
       });
@@ -792,9 +816,9 @@
       });
 
       const obraData = {
-        nombre: document.getElementById("input-nombre").value.trim(),
+        nombre: nombre,
         cliente: document.getElementById("select-cliente-obra").value || "Particular",
-        direccion: document.getElementById("input-direccion").value.trim(),
+        direccion: direccion,
         estado: document.getElementById("input-estado").value || "En curso",
         fechaInicio: document.getElementById("input-fecha-inicio").value || "",
         fechaFin: document.getElementById("input-fecha-fin").value || "",
@@ -817,17 +841,9 @@
           await addDoc(colObras, obraData);
         }
       } catch (err) {
-        console.error("Error guardando obra:", err);
-        alert("Aviso: " + err.message);
-      } finally {
-        // Cierre y reseteo garantizado
-        modal.style.display = "none";
-        document.getElementById("form-nueva-obra").reset();
-        document.getElementById("edit-obra-id").value = "";
-        btn.disabled = false;
-        btn.textContent = "Guardar Ficha";
+        console.error("Error guardando:", err);
       }
-    });
+    };
 
     // CLIENTES
     const listaClientesEl = document.getElementById("lista-clientes");
@@ -866,22 +882,29 @@
       }
     });
 
-    document.getElementById("form-nuevo-cliente").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      try {
-        await addDoc(colClientes, {
-          nombre: document.getElementById("input-nombre-cliente").value.trim(),
-          telefono: document.getElementById("input-tel-cliente").value.trim(),
-          email: document.getElementById("input-email-cliente").value.trim() || "",
-          direccion: document.getElementById("input-dir-cliente").value.trim() || "",
-          notas: document.getElementById("input-notas-cliente").value.trim() || "",
-          fechaCreacion: serverTimestamp()
-        });
-        document.getElementById("form-nuevo-cliente").reset();
-      } finally {
-        modalCliente.style.display = "none";
+    document.getElementById("btn-guardar-cliente").onclick = async () => {
+      const modal = document.getElementById("modal-cliente");
+      const nom = document.getElementById("input-nombre-cliente").value.trim();
+      const tel = document.getElementById("input-tel-cliente").value.trim();
+      if (!nom || !tel) {
+        alert("Introduce el nombre y teléfono del cliente.");
+        return;
       }
-    });
+      modal.style.display = "none";
+      await addDoc(colClientes, {
+        nombre: nom,
+        telefono: tel,
+        email: document.getElementById("input-email-cliente").value.trim() || "",
+        direccion: document.getElementById("input-dir-cliente").value.trim() || "",
+        notas: document.getElementById("input-notas-cliente").value.trim() || "",
+        fechaCreacion: serverTimestamp()
+      });
+      document.getElementById("input-nombre-cliente").value = "";
+      document.getElementById("input-tel-cliente").value = "";
+      document.getElementById("input-email-cliente").value = "";
+      document.getElementById("input-dir-cliente").value = "";
+      document.getElementById("input-notas-cliente").value = "";
+    };
 
     // OPERARIOS
     const listaOperariosEl = document.getElementById("lista-operarios");
@@ -919,20 +942,23 @@
       }
     });
 
-    document.getElementById("form-nuevo-operario").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      try {
-        await addDoc(colOperarios, {
-          nombre: document.getElementById("input-nombre-operario").value.trim(),
-          oficio: document.getElementById("input-oficio-operario").value,
-          telefono: document.getElementById("input-tel-operario").value.trim() || "",
-          fechaCreacion: serverTimestamp()
-        });
-        document.getElementById("form-nuevo-operario").reset();
-      } finally {
-        modalOperario.style.display = "none";
+    document.getElementById("btn-guardar-operario").onclick = async () => {
+      const modal = document.getElementById("modal-operario");
+      const nom = document.getElementById("input-nombre-operario").value.trim();
+      if (!nom) {
+        alert("Introduce el nombre del operario.");
+        return;
       }
-    });
+      modal.style.display = "none";
+      await addDoc(colOperarios, {
+        nombre: nom,
+        oficio: document.getElementById("input-oficio-operario").value,
+        telefono: document.getElementById("input-tel-operario").value.trim() || "",
+        fechaCreacion: serverTimestamp()
+      });
+      document.getElementById("input-nombre-operario").value = "";
+      document.getElementById("input-tel-operario").value = "";
+    };
 
     // INCIDENCIAS
     const listaIncidenciasEl = document.getElementById("lista-incidencias");
@@ -966,22 +992,26 @@
       }
     });
 
-    document.getElementById("form-nueva-incidencia").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      try {
-        await addDoc(colIncidencias, {
-          obra: document.getElementById("select-obra-incidencia").value,
-          titulo: document.getElementById("input-titulo-incidencia").value.trim(),
-          descripcion: document.getElementById("input-desc-incidencia").value.trim() || "",
-          prioridad: document.getElementById("input-prioridad-incidencia").value,
-          estado: document.getElementById("input-estado-incidencia").value,
-          fechaCreacion: serverTimestamp()
-        });
-        document.getElementById("form-nueva-incidencia").reset();
-      } finally {
-        modalIncidencia.style.display = "none";
+    document.getElementById("btn-guardar-incidencia").onclick = async () => {
+      const modal = document.getElementById("modal-incidencia");
+      const tit = document.getElementById("input-titulo-incidencia").value.trim();
+      const obr = document.getElementById("select-obra-incidencia").value;
+      if (!tit || !obr) {
+        alert("Selecciona la obra e introduce el título de la incidencia.");
+        return;
       }
-    });
+      modal.style.display = "none";
+      await addDoc(colIncidencias, {
+        obra: obr,
+        titulo: tit,
+        descripcion: document.getElementById("input-desc-incidencia").value.trim() || "",
+        prioridad: document.getElementById("input-prioridad-incidencia").value,
+        estado: document.getElementById("input-estado-incidencia").value,
+        fechaCreacion: serverTimestamp()
+      });
+      document.getElementById("input-titulo-incidencia").value = "";
+      document.getElementById("input-desc-incidencia").value = "";
+    };
 
     // HERRAMIENTAS
     const listaHerramientasEl = document.getElementById("lista-herramientas");
@@ -1011,20 +1041,23 @@
       }
     });
 
-    document.getElementById("form-nueva-herramienta").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      try {
-        await addDoc(colHerramientas, {
-          nombre: document.getElementById("input-nombre-herramienta").value.trim(),
-          serie: document.getElementById("input-serie-herramienta").value.trim() || "",
-          ubicacion: document.getElementById("select-obra-herramienta").value,
-          fechaCreacion: serverTimestamp()
-        });
-        document.getElementById("form-nueva-herramienta").reset();
-      } finally {
-        modalHerramienta.style.display = "none";
+    document.getElementById("btn-guardar-herramienta").onclick = async () => {
+      const modal = document.getElementById("modal-herramienta");
+      const nom = document.getElementById("input-nombre-herramienta").value.trim();
+      if (!nom) {
+        alert("Introduce el nombre de la herramienta.");
+        return;
       }
-    });
+      modal.style.display = "none";
+      await addDoc(colHerramientas, {
+        nombre: nom,
+        serie: document.getElementById("input-serie-herramienta").value.trim() || "",
+        ubicacion: document.getElementById("select-obra-herramienta").value,
+        fechaCreacion: serverTimestamp()
+      });
+      document.getElementById("input-nombre-herramienta").value = "";
+      document.getElementById("input-serie-herramienta").value = "";
+    };
 
     // Borrado universal
     window.borrarRegistro = async (coleccion, id) => {
