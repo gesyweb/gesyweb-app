@@ -11,7 +11,7 @@
         margin: 10mm 12mm;
         size: A4 portrait;
       }
-      aside, header, #btn-volver-obras, #acciones-ficha, .no-print {
+      aside, header, #btn-volver-obras, #btn-volver-clientes, #acciones-ficha, #acciones-ficha-cliente, .no-print {
         display: none !important;
       }
       body {
@@ -25,7 +25,7 @@
         margin: 0 !important;
         width: 100% !important;
       }
-      #vista-detalle-obra {
+      #vista-detalle-obra, #vista-detalle-cliente {
         display: block !important;
       }
       .card-print {
@@ -34,9 +34,6 @@
         box-shadow: none !important;
         border-radius: 6px !important;
         margin-bottom: 0 !important;
-      }
-      .print-compact-gap {
-        gap: 6px !important;
       }
       .print-title {
         font-size: 15pt !important;
@@ -112,7 +109,7 @@
   <!-- Contenedor Principal -->
   <main class="flex-1 p-6 md:p-10 overflow-y-auto">
 
-    <!-- SECCIÓN: LISTADO DE OBRAS -->
+    <!-- SECCIÓN 1: LISTADO DE OBRAS -->
     <div id="vista-obras">
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
@@ -148,9 +145,8 @@
       </section>
     </div>
 
-    <!-- SECCIÓN: FICHA DETALLADA A PANTALLA COMPLETA -->
+    <!-- SECCIÓN 1.1: FICHA DETALLADA OBRA -->
     <div id="vista-detalle-obra" class="hidden">
-      <!-- Barra superior no imprimible -->
       <div class="flex flex-wrap items-center justify-between pb-6 border-b border-slate-200 gap-3 bg-slate-100 sticky top-0 z-10 no-print">
         <button onclick="window.cambiarVista('obras')" id="btn-volver-obras" class="inline-flex items-center gap-2 text-sm font-bold text-slate-800 hover:text-amber-600 bg-white border border-slate-300 px-4 py-2 rounded-xl shadow-sm transition">
           ← Volver al listado
@@ -178,23 +174,50 @@
       </div>
     </div>
 
-    <!-- SECCIÓN: CLIENTES -->
+    <!-- SECCIÓN 2: LISTADO DE CLIENTES -->
     <div id="vista-clientes" class="hidden">
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
           <h2 class="text-2xl font-bold text-slate-900">Directorio de Clientes</h2>
-          <p class="text-sm text-slate-500">Historial y fichas completas de clientes.</p>
+          <p class="text-sm text-slate-500">Historial, datos fiscales, llamadas y seguimiento de proyectos.</p>
         </div>
-        <button id="btn-abrir-modal-cliente" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2.5 rounded-lg shadow-sm transition">
+        <button id="btn-abrir-modal-cliente" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2.5 rounded-lg shadow-sm transition">
           + Nuevo Cliente
         </button>
       </header>
+
       <section id="lista-clientes" class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <p class="text-sm text-slate-400">Cargando clientes...</p>
       </section>
     </div>
 
-    <!-- SECCIÓN: INCIDENCIAS -->
+    <!-- SECCIÓN 2.1: FICHA DETALLADA CLIENTE (PANTALLA COMPLETA) -->
+    <div id="vista-detalle-cliente" class="hidden">
+      <div class="flex flex-wrap items-center justify-between pb-6 border-b border-slate-200 gap-3 bg-slate-100 sticky top-0 z-10 no-print">
+        <button onclick="window.cambiarVista('clientes')" id="btn-volver-clientes" class="inline-flex items-center gap-2 text-sm font-bold text-slate-800 hover:text-indigo-600 bg-white border border-slate-300 px-4 py-2 rounded-xl shadow-sm transition">
+          ← Volver a Clientes
+        </button>
+        
+        <div id="acciones-ficha-cliente" class="flex flex-wrap gap-2">
+          <button id="btn-editar-cliente-actual" class="bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold px-4 py-2 rounded-xl transition">
+            ✏️ Editar Cliente
+          </button>
+          <button id="btn-borrar-cliente-actual" class="bg-rose-50 hover:bg-rose-100 text-rose-700 text-sm font-semibold px-4 py-2 rounded-xl border border-rose-200 transition">
+            Eliminar
+          </button>
+        </div>
+      </div>
+
+      <div id="contenedor-detalle-cliente" class="mt-4"></div>
+
+      <div class="mt-6 pt-4 border-t border-slate-200 flex justify-start no-print">
+        <button onclick="window.cambiarVista('clientes')" class="inline-flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-indigo-600 bg-white border px-5 py-2 rounded-xl shadow-sm transition">
+          ← Volver a Clientes
+        </button>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 3: INCIDENCIAS -->
     <div id="vista-incidencias" class="hidden">
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
@@ -210,7 +233,7 @@
       </section>
     </div>
 
-    <!-- SECCIÓN: OPERARIOS -->
+    <!-- SECCIÓN 4: OPERARIOS -->
     <div id="vista-operarios" class="hidden">
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
@@ -226,7 +249,7 @@
       </section>
     </div>
 
-    <!-- SECCIÓN: HERRAMIENTAS -->
+    <!-- SECCIÓN 5: HERRAMIENTAS -->
     <div id="vista-herramientas" class="hidden">
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
@@ -381,29 +404,62 @@
     </div>
   </div>
 
-  <!-- MODALES SECUNDARIOS -->
-  <div id="modal-cliente" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 z-50">
-    <div class="bg-white rounded-2xl p-6 max-w-lg w-full shadow-2xl">
-      <div class="flex justify-between items-center pb-4 border-b">
-        <h3 class="text-lg font-bold">Alta de Cliente</h3>
-        <button type="button" onclick="document.getElementById('modal-cliente').style.display='none'" class="text-slate-400 text-2xl font-bold">&times;</button>
-      </div>
-      <div class="mt-4 space-y-3">
-        <input id="input-nombre-cliente" type="text" placeholder="Nombre o Razón Social *" class="w-full px-3 py-2 border rounded-lg text-sm">
-        <div class="grid grid-cols-2 gap-2">
-          <input id="input-tel-cliente" type="tel" placeholder="Teléfono *" class="w-full px-3 py-2 border rounded-lg text-sm">
-          <input id="input-email-cliente" type="email" placeholder="Email" class="w-full px-3 py-2 border rounded-lg text-sm">
+  <!-- MODAL: CREAR / EDITAR CLIENTE -->
+  <div id="modal-cliente" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 z-50 overflow-y-auto">
+    <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl my-8">
+      <div class="flex justify-between items-center pb-4 border-b border-slate-100">
+        <div>
+          <h3 id="titulo-modal-cliente" class="text-lg font-bold text-slate-900">Alta de Cliente</h3>
+          <p class="text-xs text-slate-500">Datos fiscales, de contacto y notas comerciales.</p>
         </div>
-        <input id="input-dir-cliente" type="text" placeholder="Dirección" class="w-full px-3 py-2 border rounded-lg text-sm">
-        <textarea id="input-notas-cliente" rows="2" placeholder="Notas..." class="w-full px-3 py-2 border rounded-lg text-sm"></textarea>
-        <div class="flex justify-end gap-2 pt-2">
-          <button type="button" onclick="document.getElementById('modal-cliente').style.display='none'" class="px-4 py-2 text-sm text-slate-600">Cancelar</button>
-          <button type="button" id="btn-guardar-cliente" class="px-5 py-2 text-sm bg-indigo-600 text-white font-semibold rounded-lg">Guardar</button>
+        <button type="button" onclick="document.getElementById('modal-cliente').style.display='none'" class="text-slate-400 hover:text-slate-700 text-2xl font-bold">&times;</button>
+      </div>
+
+      <div class="mt-6 space-y-4">
+        <input type="hidden" id="edit-cliente-id" value="">
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre Completo o Razón Social *</label>
+          <input id="input-nombre-cliente" type="text" placeholder="Ej. Ana Fernández / Construcciones SL" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">NIF / CIF / DNI</label>
+            <input id="input-cif-cliente" type="text" placeholder="Ej. B-12345678" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Teléfono Principal *</label>
+            <input id="input-tel-cliente" type="tel" placeholder="Ej. 612345678" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Correo Electrónico</label>
+          <input id="input-email-cliente" type="email" placeholder="cliente@correo.com" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Dirección de Facturación / Contacto</label>
+          <input id="input-dir-cliente" type="text" placeholder="Calle, número, código postal y ciudad" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Notas Comerciales / Seguimiento</label>
+          <textarea id="input-notas-cliente" rows="3" placeholder="Preferencias del cliente, acuerdos, horario de llamada..." class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none"></textarea>
+        </div>
+
+        <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
+          <button type="button" onclick="document.getElementById('modal-cliente').style.display='none'" class="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg">Cancelar</button>
+          <button type="button" id="btn-guardar-cliente" class="px-5 py-2 text-sm bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg shadow-sm transition">
+            Guardar Cliente
+          </button>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- MODALES SECUNDARIOS -->
   <div id="modal-incidencia" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 z-50">
     <div class="bg-white rounded-2xl p-6 max-w-lg w-full shadow-2xl">
       <div class="flex justify-between items-center pb-4 border-b">
@@ -499,11 +555,12 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Navegación
+    // Navegación modular
     const vistas = {
       obras: document.getElementById("vista-obras"),
       detalleObra: document.getElementById("vista-detalle-obra"),
       clientes: document.getElementById("vista-clientes"),
+      detalleCliente: document.getElementById("vista-detalle-cliente"),
       incidencias: document.getElementById("vista-incidencias"),
       operarios: document.getElementById("vista-operarios"),
       herramientas: document.getElementById("vista-herramientas")
@@ -584,12 +641,24 @@
       document.getElementById("modal-obra").style.display = "flex";
     };
 
-    document.getElementById("btn-abrir-modal-cliente").onclick = () => document.getElementById("modal-cliente").style.display = "flex";
+    document.getElementById("btn-abrir-modal-cliente").onclick = () => {
+      document.getElementById("edit-cliente-id").value = "";
+      document.getElementById("titulo-modal-cliente").textContent = "Alta de Cliente";
+      document.getElementById("btn-guardar-cliente").textContent = "Guardar Cliente";
+      document.getElementById("input-nombre-cliente").value = "";
+      document.getElementById("input-cif-cliente").value = "";
+      document.getElementById("input-tel-cliente").value = "";
+      document.getElementById("input-email-cliente").value = "";
+      document.getElementById("input-dir-cliente").value = "";
+      document.getElementById("input-notas-cliente").value = "";
+      document.getElementById("modal-cliente").style.display = "flex";
+    };
+
     document.getElementById("btn-abrir-modal-incidencia").onclick = () => document.getElementById("modal-incidencia").style.display = "flex";
     document.getElementById("btn-abrir-modal-operario").onclick = () => document.getElementById("modal-operario").style.display = "flex";
     document.getElementById("btn-abrir-modal-herramienta").onclick = () => document.getElementById("modal-herramienta").style.display = "flex";
 
-    // REPEATER: TRABAJOS
+    // Repeaters
     function agregarFilaTrabajo(valor = "") {
       const c = document.getElementById("contenedor-trabajos");
       const f = document.createElement("div");
@@ -603,7 +672,6 @@
     }
     document.getElementById("btn-add-trabajo").onclick = () => agregarFilaTrabajo("");
 
-    // REPEATER: MATERIALES
     function agregarFilaMaterial(nombre = "", unidad = "m²", cant = "") {
       const c = document.getElementById("contenedor-materiales");
       const f = document.createElement("div");
@@ -629,7 +697,7 @@
     }
     document.getElementById("btn-add-material").onclick = () => agregarFilaMaterial("", "m²", "");
 
-    // Firestore
+    // Colecciones Firestore
     const colObras = collection(db, "proyectos");
     const colClientes = collection(db, "clientes");
     const colIncidencias = collection(db, "incidencias");
@@ -637,9 +705,12 @@
     const colHerramientas = collection(db, "herramientas");
 
     let cacheObras = [];
+    let cacheClientes = [];
     let filtroEstadoActual = 'todas';
     let obraSeleccionadaActual = null;
+    let clienteSeleccionadoActual = null;
 
+    // FILTRO DE OBRAS
     window.filtrarObras = (estado, btnElement) => {
       filtroEstadoActual = estado;
 
@@ -678,7 +749,7 @@
             </div>
 
             <h3 class="text-base font-bold text-slate-900 leading-snug">${d.nombre}</h3>
-            <p class="text-xs text-slate-500 mt-1">👤 ${d.cliente || 'Particular'}</p>
+            <p class="text-xs text-slate-500 mt-1">👤 <span class="font-semibold text-indigo-700 cursor-pointer hover:underline" onclick="window.abrirDetalleClientePorNombre('${d.cliente}')">${d.cliente || 'Particular'}</span></p>
             <p class="text-xs text-slate-500 mt-1">📍 ${d.direccion || 'Sin dirección'}</p>
 
             <div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-xs text-slate-500">
@@ -700,7 +771,7 @@
       });
     }
 
-    // PANTALLA COMPLETA DETALLE OBRA (CON TELÉFONOS CLICABLES)
+    // PANTALLA COMPLETA DETALLE OBRA
     window.abrirDetalleObra = (id) => {
       const obra = cacheObras.find(o => o.id === id);
       if (!obra) return;
@@ -750,7 +821,6 @@
         }
       }
 
-      // Teléfonos formateados clicables para llamadas
       const telefonosArray = [];
       if (obra.tel1) telefonosArray.push(`<a href="tel:${obra.tel1}" class="text-amber-700 font-bold hover:underline">📞 ${obra.tel1}</a>`);
       if (obra.tel2) telefonosArray.push(`<a href="tel:${obra.tel2}" class="text-amber-700 font-bold hover:underline">📞 ${obra.tel2}</a>`);
@@ -759,7 +829,6 @@
       cont.innerHTML = `
         <div class="card-print bg-white rounded-2xl p-5 sm:p-7 border border-slate-200 shadow-sm space-y-4">
           
-          <!-- Encabezado Ficha -->
           <div class="flex flex-col sm:flex-row justify-between items-start gap-2 pb-3 border-b border-slate-200">
             <div>
               <div class="flex items-center gap-2">
@@ -778,11 +847,10 @@
             </div>
           </div>
 
-          <!-- Cuadrícula 4 campos -->
           <div class="print-grid-4col grid grid-cols-2 lg:grid-cols-4 gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs">
             <div>
               <span class="text-[10px] font-bold text-slate-400 uppercase">Cliente</span>
-              <p class="font-semibold text-indigo-700 mt-0.5 truncate">👤 ${obra.cliente || 'Particular'}</p>
+              <p class="font-semibold text-indigo-700 mt-0.5 truncate cursor-pointer hover:underline" onclick="window.abrirDetalleClientePorNombre('${obra.cliente}')">👤 ${obra.cliente || 'Particular'}</p>
             </div>
             <div>
               <span class="text-[10px] font-bold text-slate-400 uppercase">Fecha Inicio</span>
@@ -793,7 +861,7 @@
               <p class="font-medium text-slate-800 mt-0.5">🏁 ${obra.fechaFin || 'Pendiente'}</p>
             </div>
             <div>
-              <span class="text-[10px] font-bold text-slate-400 uppercase">Teléfonos Clicables</span>
+              <span class="text-[10px] font-bold text-slate-400 uppercase">Teléfonos</span>
               <div class="mt-0.5 flex flex-wrap gap-2 text-xs">
                 ${telefonosArray.length > 0 ? telefonosArray.join('<span class="text-slate-300">|</span>') : '<span class="text-slate-400 italic">Sin teléfonos</span>'}
               </div>
@@ -806,7 +874,6 @@
             <p class="text-xs text-slate-700 leading-relaxed bg-slate-50 p-2.5 rounded-lg border">${obra.descripcion}</p>
           </div>` : ''}
 
-          <!-- Tajos y Materiales -->
           <div class="print-section print-grid-2col grid grid-cols-1 lg:grid-cols-2 gap-4">
             <div class="p-3.5 rounded-xl border border-slate-200 bg-white">
               <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2 flex items-center justify-between pb-1.5 border-b">
@@ -872,7 +939,6 @@
         prev.classList.add("hidden");
       }
 
-      // Tajos
       const cTrabajos = document.getElementById("contenedor-trabajos");
       cTrabajos.innerHTML = "";
       if (d.trabajos && d.trabajos.length > 0) {
@@ -881,7 +947,6 @@
         agregarFilaTrabajo("");
       }
 
-      // Materiales
       const cMateriales = document.getElementById("contenedor-materiales");
       cMateriales.innerHTML = "";
       if (d.materiales && d.materiales.length > 0) {
@@ -896,7 +961,6 @@
         agregarFilaMaterial("", "m²", "");
       }
 
-      // Checkboxes operarios
       document.querySelectorAll("#contenedor-checkbox-operarios input").forEach(chk => {
         chk.checked = d.operarios && d.operarios.includes(chk.value);
       });
@@ -934,6 +998,11 @@
       if (obraSeleccionadaActual && !vistas.detalleObra.classList.contains("hidden")) {
         const actualizada = cacheObras.find(o => o.id === obraSeleccionadaActual.id);
         if (actualizada) window.abrirDetalleObra(actualizada.id);
+      }
+
+      // Si tenemos abierta la ficha de un cliente, refrescar sus obras vinculadas
+      if (clienteSeleccionadoActual && !vistas.detalleCliente.classList.contains("hidden")) {
+        window.abrirDetalleCliente(clienteSeleccionadoActual.id);
       }
     });
 
@@ -1008,65 +1077,265 @@
       }
     };
 
-    // CLIENTES
-    const listaClientesEl = document.getElementById("lista-clientes");
-    const selectClienteObra = document.getElementById("select-cliente-obra");
-    onSnapshot(colClientes, (snap) => {
+    // ==========================================
+    // REFINAMIENTO: CLIENTES
+    // ==========================================
+
+    function renderizarClientes() {
+      const listaClientesEl = document.getElementById("lista-clientes");
+      const selectClienteObra = document.getElementById("select-cliente-obra");
       listaClientesEl.innerHTML = "";
       selectClienteObra.innerHTML = '<option value="Particular / Sin asignar">Particular / Sin asignar</option>';
 
-      if (snap.empty) {
-        listaClientesEl.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay clientes dados de alta.</p></div>`;
-      } else {
-        snap.forEach((docSnap) => {
-          const d = docSnap.data();
-          const opt = document.createElement("option");
-          opt.value = d.nombre;
-          opt.textContent = d.nombre + (d.telefono ? ` (${d.telefono})` : '');
-          selectClienteObra.appendChild(opt);
+      if (cacheClientes.length === 0) {
+        listaClientesEl.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay clientes dados de alta todavía.</p></div>`;
+        return;
+      }
 
-          const card = document.createElement("div");
-          card.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between";
-          card.innerHTML = `
-            <div>
-              <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-800">Cliente</span>
-              <h3 class="text-base font-bold text-slate-900 mt-2">${d.nombre}</h3>
-              <p class="text-xs text-slate-600 mt-2">📞 <a href="tel:${d.telefono}" class="text-indigo-600 hover:underline font-bold">${d.telefono}</a></p>
-              ${d.email ? `<p class="text-xs text-slate-500 mt-1">✉️ <a href="mailto:${d.email}" class="hover:underline">${d.email}</a></p>` : ''}
-              ${d.direccion ? `<p class="text-xs text-slate-500 mt-1">📍 ${d.direccion}</p>` : ''}
-              ${d.notas ? `<p class="text-xs bg-slate-50 p-2.5 rounded-lg border text-slate-600 mt-3 italic">"${d.notas}"</p>` : ''}
+      cacheClientes.forEach((d) => {
+        // Llenar selector de obras
+        const opt = document.createElement("option");
+        opt.value = d.nombre;
+        opt.textContent = d.nombre + (d.telefono ? ` (${d.telefono})` : '');
+        selectClienteObra.appendChild(opt);
+
+        // Obras asociadas a este cliente
+        const obrasDelCliente = cacheObras.filter(o => o.cliente === d.nombre);
+        const totalFacturado = obrasDelCliente.reduce((acc, curr) => acc + (Number(curr.presupuesto) || 0), 0);
+
+        const card = document.createElement("div");
+        card.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between hover:shadow-md transition";
+        card.innerHTML = `
+          <div>
+            <div class="flex justify-between items-start mb-2">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">
+                ${d.cif ? d.cif : 'Cliente'}
+              </span>
+              <span class="text-xs font-bold text-slate-600">
+                ${obrasDelCliente.length} obra${obrasDelCliente.length === 1 ? '' : 's'}
+              </span>
             </div>
-            <div class="mt-6 pt-4 border-t border-slate-100 flex justify-end">
-              <button onclick="window.borrarRegistro('clientes', '${docSnap.id}')" class="text-xs text-rose-500 hover:underline">Eliminar</button>
+
+            <h3 class="text-base font-bold text-slate-900 leading-snug">${d.nombre}</h3>
+            
+            <div class="mt-3 space-y-1 text-xs text-slate-600">
+              <p>📞 <a href="tel:${d.telefono}" class="text-indigo-600 font-bold hover:underline">${d.telefono}</a></p>
+              ${d.email ? `<p>✉️ <a href="mailto:${d.email}" class="hover:underline">${d.email}</a></p>` : ''}
+              ${d.direccion ? `<p class="truncate">📍 ${d.direccion}</p>` : ''}
             </div>
-          `;
-          listaClientesEl.appendChild(card);
-        });
+
+            <div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-xs">
+              <span class="text-slate-400">Total presupuestado:</span>
+              <span class="font-bold text-slate-800">${totalFacturado > 0 ? totalFacturado.toLocaleString('es-ES') + ' €' : '-'}</span>
+            </div>
+          </div>
+
+          <div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+            <a href="tel:${d.telefono}" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold transition">
+              📞 Llamar
+            </a>
+            <button onclick="window.abrirDetalleCliente('${d.id}')" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg text-xs shadow-sm transition">
+              🔍 Ver Ficha Completa
+            </button>
+          </div>
+        `;
+        listaClientesEl.appendChild(card);
+      });
+    }
+
+    // Sincronizar Clientes de Firestore
+    onSnapshot(colClientes, (snap) => {
+      cacheClientes = [];
+      snap.forEach((docSnap) => {
+        cacheClientes.push({ id: docSnap.id, ...docSnap.data() });
+      });
+      renderizarClientes();
+
+      if (clienteSeleccionadoActual && !vistas.detalleCliente.classList.contains("hidden")) {
+        const actualizado = cacheClientes.find(c => c.id === clienteSeleccionadoActual.id);
+        if (actualizado) window.abrirDetalleCliente(actualizado.id);
       }
     });
 
+    // PANTALLA COMPLETA DETALLE CLIENTE
+    window.abrirDetalleCliente = (id) => {
+      const cliente = cacheClientes.find(c => c.id === id);
+      if (!cliente) return;
+      clienteSeleccionadoActual = cliente;
+
+      const cont = document.getElementById("contenedor-detalle-cliente");
+      const obrasDelCliente = cacheObras.filter(o => o.cliente === cliente.nombre);
+      const totalPresupuesto = obrasDelCliente.reduce((acc, curr) => acc + (Number(curr.presupuesto) || 0), 0);
+      const urlMaps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(cliente.direccion || '')}`;
+
+      const obrasListHtml = obrasDelCliente.length > 0
+        ? obrasDelCliente.map(o => {
+            let badge = o.estado === "Finalizada" ? "bg-sky-100 text-sky-800" : o.estado === "Presupuestada" ? "bg-amber-100 text-amber-800" : o.estado === "Pausada" ? "bg-orange-100 text-orange-800" : "bg-emerald-100 text-emerald-800";
+            return `
+              <div class="flex items-center justify-between p-3.5 bg-slate-50 border rounded-xl hover:bg-amber-50/50 transition cursor-pointer" onclick="window.abrirDetalleObra('${o.id}')">
+                <div class="space-y-0.5">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ${badge}">${o.estado || 'En curso'}</span>
+                    <h4 class="text-sm font-bold text-slate-900">${o.nombre}</h4>
+                  </div>
+                  <p class="text-xs text-slate-500">📍 ${o.direccion || 'Sin dirección'}</p>
+                </div>
+                <div class="text-right">
+                  <span class="text-sm font-black text-slate-800">${o.presupuesto ? Number(o.presupuesto).toLocaleString('es-ES') + ' €' : '-'}</span>
+                  <p class="text-[11px] text-amber-600 font-semibold hover:underline">Ver Obra →</p>
+                </div>
+              </div>
+            `;
+          }).join('')
+        : '<p class="text-xs text-slate-400 italic bg-slate-50 p-4 rounded-xl border">Este cliente aún no tiene ninguna obra vinculada.</p>';
+
+      cont.innerHTML = `
+        <div class="card-print bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+          
+          <!-- Encabezado Cliente -->
+          <div class="flex flex-col sm:flex-row justify-between items-start gap-4 pb-4 border-b border-slate-200">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">
+                  ${cliente.cif ? 'CIF/NIF: ' + cliente.cif : 'Cliente Registrado'}
+                </span>
+                <span class="text-xs text-slate-400 font-mono">ID: ${cliente.id.substring(0, 6).toUpperCase()}</span>
+              </div>
+              <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">${cliente.nombre}</h1>
+              <p class="text-xs sm:text-sm text-slate-500 mt-1 flex items-center gap-2">
+                📍 ${cliente.direccion || 'Sin dirección fiscal'}
+                ${cliente.direccion ? `<a href="${urlMaps}" target="_blank" class="no-print text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200 hover:bg-indigo-100">🗺️ Abrir Maps</a>` : ''}
+              </p>
+            </div>
+            <div class="sm:text-right">
+              <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Volumen Contratado</span>
+              <p class="text-2xl font-black text-slate-900 mt-0.5">${totalPresupuesto > 0 ? totalPresupuesto.toLocaleString('es-ES') + ' €' : '0 €'}</p>
+              <p class="text-xs text-slate-500">${obrasDelCliente.length} reforma${obrasDelCliente.length === 1 ? '' : 's'} en total</p>
+            </div>
+          </div>
+
+          <!-- Cuadrícula de Contacto Directo -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
+            <div>
+              <span class="text-xs font-bold text-slate-400 uppercase">Teléfono</span>
+              <p class="mt-1">
+                <a href="tel:${cliente.telefono}" class="text-sm font-bold text-indigo-600 hover:underline inline-flex items-center gap-1.5">
+                  📞 ${cliente.telefono}
+                </a>
+              </p>
+            </div>
+            <div>
+              <span class="text-xs font-bold text-slate-400 uppercase">Correo Electrónico</span>
+              <p class="mt-1">
+                ${cliente.email ? `<a href="mailto:${cliente.email}" class="text-sm font-semibold text-slate-800 hover:underline truncate inline-flex items-center gap-1.5">✉️ ${cliente.email}</a>` : '<span class="text-xs text-slate-400 italic">Sin correo</span>'}
+              </p>
+            </div>
+            <div>
+              <span class="text-xs font-bold text-slate-400 uppercase">Documento Fiscal</span>
+              <p class="text-sm font-semibold text-slate-800 mt-1">🆔 ${cliente.cif || 'No indicado'}</p>
+            </div>
+          </div>
+
+          ${cliente.notas ? `
+          <div>
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Notas y Observaciones de Seguimiento</h3>
+            <div class="p-4 bg-amber-50/60 rounded-xl border border-amber-200 text-xs text-slate-700 leading-relaxed italic">
+              "${cliente.notas}"
+            </div>
+          </div>` : ''}
+
+          <!-- Historial de Obras Vinculadas -->
+          <div>
+            <div class="flex justify-between items-center mb-3">
+              <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider">
+                Obras y Reformas Asociadas (${obrasDelCliente.length})
+              </h3>
+              <button onclick="document.getElementById('btn-abrir-modal-obra').click(); document.getElementById('select-cliente-obra').value='${cliente.nombre}';" class="text-xs font-bold text-amber-700 hover:underline">
+                + Crear obra para este cliente
+              </button>
+            </div>
+            <div class="space-y-2.5">
+              ${obrasListHtml}
+            </div>
+          </div>
+
+        </div>
+      `;
+
+      cambiarVista('detalleCliente');
+    };
+
+    window.abrirDetalleClientePorNombre = (nombreCliente) => {
+      if (!nombreCliente || nombreCliente === "Particular" || nombreCliente === "Particular / Sin asignar") return;
+      const c = cacheClientes.find(item => item.nombre.trim().toLowerCase() === nombreCliente.trim().toLowerCase());
+      if (c) {
+        window.abrirDetalleCliente(c.id);
+      } else {
+        cambiarVista('clientes');
+      }
+    };
+
+    // BOTÓN EDITAR CLIENTE (CARGAR DATOS EN EL MODAL)
+    document.getElementById("btn-editar-cliente-actual").onclick = () => {
+      if (!clienteSeleccionadoActual) return;
+      const d = clienteSeleccionadoActual;
+
+      document.getElementById("edit-cliente-id").value = d.id;
+      document.getElementById("titulo-modal-cliente").textContent = "Editar Cliente";
+      document.getElementById("btn-guardar-cliente").textContent = "Actualizar Ficha";
+
+      document.getElementById("input-nombre-cliente").value = d.nombre || "";
+      document.getElementById("input-cif-cliente").value = d.cif || "";
+      document.getElementById("input-tel-cliente").value = d.telefono || "";
+      document.getElementById("input-email-cliente").value = d.email || "";
+      document.getElementById("input-dir-cliente").value = d.direccion || "";
+      document.getElementById("input-notas-cliente").value = d.notas || "";
+
+      document.getElementById("modal-cliente").style.display = "flex";
+    };
+
+    // BOTÓN BORRAR CLIENTE ACTUAL
+    document.getElementById("btn-borrar-cliente-actual").onclick = async () => {
+      if (clienteSeleccionadoActual && confirm(`¿Deseas eliminar a ${clienteSeleccionadoActual.nombre}? Sus obras asociadas seguirán existiendo pero sin ficha de cliente.`)) {
+        await deleteDoc(doc(db, "clientes", clienteSeleccionadoActual.id));
+        cambiarVista('clientes');
+      }
+    };
+
+    // GUARDAR CLIENTE (CREACIÓN O ACTUALIZACIÓN CON CIERRE INMEDIATO)
     document.getElementById("btn-guardar-cliente").onclick = async () => {
       const modal = document.getElementById("modal-cliente");
       const nom = document.getElementById("input-nombre-cliente").value.trim();
       const tel = document.getElementById("input-tel-cliente").value.trim();
+
       if (!nom || !tel) {
         alert("Introduce el nombre y teléfono del cliente.");
         return;
       }
+
       modal.style.display = "none";
-      await addDoc(colClientes, {
+      const editId = document.getElementById("edit-cliente-id").value;
+
+      const clienteData = {
         nombre: nom,
+        cif: document.getElementById("input-cif-cliente").value.trim() || "",
         telefono: tel,
         email: document.getElementById("input-email-cliente").value.trim() || "",
         direccion: document.getElementById("input-dir-cliente").value.trim() || "",
         notas: document.getElementById("input-notas-cliente").value.trim() || "",
-        fechaCreacion: serverTimestamp()
-      });
-      document.getElementById("input-nombre-cliente").value = "";
-      document.getElementById("input-tel-cliente").value = "";
-      document.getElementById("input-email-cliente").value = "";
-      document.getElementById("input-dir-cliente").value = "";
-      document.getElementById("input-notas-cliente").value = "";
+        fechaModificacion: serverTimestamp()
+      };
+
+      try {
+        if (editId) {
+          await updateDoc(doc(db, "clientes", editId), clienteData);
+        } else {
+          clienteData.fechaCreacion = serverTimestamp();
+          await addDoc(colClientes, clienteData);
+        }
+      } catch (err) {
+        console.error("Error guardando cliente:", err);
+      }
     };
 
     // OPERARIOS
