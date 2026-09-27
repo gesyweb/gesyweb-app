@@ -5,6 +5,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gesyweb ERP — Gestión de Reformas</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @media print {
+      aside, header, #btn-volver-obras, #acciones-ficha, .no-print {
+        display: none !important;
+      }
+      body {
+        background-color: white !important;
+        color: black !important;
+      }
+      main {
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      #vista-detalle-obra {
+        display: block !important;
+      }
+      .card-print {
+        border: 1px solid #cbd5e1 !important;
+        box-shadow: none !important;
+      }
+    }
+  </style>
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col md:flex-row">
 
@@ -52,7 +74,7 @@
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
           <h2 class="text-2xl font-bold text-slate-900">Obras y Proyectos</h2>
-          <p class="text-sm text-slate-500">Planificación de tajos, partidas, materiales con medidas y rutas.</p>
+          <p class="text-sm text-slate-500">Planificación de tajos, partidas, documentación y materiales.</p>
         </div>
         <button id="btn-abrir-modal-obra" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-4 py-2.5 rounded-lg shadow-sm transition">
           + Nueva Obra
@@ -73,14 +95,18 @@
       </section>
     </div>
 
-    <!-- SECCIÓN: PANTALLA COMPLETA DETALLE OBRA -->
+    <!-- SECCIÓN: FICHA DETALLADA A PANTALLA COMPLETA -->
     <div id="vista-detalle-obra" class="hidden">
-      <!-- Barra superior fija de navegación -->
-      <div class="flex items-center justify-between pb-6 border-b border-slate-200 bg-slate-100 sticky top-0 z-10">
-        <button onclick="window.cambiarVista('obras')" class="inline-flex items-center gap-2 text-sm font-bold text-slate-800 hover:text-amber-600 bg-white border border-slate-300 px-4 py-2 rounded-xl shadow-sm transition">
-          ← Volver al listado de obras
+      <!-- Barra superior de navegación y acciones -->
+      <div class="flex flex-wrap items-center justify-between pb-6 border-b border-slate-200 gap-3 bg-slate-100 sticky top-0 z-10">
+        <button onclick="window.cambiarVista('obras')" id="btn-volver-obras" class="inline-flex items-center gap-2 text-sm font-bold text-slate-800 hover:text-amber-600 bg-white border border-slate-300 px-4 py-2 rounded-xl shadow-sm transition">
+          ← Volver al listado
         </button>
-        <div class="flex gap-2">
+        
+        <div id="acciones-ficha" class="flex flex-wrap gap-2">
+          <button onclick="window.print()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-xl shadow-sm transition flex items-center gap-2">
+            <span>📄</span> Imprimir / PDF
+          </button>
           <button id="btn-editar-obra-actual" class="bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold px-4 py-2 rounded-xl transition">
             ✏️ Editar Obra
           </button>
@@ -92,8 +118,7 @@
 
       <div id="contenedor-detalle-obra" class="mt-6"></div>
 
-      <!-- Botón secundario inferior de volver -->
-      <div class="mt-8 pt-6 border-t border-slate-200 flex justify-start">
+      <div class="mt-8 pt-6 border-t border-slate-200 flex justify-start no-print">
         <button onclick="window.cambiarVista('obras')" class="inline-flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-amber-600 bg-white border px-5 py-2.5 rounded-xl shadow-sm transition">
           ← Volver al listado
         </button>
@@ -166,13 +191,13 @@
 
   </main>
 
-  <!-- MODAL: CREAR / EDITAR OBRA (CONTROL DIRECTO SIN CONFLICTOS) -->
+  <!-- MODAL: CREAR / EDITAR OBRA -->
   <div id="modal-obra" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 z-50 overflow-y-auto">
     <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-3xl w-full shadow-2xl my-8 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center pb-4 border-b border-slate-100">
         <div>
           <h3 id="titulo-modal-obra" class="text-lg font-bold text-slate-900">Registrar Nueva Obra</h3>
-          <p class="text-xs text-slate-500">Detalles técnicos, contactos, tajos y materiales.</p>
+          <p class="text-xs text-slate-500">Detalles técnicos, contactos, documentos y materiales.</p>
         </div>
         <button type="button" onclick="document.getElementById('modal-obra').style.display='none'" class="text-slate-400 hover:text-slate-700 text-2xl font-bold">&times;</button>
       </div>
@@ -269,19 +294,30 @@
           <div id="contenedor-trabajos" class="space-y-2"></div>
         </div>
 
-        <!-- Bloque 5: Repeater Materiales (Material + Cantidad + Select de Medida) -->
+        <!-- Bloque 5: Repeater Materiales -->
         <div class="pt-4 border-t border-slate-100 space-y-3">
           <div class="flex justify-between items-center">
             <div>
               <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Lista de Materiales</h4>
-              <p class="text-[11px] text-slate-400">Indica el material, la cantidad y la unidad (metros, kilos, litros, piezas...)</p>
+              <p class="text-[11px] text-slate-400">Material, cantidad y unidad de medida.</p>
             </div>
             <button type="button" id="btn-add-material" class="text-xs bg-slate-200 text-slate-800 font-semibold px-2.5 py-1 rounded hover:bg-slate-300">+ Añadir Material</button>
           </div>
           <div id="contenedor-materiales" class="space-y-2"></div>
         </div>
 
-        <!-- Botones de Acción directos -->
+        <!-- Bloque 6: Documentos y Fotos de Obra (Permisos, Planos, Averías) -->
+        <div class="pt-4 border-t border-slate-100 space-y-3">
+          <div>
+            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Documentos y Fotografías Cruciales</h4>
+            <p class="text-[11px] text-slate-400">Licencia de obra, actas, planos o imágenes clave (PDF, JPG, PNG).</p>
+          </div>
+          <div class="p-4 bg-slate-50 rounded-xl border border-dashed border-slate-300">
+            <input type="file" id="input-archivo-obra" accept="image/*,application/pdf" class="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-500 file:text-slate-950 hover:file:bg-amber-600 cursor-pointer">
+            <div id="preview-archivo-seleccionado" class="mt-2 text-xs font-medium text-slate-700 hidden"></div>
+          </div>
+        </div>
+
         <div class="mt-8 flex justify-end gap-3 pt-4 border-t border-slate-100">
           <button type="button" onclick="document.getElementById('modal-obra').style.display='none'" class="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg">Cancelar</button>
           <button type="button" id="btn-submit-obra" class="px-6 py-2.5 text-sm bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg shadow-sm transition">
@@ -410,7 +446,7 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Navegación modular
+    // Navegación
     const vistas = {
       obras: document.getElementById("vista-obras"),
       detalleObra: document.getElementById("vista-detalle-obra"),
@@ -446,7 +482,31 @@
     botonesNav.operarios.onclick = () => cambiarVista('operarios');
     botonesNav.herramientas.onclick = () => cambiarVista('herramientas');
 
-    // Apertura de modales
+    let archivoBase64Actual = null;
+    let nombreArchivoActual = null;
+
+    // Lector de archivos adjuntos
+    document.getElementById("input-archivo-obra").addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      const preview = document.getElementById("preview-archivo-seleccionado");
+      if (!file) return;
+
+      if (file.size > 2 * 1024 * 1024) {
+        alert("El archivo excede el límite recomendado de 2 MB. Selecciona un archivo comprimido o foto más ligera.");
+        e.target.value = "";
+        return;
+      }
+
+      nombreArchivoActual = file.name;
+      const reader = new FileReader();
+      reader.onload = () => {
+        archivoBase64Actual = reader.result;
+        preview.textContent = `📎 Documento cargado: ${file.name}`;
+        preview.classList.remove("hidden");
+      };
+      reader.readAsDataURL(file);
+    });
+
     document.getElementById("btn-abrir-modal-obra").onclick = () => {
       document.getElementById("edit-obra-id").value = "";
       document.getElementById("titulo-modal-obra").textContent = "Registrar Nueva Obra";
@@ -460,6 +520,10 @@
       document.getElementById("input-tel1").value = "";
       document.getElementById("input-tel2").value = "";
       document.getElementById("input-tel3").value = "";
+      document.getElementById("input-archivo-obra").value = "";
+      document.getElementById("preview-archivo-seleccionado").classList.add("hidden");
+      archivoBase64Actual = null;
+      nombreArchivoActual = null;
       document.getElementById("contenedor-trabajos").innerHTML = "";
       document.getElementById("contenedor-materiales").innerHTML = "";
       agregarFilaTrabajo("");
@@ -486,20 +550,20 @@
     }
     document.getElementById("btn-add-trabajo").onclick = () => agregarFilaTrabajo("");
 
-    // REPEATER: MATERIALES (CON SELECT DE UNIDAD: METROS, KILOS, LITROS, PIEZAS...)
+    // REPEATER: MATERIALES
     function agregarFilaMaterial(nombre = "", unidad = "m²", cant = "") {
       const c = document.getElementById("contenedor-materiales");
       const f = document.createElement("div");
       f.className = "grid grid-cols-12 gap-2 items-center item-material bg-slate-50 p-2 rounded-lg border border-slate-200";
       f.innerHTML = `
-        <input type="text" value="${nombre}" placeholder="Nombre de material (ej. Losetas 60x60)" class="col-span-6 px-3 py-1.5 border rounded-lg text-sm outline-none bg-white focus:ring-1 focus:ring-amber-500">
+        <input type="text" value="${nombre}" placeholder="Material (ej. Losetas 60x60)" class="col-span-6 px-3 py-1.5 border rounded-lg text-sm outline-none bg-white focus:ring-1 focus:ring-amber-500">
         <input type="number" step="any" value="${cant}" placeholder="Cant." class="col-span-2 px-2 py-1.5 border rounded-lg text-sm outline-none bg-white focus:ring-1 focus:ring-amber-500 text-center">
         <select class="col-span-3 px-2 py-1.5 border rounded-lg text-xs outline-none bg-white focus:ring-1 focus:ring-amber-500 font-medium">
-          <option value="m²" ${unidad === 'm²' ? 'selected' : ''}>m² (m. cuadrados)</option>
-          <option value="m" ${unidad === 'm' ? 'selected' : ''}>m (m. lineales)</option>
-          <option value="m³" ${unidad === 'm³' ? 'selected' : ''}>m³ (m. cúbicos)</option>
-          <option value="ud" ${unidad === 'ud' ? 'selected' : ''}>ud (unidades)</option>
-          <option value="kg" ${unidad === 'kg' ? 'selected' : ''}>kg (kilos)</option>
+          <option value="m²" ${unidad === 'm²' ? 'selected' : ''}>m²</option>
+          <option value="m" ${unidad === 'm' ? 'selected' : ''}>m (lineales)</option>
+          <option value="m³" ${unidad === 'm³' ? 'selected' : ''}>m³</option>
+          <option value="ud" ${unidad === 'ud' ? 'selected' : ''}>ud</option>
+          <option value="kg" ${unidad === 'kg' ? 'selected' : ''}>kg</option>
           <option value="L" ${unidad === 'L' ? 'selected' : ''}>L (litros)</option>
           <option value="sacos" ${unidad === 'sacos' ? 'selected' : ''}>sacos</option>
           <option value="cajas" ${unidad === 'cajas' ? 'selected' : ''}>cajas</option>
@@ -534,7 +598,7 @@
       const filtradas = filtroEstadoActual === 'todas' ? cacheObras : cacheObras.filter(o => o.estado === filtroEstadoActual);
 
       if (filtradas.length === 0) {
-        listaObrasEl.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay obras bajo este filtro.</p></div>`;
+        listaObrasEl.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay obras registradas bajo este filtro.</p></div>`;
         return;
       }
 
@@ -558,7 +622,7 @@
 
             <div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-xs text-slate-500">
               <span>Tajos: <strong>${d.trabajos ? d.trabajos.length : 0}</strong></span>
-              <span>Materiales: <strong>${d.materiales ? d.materiales.length : 0}</strong></span>
+              <span>Adjuntos: <strong>${d.archivoAdjunto ? '1 archivo' : '0'}</strong></span>
             </div>
           </div>
 
@@ -575,7 +639,7 @@
       });
     }
 
-    // PANTALLA COMPLETA DETALLE OBRA
+    // PANTALLA COMPLETA DETALLE OBRA (CON DOCUMENTOS Y MAQUETACIÓN A4)
     window.abrirDetalleObra = (id) => {
       const obra = cacheObras.find(o => o.id === id);
       if (!obra) return;
@@ -594,7 +658,7 @@
             const displayCant = (m.cantidad ? m.cantidad : '') + ' ' + (m.unidad ? m.unidad : '');
             return `
               <li class="flex items-center justify-between py-2 text-sm text-slate-700 border-b border-slate-100 last:border-0">
-                <span class="font-medium">${m.nombre || 'Material sin nombre'}</span>
+                <span class="font-medium">${m.nombre || 'Material'}</span>
                 <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-200">${displayCant.trim() || 'ud'}</span>
               </li>`;
           }).join('')
@@ -604,8 +668,31 @@
         ? obra.operarios.map(op => `<span class="bg-white border px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 shadow-sm">👷 ${op}</span>`).join('')
         : '<p class="text-sm text-slate-400 italic">Sin operarios asignados.</p>';
 
+      // Visor de archivo adjunto
+      let adjuntoHtml = '<p class="text-sm text-slate-400 italic">Sin documentos adjuntos.</p>';
+      if (obra.archivoAdjunto) {
+        const esImg = obra.archivoAdjunto.startsWith("data:image");
+        if (esImg) {
+          adjuntoHtml = `
+            <div class="space-y-2">
+              <img src="${obra.archivoAdjunto}" alt="Documento de obra" class="max-h-72 rounded-xl border shadow-sm object-cover">
+              <a href="${obra.archivoAdjunto}" download="${obra.nombreArchivo || 'documento-obra'}" class="inline-block text-xs font-bold text-amber-600 hover:underline">⬇️ Descargar fotografía</a>
+            </div>`;
+        } else {
+          adjuntoHtml = `
+            <div class="flex items-center gap-3 p-4 bg-slate-50 border rounded-xl">
+              <span class="text-3xl">📄</span>
+              <div class="flex-1 overflow-hidden">
+                <p class="text-sm font-bold text-slate-800 truncate">${obra.nombreArchivo || 'Documento adjunto'}</p>
+                <p class="text-xs text-slate-400">Documento técnico / Licencia</p>
+              </div>
+              <a href="${obra.archivoAdjunto}" download="${obra.nombreArchivo || 'documento-obra.pdf'}" class="px-3 py-1.5 bg-amber-500 text-slate-950 font-bold rounded-lg text-xs shadow-sm hover:bg-amber-600">Descargar</a>
+            </div>`;
+        }
+      }
+
       cont.innerHTML = `
-        <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-8">
+        <div class="card-print bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-8">
           
           <div class="flex flex-col sm:flex-row justify-between items-start gap-4 pb-6 border-b border-slate-200">
             <div>
@@ -616,7 +703,7 @@
               <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">${obra.nombre}</h1>
               <p class="text-sm text-slate-500 mt-1 flex items-center gap-2">
                 📍 ${obra.direccion}
-                <a href="${urlMaps}" target="_blank" class="text-xs font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 hover:bg-amber-100">🗺️ Abrir en Google Maps</a>
+                <a href="${urlMaps}" target="_blank" class="no-print text-xs font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 hover:bg-amber-100">🗺️ Abrir en Google Maps</a>
               </p>
             </div>
             <div class="sm:text-right">
@@ -628,7 +715,7 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-4 bg-slate-50 rounded-xl border border-slate-200">
             <div>
               <span class="text-xs font-bold text-slate-400 uppercase">Cliente</span>
-              <p class="text-sm font-semibold text-indigo-700 mt-1 cursor-pointer hover:underline" onclick="window.cambiarVista('clientes')">👤 ${obra.cliente || 'Particular'}</p>
+              <p class="text-sm font-semibold text-indigo-700 mt-1">👤 ${obra.cliente || 'Particular'}</p>
             </div>
             <div>
               <span class="text-xs font-bold text-slate-400 uppercase">Fecha Inicio</span>
@@ -639,11 +726,11 @@
               <p class="text-sm font-medium text-slate-800 mt-1">🏁 ${obra.fechaFin || 'Pendiente'}</p>
             </div>
             <div>
-              <span class="text-xs font-bold text-slate-400 uppercase">Teléfonos de Contacto</span>
+              <span class="text-xs font-bold text-slate-400 uppercase">Teléfonos</span>
               <div class="text-xs text-slate-700 mt-1 space-y-0.5 font-medium">
-                ${obra.tel1 ? `<p>📞 <a href="tel:${obra.tel1}" class="hover:underline">${obra.tel1}</a></p>` : ''}
-                ${obra.tel2 ? `<p>📞 <a href="tel:${obra.tel2}" class="hover:underline">${obra.tel2}</a></p>` : ''}
-                ${obra.tel3 ? `<p>📞 <a href="tel:${obra.tel3}" class="hover:underline">${obra.tel3}</a></p>` : ''}
+                ${obra.tel1 ? `<p>📞 Principal: ${obra.tel1}</p>` : ''}
+                ${obra.tel2 ? `<p>📞 Obra: ${obra.tel2}</p>` : ''}
+                ${obra.tel3 ? `<p>📞 Extra: ${obra.tel3}</p>` : ''}
                 ${!obra.tel1 && !obra.tel2 && !obra.tel3 ? '<p class="text-slate-400 italic">Sin teléfonos</p>' : ''}
               </div>
             </div>
@@ -658,7 +745,7 @@
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div class="p-6 rounded-xl border border-slate-200 bg-white">
               <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-4 flex items-center justify-between">
-                <span>📋 Trabajos y Partidas</span>
+                <span>📋 Partidas y Trabajos</span>
                 <span class="text-xs bg-amber-100 text-amber-900 px-2 py-0.5 rounded font-semibold">${obra.trabajos ? obra.trabajos.length : 0}</span>
               </h3>
               <ul class="space-y-1">${trabajosLi}</ul>
@@ -674,8 +761,14 @@
           </div>
 
           <div>
-            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Personal Asignado a este proyecto</h3>
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Equipo asignado</h3>
             <div class="flex flex-wrap gap-2">${operariosBadges}</div>
+          </div>
+
+          <!-- Sección de Documentos adjuntos -->
+          <div class="pt-6 border-t border-slate-200">
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Documentación y Fotos clave</h3>
+            ${adjuntoHtml}
           </div>
 
         </div>
@@ -684,7 +777,7 @@
       cambiarVista('detalleObra');
     };
 
-    // BOTÓN EDITAR OBRA (CARGA PREVIA CON EL SELECT DE UNIDADES)
+    // BOTÓN EDITAR OBRA
     document.getElementById("btn-editar-obra-actual").onclick = () => {
       if (!obraSeleccionadaActual) return;
       const d = obraSeleccionadaActual;
@@ -705,7 +798,17 @@
       document.getElementById("input-tel2").value = d.tel2 || "";
       document.getElementById("input-tel3").value = d.tel3 || "";
 
-      // Precargar Tajos
+      archivoBase64Actual = d.archivoAdjunto || null;
+      nombreArchivoActual = d.nombreArchivo || null;
+      const prev = document.getElementById("preview-archivo-seleccionado");
+      if (nombreArchivoActual) {
+        prev.textContent = `📎 Documento guardado: ${nombreArchivoActual}`;
+        prev.classList.remove("hidden");
+      } else {
+        prev.classList.add("hidden");
+      }
+
+      // Tajos
       const cTrabajos = document.getElementById("contenedor-trabajos");
       cTrabajos.innerHTML = "";
       if (d.trabajos && d.trabajos.length > 0) {
@@ -714,7 +817,7 @@
         agregarFilaTrabajo("");
       }
 
-      // Precargar Materiales con su select de medida
+      // Materiales
       const cMateriales = document.getElementById("contenedor-materiales");
       cMateriales.innerHTML = "";
       if (d.materiales && d.materiales.length > 0) {
@@ -770,10 +873,9 @@
       }
     });
 
-    // BOTÓN GUARDAR OBRA (CIERRE FORZADO INMEDIATO Y ENVÍO A FIRESTORE)
+    // GUARDAR OBRA
     document.getElementById("btn-submit-obra").onclick = async () => {
       const modal = document.getElementById("modal-obra");
-      const btn = document.getElementById("btn-submit-obra");
       const nombre = document.getElementById("input-nombre").value.trim();
       const direccion = document.getElementById("input-direccion").value.trim();
 
@@ -782,19 +884,15 @@
         return;
       }
 
-      // CIERRE INMEDIATO DEL MODAL
       modal.style.display = "none";
-
       const editId = document.getElementById("edit-obra-id").value;
 
-      // Recoger tajos
       const trabajos = [];
       document.querySelectorAll("#contenedor-trabajos .item-trabajo input").forEach(inp => {
         const v = inp.value.trim();
         if (v) trabajos.push(v);
       });
 
-      // Recoger materiales con unidad seleccionada
       const materiales = [];
       document.querySelectorAll("#contenedor-materiales .item-material").forEach(row => {
         const txtNombre = row.querySelector("input[type='text']").value.trim();
@@ -809,7 +907,6 @@
         }
       });
 
-      // Recoger operarios
       const operariosSeleccionados = [];
       document.querySelectorAll("#contenedor-checkbox-operarios input:checked").forEach(chk => {
         operariosSeleccionados.push(chk.value);
@@ -830,6 +927,8 @@
         operarios: operariosSeleccionados,
         trabajos: trabajos,
         materiales: materiales,
+        archivoAdjunto: archivoBase64Actual || "",
+        nombreArchivo: nombreArchivoActual || "",
         fechaModificacion: serverTimestamp()
       };
 
