@@ -47,7 +47,7 @@
   <!-- Contenedor Principal -->
   <main class="flex-1 p-6 md:p-10 overflow-y-auto">
 
-    <!-- VISTA: OBRAS -->
+    <!-- SECCIÓN 1: VISTA LISTADO DE OBRAS -->
     <div id="vista-obras">
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
@@ -64,6 +64,7 @@
         <button onclick="window.filtrarObras('todas')" class="px-3 py-1 rounded-full text-xs font-semibold bg-slate-800 text-white">Todas</button>
         <button onclick="window.filtrarObras('En curso')" class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">🟢 En curso</button>
         <button onclick="window.filtrarObras('Presupuestada')" class="px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800">🟡 Presupuestadas</button>
+        <button onclick="window.filtrarObras('Pausada')" class="px-3 py-1 rounded-full text-xs font-semibold bg-orange-100 text-orange-800">🟠 Pausadas</button>
         <button onclick="window.filtrarObras('Finalizada')" class="px-3 py-1 rounded-full text-xs font-semibold bg-sky-100 text-sky-800">🔵 Finalizadas</button>
       </div>
 
@@ -72,7 +73,28 @@
       </section>
     </div>
 
-    <!-- VISTA: CLIENTES -->
+    <!-- SECCIÓN 1.1: FICHA DETALLADA A PANTALLA COMPLETA -->
+    <div id="vista-detalle-obra" class="hidden">
+      <div class="flex items-center justify-between pb-6 border-b border-slate-200">
+        <button id="btn-volver-obras" class="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-slate-950 transition">
+          ← Volver al listado
+        </button>
+        <div class="flex gap-2">
+          <button id="btn-editar-obra-actual" class="bg-slate-900 hover:bg-slate-800 text-white text-sm font-medium px-4 py-2 rounded-lg transition">
+            ✏️ Editar Obra
+          </button>
+          <button id="btn-borrar-obra-actual" class="bg-rose-50 hover:bg-rose-100 text-rose-700 text-sm font-medium px-4 py-2 rounded-lg border border-rose-200 transition">
+            Eliminar
+          </button>
+        </div>
+      </div>
+
+      <div id="contenedor-detalle-obra" class="mt-6">
+        <!-- Contenido dinámico inyectado por JS -->
+      </div>
+    </div>
+
+    <!-- SECCIÓN 2: CLIENTES -->
     <div id="vista-clientes" class="hidden">
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
@@ -88,7 +110,7 @@
       </section>
     </div>
 
-    <!-- VISTA: INCIDENCIAS -->
+    <!-- SECCIÓN 3: INCIDENCIAS -->
     <div id="vista-incidencias" class="hidden">
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
@@ -104,7 +126,7 @@
       </section>
     </div>
 
-    <!-- VISTA: OPERARIOS -->
+    <!-- SECCIÓN 4: OPERARIOS -->
     <div id="vista-operarios" class="hidden">
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
@@ -120,7 +142,7 @@
       </section>
     </div>
 
-    <!-- VISTA: HERRAMIENTAS -->
+    <!-- SECCIÓN 5: HERRAMIENTAS -->
     <div id="vista-herramientas" class="hidden">
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
@@ -138,19 +160,21 @@
 
   </main>
 
-  <!-- MODAL COMPLETO: NUEVA OBRA -->
+  <!-- MODAL: CREAR / EDITAR OBRA -->
   <div id="modal-obra" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 z-50 overflow-y-auto">
     <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-3xl w-full shadow-2xl my-8 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center pb-4 border-b border-slate-100">
         <div>
-          <h3 class="text-lg font-bold text-slate-900">Ficha Completa de Obra</h3>
+          <h3 id="titulo-modal-obra" class="text-lg font-bold text-slate-900">Registrar Nueva Obra</h3>
           <p class="text-xs text-slate-500">Detalles técnicos, contactos, tajos y materiales.</p>
         </div>
         <button id="btn-cerrar-modal-obra" class="text-slate-400 hover:text-slate-700 text-xl font-bold">&times;</button>
       </div>
 
       <form id="form-nueva-obra" class="mt-6 space-y-6">
-        <!-- Bloque 1: Datos Básicos -->
+        <input type="hidden" id="edit-obra-id" value="">
+
+        <!-- Bloque 1: General -->
         <div class="space-y-4">
           <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Información General</h4>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -168,11 +192,11 @@
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1">Dirección completa de la Obra *</label>
-              <input id="input-direccion" type="text" required placeholder="Calle, portal, piso, código postal y ciudad" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Dirección completa *</label>
+              <input id="input-direccion" type="text" required placeholder="Calle, número, piso y ciudad" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
             </div>
             <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1">Estado del Proyecto</label>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Estado</label>
               <select id="input-estado" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none bg-white">
                 <option value="En curso">🟢 En curso</option>
                 <option value="Presupuestada">🟡 Presupuestada</option>
@@ -199,71 +223,58 @@
 
           <div>
             <label class="block text-xs font-semibold text-slate-600 mb-1">Descripción del Alcance</label>
-            <textarea id="input-descripcion" rows="2" placeholder="Resumen general de la reforma a realizar..." class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none"></textarea>
+            <textarea id="input-descripcion" rows="2" placeholder="Resumen general de las actuaciones..." class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none"></textarea>
           </div>
         </div>
 
-        <!-- Bloque 2: Contactos directos de obra -->
+        <!-- Bloque 2: Contactos -->
         <div class="pt-4 border-t border-slate-100 space-y-4">
-          <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Teléfonos de Contacto (Hasta 3)</h4>
+          <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Teléfonos de Contacto</h4>
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
               <label class="block text-xs font-semibold text-slate-600 mb-1">Teléfono 1 (Principal)</label>
-              <input id="input-tel1" type="tel" placeholder="Ej. 611223344 (Cliente)" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+              <input id="input-tel1" type="tel" placeholder="611000000" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
             </div>
             <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1">Teléfono 2 (Encargado/Obra)</label>
-              <input id="input-tel2" type="tel" placeholder="Ej. 622334455 (Jefe Obra)" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Teléfono 2 (Obra / Encargado)</label>
+              <input id="input-tel2" type="tel" placeholder="622000000" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
             </div>
             <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1">Teléfono 3 (Portero/Adicional)</label>
-              <input id="input-tel3" type="tel" placeholder="Ej. 910000000 (Portería)" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Teléfono 3 (Adicional)</label>
+              <input id="input-tel3" type="tel" placeholder="633000000" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
             </div>
           </div>
         </div>
 
-        <!-- Bloque 3: Operarios asignados -->
+        <!-- Bloque 3: Operarios -->
         <div class="pt-4 border-t border-slate-100 space-y-2">
           <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Operarios y Gremios Asignados</h4>
-          <p class="text-xs text-slate-500">Selecciona quiénes intervienen en esta obra:</p>
           <div id="contenedor-checkbox-operarios" class="grid grid-cols-2 sm:grid-cols-3 gap-2 p-3 bg-slate-50 border rounded-lg max-h-36 overflow-y-auto">
-            <span class="text-xs text-slate-400 col-span-full">Cargando operarios disponibles...</span>
+            <span class="text-xs text-slate-400 col-span-full">Cargando operarios...</span>
           </div>
         </div>
 
-        <!-- Bloque 4: Repeater de Trabajos a Realizar -->
+        <!-- Bloque 4: Repeater Trabajos -->
         <div class="pt-4 border-t border-slate-100 space-y-3">
           <div class="flex justify-between items-center">
             <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Trabajos a Realizar / Partidas</h4>
             <button type="button" id="btn-add-trabajo" class="text-xs bg-amber-100 text-amber-900 font-semibold px-2.5 py-1 rounded hover:bg-amber-200">+ Añadir Trabajo</button>
           </div>
-          <div id="contenedor-trabajos" class="space-y-2">
-            <!-- Fila repeater -->
-            <div class="flex gap-2 item-trabajo">
-              <input type="text" placeholder="Ej. Demolición de tabique divisorio y desescombro" class="w-full px-3 py-1.5 border rounded-lg text-sm outline-none focus:ring-1 focus:ring-amber-500">
-              <button type="button" class="btn-eliminar-fila text-rose-500 hover:text-rose-700 px-2 font-bold">&times;</button>
-            </div>
-          </div>
+          <div id="contenedor-trabajos" class="space-y-2"></div>
         </div>
 
-        <!-- Bloque 5: Repeater de Lista de Materiales -->
+        <!-- Bloque 5: Repeater Materiales -->
         <div class="pt-4 border-t border-slate-100 space-y-3">
           <div class="flex justify-between items-center">
-            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Lista de Materiales Necesarios</h4>
+            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Lista de Materiales</h4>
             <button type="button" id="btn-add-material" class="text-xs bg-slate-200 text-slate-800 font-semibold px-2.5 py-1 rounded hover:bg-slate-300">+ Añadir Material</button>
           </div>
-          <div id="contenedor-materiales" class="space-y-2">
-            <!-- Fila repeater -->
-            <div class="flex gap-2 item-material">
-              <input type="text" placeholder="Ej. 15 sacos de mortero hidrófugo M-80" class="w-full px-3 py-1.5 border rounded-lg text-sm outline-none focus:ring-1 focus:ring-amber-500">
-              <button type="button" class="btn-eliminar-fila text-rose-500 hover:text-rose-700 px-2 font-bold">&times;</button>
-            </div>
-          </div>
+          <div id="contenedor-materiales" class="space-y-2"></div>
         </div>
 
         <div class="mt-8 flex justify-end gap-3 pt-4 border-t border-slate-100">
           <button type="button" id="btn-cancelar-obra" class="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg">Cancelar</button>
-          <button type="submit" class="px-5 py-2 text-sm bg-amber-500 hover:bg-amber-600 text-slate-950 font-semibold rounded-lg shadow-sm">Guardar Ficha de Obra</button>
+          <button type="submit" id="btn-submit-obra" class="px-5 py-2 text-sm bg-amber-500 hover:bg-amber-600 text-slate-950 font-semibold rounded-lg shadow-sm">Guardar Ficha</button>
         </div>
       </form>
     </div>
@@ -292,16 +303,16 @@
           </div>
         </div>
         <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Dirección de Contacto</label>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Dirección</label>
           <input id="input-dir-cliente" type="text" placeholder="Calle, número, ciudad" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
         </div>
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1">Notas</label>
-          <textarea id="input-notas-cliente" rows="2" placeholder="Notas de seguimiento..." class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none"></textarea>
+          <textarea id="input-notas-cliente" rows="2" placeholder="Notas..." class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none"></textarea>
         </div>
         <div class="mt-6 flex justify-end gap-3 pt-4 border-t border-slate-100">
           <button type="button" id="btn-cancelar-cliente" class="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg">Cancelar</button>
-          <button type="submit" class="px-5 py-2 text-sm bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg">Guardar Cliente</button>
+          <button type="submit" class="px-5 py-2 text-sm bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg">Guardar</button>
         </div>
       </form>
     </div>
@@ -318,12 +329,12 @@
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1">Obra afectada *</label>
           <select id="select-obra-incidencia" required class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-rose-500 outline-none bg-white">
-            <option value="">Selecciona una obra...</option>
+            <option value="">Selecciona obra...</option>
           </select>
         </div>
         <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Título de la Incidencia *</label>
-          <input id="input-titulo-incidencia" type="text" required placeholder="Ej. Fuga de agua" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-rose-500 outline-none">
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Título *</label>
+          <input id="input-titulo-incidencia" type="text" required placeholder="Ej. Fuga en tubería" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-rose-500 outline-none">
         </div>
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1">Descripción</label>
@@ -386,7 +397,7 @@
         </div>
         <div class="mt-6 flex justify-end gap-3 pt-4 border-t border-slate-100">
           <button type="button" id="btn-cancelar-operario" class="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg">Cancelar</button>
-          <button type="submit" class="px-5 py-2 text-sm bg-sky-500 hover:bg-sky-600 text-white font-semibold rounded-lg">Guardar Operario</button>
+          <button type="submit" class="px-5 py-2 text-sm bg-sky-500 hover:bg-sky-600 text-white font-semibold rounded-lg">Guardar</button>
         </div>
       </form>
     </div>
@@ -424,10 +435,10 @@
     </div>
   </div>
 
-  <!-- SCRIPT FIREBASE & LÓGICA -->
+  <!-- SCRIPT FIREBASE -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDerRNJAbwBr8G7sjp7guj3HmKBBh0S6UE",
@@ -445,6 +456,7 @@
     // Navegación
     const vistas = {
       obras: document.getElementById("vista-obras"),
+      detalleObra: document.getElementById("vista-detalle-obra"),
       clientes: document.getElementById("vista-clientes"),
       incidencias: document.getElementById("vista-incidencias"),
       operarios: document.getElementById("vista-operarios"),
@@ -462,10 +474,10 @@
       Object.keys(vistas).forEach(k => {
         if (k === activa) {
           vistas[k].classList.remove("hidden");
-          botonesNav[k].className = "nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg bg-slate-800 text-white font-medium transition";
+          if (botonesNav[k]) botonesNav[k].className = "nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg bg-slate-800 text-white font-medium transition";
         } else {
           vistas[k].classList.add("hidden");
-          botonesNav[k].className = "nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition";
+          if (botonesNav[k]) botonesNav[k].className = "nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition";
         }
       });
     };
@@ -475,10 +487,24 @@
     botonesNav.incidencias.onclick = () => cambiarVista('incidencias');
     botonesNav.operarios.onclick = () => cambiarVista('operarios');
     botonesNav.herramientas.onclick = () => cambiarVista('herramientas');
+    document.getElementById("btn-volver-obras").onclick = () => cambiarVista('obras');
 
     function vincularModal(btnAbrirId, modalId, btnCerrarId, btnCancelarId) {
       const modal = document.getElementById(modalId);
-      document.getElementById(btnAbrirId).onclick = () => modal.style.display = "flex";
+      document.getElementById(btnAbrirId).onclick = () => {
+        // Reset a modo creación si es modal-obra
+        if (modalId === "modal-obra") {
+          document.getElementById("form-nueva-obra").reset();
+          document.getElementById("edit-obra-id").value = "";
+          document.getElementById("titulo-modal-obra").textContent = "Registrar Nueva Obra";
+          document.getElementById("btn-submit-obra").textContent = "Guardar Ficha de Obra";
+          document.getElementById("contenedor-trabajos").innerHTML = "";
+          document.getElementById("contenedor-materiales").innerHTML = "";
+          agregarFilaRepeater("contenedor-trabajos", "item-trabajo", "Ej. Instalación eléctrica general");
+          agregarFilaRepeater("contenedor-materiales", "item-material", "Ej. 100m cable libre de halógenos");
+        }
+        modal.style.display = "flex";
+      };
       document.getElementById(btnCerrarId).onclick = () => modal.style.display = "none";
       document.getElementById(btnCancelarId).onclick = () => modal.style.display = "none";
       return modal;
@@ -490,31 +516,21 @@
     const modalOperario = vincularModal("btn-abrir-modal-operario", "modal-operario", "btn-cerrar-modal-operario", "btn-cancelar-operario");
     const modalHerramienta = vincularModal("btn-abrir-modal-herramienta", "modal-herramienta", "btn-cerrar-modal-herramienta", "btn-cancelar-herramienta");
 
-    // Repeaters (Trabajos y Materiales)
-    function configurarRepeater(btnId, contenedorId, placeholderTexto, claseItem) {
-      const btn = document.getElementById(btnId);
+    // Repeaters Helper
+    function agregarFilaRepeater(contenedorId, claseItem, placeholder, valor = "") {
       const contenedor = document.getElementById(contenedorId);
-
-      btn.addEventListener("click", () => {
-        const fila = document.createElement("div");
-        fila.className = `flex gap-2 ${claseItem}`;
-        fila.innerHTML = `
-          <input type="text" placeholder="${placeholderTexto}" class="w-full px-3 py-1.5 border rounded-lg text-sm outline-none focus:ring-1 focus:ring-amber-500">
-          <button type="button" class="btn-eliminar-fila text-rose-500 hover:text-rose-700 px-2 font-bold">&times;</button>
-        `;
-        fila.querySelector(".btn-eliminar-fila").onclick = () => fila.remove();
-        contenedor.appendChild(fila);
-      });
-
-      contenedor.addEventListener("click", (e) => {
-        if (e.target.classList.contains("btn-eliminar-fila")) {
-          e.target.parentElement.remove();
-        }
-      });
+      const fila = document.createElement("div");
+      fila.className = `flex gap-2 ${claseItem}`;
+      fila.innerHTML = `
+        <input type="text" value="${valor}" placeholder="${placeholder}" class="w-full px-3 py-1.5 border rounded-lg text-sm outline-none focus:ring-1 focus:ring-amber-500">
+        <button type="button" class="btn-eliminar-fila text-rose-500 hover:text-rose-700 px-2 font-bold">&times;</button>
+      `;
+      fila.querySelector(".btn-eliminar-fila").onclick = () => fila.remove();
+      contenedor.appendChild(fila);
     }
 
-    configurarRepeater("btn-add-trabajo", "contenedor-trabajos", "Ej. Instalación de tarima flotante AC5", "item-trabajo");
-    configurarRepeater("btn-add-material", "contenedor-materiales", "Ej. 45 m² Tarima roble + aislante", "item-material");
+    document.getElementById("btn-add-trabajo").onclick = () => agregarFilaRepeater("contenedor-trabajos", "item-trabajo", "Ej. Alicatado baño principal");
+    document.getElementById("btn-add-material").onclick = () => agregarFilaRepeater("contenedor-materiales", "item-material", "Ej. 25m² azulejo porcelánico");
 
     // Colecciones Firestore
     const colObras = collection(db, "proyectos");
@@ -525,6 +541,7 @@
 
     let cacheObras = [];
     let filtroEstadoActual = 'todas';
+    let obraSeleccionadaActual = null;
 
     window.filtrarObras = (estado) => {
       filtroEstadoActual = estado;
@@ -543,83 +560,205 @@
 
       filtradas.forEach((d) => {
         let badge = d.estado === "Finalizada" ? "bg-sky-100 text-sky-800" : d.estado === "Presupuestada" ? "bg-amber-100 text-amber-800" : d.estado === "Pausada" ? "bg-orange-100 text-orange-800" : "bg-emerald-100 text-emerald-800";
-        
-        // Enlace directo a Google Maps
         const urlMaps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.direccion || '')}`;
-        
-        // Trabajos formateados
-        const trabajosHtml = d.trabajos && d.trabajos.length > 0 
-          ? `<ul class="mt-2 list-disc list-inside text-xs text-slate-600 space-y-0.5">${d.trabajos.slice(0, 3).map(t => `<li>${t}</li>`).join('')}${d.trabajos.length > 3 ? `<li class="text-amber-600 font-semibold">+${d.trabajos.length - 3} más...</li>` : ''}</ul>`
-          : '<p class="text-xs text-slate-400 italic mt-1">Sin partidas listadas</p>';
-
-        // Operarios asignados
-        const operariosHtml = d.operarios && d.operarios.length > 0
-          ? `<div class="flex flex-wrap gap-1 mt-2">${d.operarios.map(op => `<span class="bg-slate-100 text-slate-700 text-[11px] px-2 py-0.5 rounded font-medium border">👷 ${op}</span>`).join('')}</div>`
-          : '<p class="text-xs text-slate-400 italic mt-1">Sin personal asignado</p>';
 
         const card = document.createElement("div");
-        card.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between hover:shadow-md transition";
+        card.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between hover:shadow-md transition cursor-pointer";
+        
         card.innerHTML = `
-          <div>
+          <div onclick="window.abrirDetalleObra('${d.id}')">
             <div class="flex justify-between items-start mb-2">
               <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold ${badge}">${d.estado || 'En curso'}</span>
               <span class="text-xs font-bold text-slate-700">${d.presupuesto ? Number(d.presupuesto).toLocaleString('es-ES') + ' €' : '-'}</span>
             </div>
 
-            <h3 class="text-base font-bold text-slate-900 leading-snug">${d.nombre}</h3>
+            <h3 class="text-base font-bold text-slate-900 leading-snug hover:text-amber-600 transition">${d.nombre}</h3>
             
-            <!-- Cliente Clicable -->
-            <p class="text-xs text-slate-500 mt-1">
-              👤 Cliente: <button onclick="window.cambiarVista('clientes')" class="font-semibold text-indigo-600 hover:underline text-left">${d.cliente || 'Sin cliente'}</button>
-            </p>
+            <p class="text-xs text-slate-500 mt-1">👤 ${d.cliente || 'Sin cliente'}</p>
+            <p class="text-xs text-slate-500 mt-1">📍 ${d.direccion || 'Sin dirección'}</p>
 
-            <!-- Dirección y Cómo Llegar -->
-            <p class="text-xs text-slate-500 mt-1 flex items-start gap-1">
-              📍 <span>${d.direccion || 'Sin dirección'}</span>
-            </p>
-            <div class="mt-2">
-              <a href="${urlMaps}" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-50 text-amber-900 border border-amber-200 rounded-lg text-xs font-semibold hover:bg-amber-100 transition">
-                🗺️ Cómo llegar
-              </a>
-            </div>
-
-            <!-- Teléfonos de contacto -->
-            <div class="mt-3 pt-3 border-t border-slate-100 text-xs text-slate-600 space-y-1">
-              <p class="font-semibold text-slate-700 text-[11px] uppercase tracking-wider">Contactos:</p>
-              ${d.tel1 ? `<p>📞 Principal: <a href="tel:${d.tel1}" class="text-amber-700 font-medium hover:underline">${d.tel1}</a></p>` : ''}
-              ${d.tel2 ? `<p>📞 Obra: <a href="tel:${d.tel2}" class="text-amber-700 font-medium hover:underline">${d.tel2}</a></p>` : ''}
-              ${d.tel3 ? `<p>📞 Extra: <a href="tel:${d.tel3}" class="text-amber-700 font-medium hover:underline">${d.tel3}</a></p>` : ''}
-              ${!d.tel1 && !d.tel2 && !d.tel3 ? '<p class="text-slate-400 italic">No hay teléfonos registrados</p>' : ''}
-            </div>
-
-            <!-- Trabajos -->
-            <div class="mt-3 pt-3 border-t border-slate-100">
-              <p class="font-semibold text-slate-700 text-[11px] uppercase tracking-wider">Tajos / Trabajos:</p>
-              ${trabajosHtml}
-            </div>
-
-            <!-- Operarios -->
-            <div class="mt-3 pt-3 border-t border-slate-100">
-              <p class="font-semibold text-slate-700 text-[11px] uppercase tracking-wider">Equipo:</p>
-              ${operariosHtml}
+            <div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-xs text-slate-500">
+              <span>Partidas: <strong>${d.trabajos ? d.trabajos.length : 0}</strong></span>
+              <span>Equipo: <strong>${d.operarios ? d.operarios.length : 0}</strong></span>
             </div>
           </div>
 
-          <div class="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center text-xs">
-            <span class="text-slate-400">Ref: ${d.id.substring(0, 5).toUpperCase()}</span>
-            <button onclick="window.borrarRegistro('proyectos', '${d.id}')" class="text-rose-500 hover:underline">Eliminar</button>
+          <div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-xs">
+            <a href="${urlMaps}" target="_blank" onclick="event.stopPropagation();" class="text-amber-600 font-semibold hover:underline">🗺️ Cómo llegar</a>
+            <button onclick="event.stopPropagation(); window.abrirDetalleObra('${d.id}')" class="font-semibold text-slate-900 hover:text-amber-600">Ver Ficha →</button>
           </div>
         `;
         listaObrasEl.appendChild(card);
       });
     }
 
-    // Escuchar Obras
+    // PANTALLA COMPLETA DETALLE OBRA
+    window.abrirDetalleObra = (id) => {
+      const obra = cacheObras.find(o => o.id === id);
+      if (!obra) return;
+      obraSeleccionadaActual = obra;
+
+      const cont = document.getElementById("contenedor-detalle-obra");
+      let badge = obra.estado === "Finalizada" ? "bg-sky-100 text-sky-800" : obra.estado === "Presupuestada" ? "bg-amber-100 text-amber-800" : obra.estado === "Pausada" ? "bg-orange-100 text-orange-800" : "bg-emerald-100 text-emerald-800";
+      const urlMaps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(obra.direccion || '')}`;
+
+      const trabajosLi = obra.trabajos && obra.trabajos.length > 0
+        ? obra.trabajos.map((t, idx) => `<li class="flex items-start gap-2 py-2 border-b border-slate-100 last:border-0"><span class="w-5 h-5 rounded-full bg-amber-100 text-amber-900 text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">${idx+1}</span><span class="text-sm text-slate-700">${t}</span></li>`).join('')
+        : '<p class="text-sm text-slate-400 italic">No hay tajos definidos aún.</p>';
+
+      const materialesLi = obra.materiales && obra.materiales.length > 0
+        ? obra.materiales.map(m => `<li class="flex items-center gap-2 py-1.5 text-sm text-slate-700 border-b border-slate-100 last:border-0"><span class="text-amber-500">▪</span> ${m}</li>`).join('')
+        : '<p class="text-sm text-slate-400 italic">No hay lista de materiales registrada.</p>';
+
+      const operariosBadges = obra.operarios && obra.operarios.length > 0
+        ? obra.operarios.map(op => `<span class="bg-white border px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 shadow-sm">👷 ${op}</span>`).join('')
+        : '<p class="text-sm text-slate-400 italic">Sin operarios asignados.</p>';
+
+      cont.innerHTML = `
+        <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-8">
+          
+          <!-- Encabezado ficha -->
+          <div class="flex flex-col sm:flex-row justify-between items-start gap-4 pb-6 border-b border-slate-200">
+            <div>
+              <div class="flex items-center gap-3">
+                <span class="px-3 py-1 rounded-full text-xs font-semibold ${badge}">${obra.estado}</span>
+                <span class="text-xs text-slate-400 font-mono">ID: ${obra.id}</span>
+              </div>
+              <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">${obra.nombre}</h1>
+              <p class="text-sm text-slate-500 mt-1 flex items-center gap-1.5">
+                📍 ${obra.direccion}
+                <a href="${urlMaps}" target="_blank" class="ml-2 text-xs font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 hover:bg-amber-100">🗺️ Abrir en Google Maps</a>
+              </p>
+            </div>
+            <div class="sm:text-right">
+              <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Presupuesto Aceptado</span>
+              <p class="text-2xl font-black text-slate-900 mt-0.5">${obra.presupuesto ? Number(obra.presupuesto).toLocaleString('es-ES') + ' €' : 'Sin fijar'}</p>
+            </div>
+          </div>
+
+          <!-- Cuadrícula de Datos Clave -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-4 bg-slate-50 rounded-xl border border-slate-200">
+            <div>
+              <span class="text-xs font-bold text-slate-400 uppercase">Cliente</span>
+              <p class="text-sm font-semibold text-indigo-700 mt-1 cursor-pointer hover:underline" onclick="window.cambiarVista('clientes')">👤 ${obra.cliente || 'Particular'}</p>
+            </div>
+            <div>
+              <span class="text-xs font-bold text-slate-400 uppercase">Fecha Inicio</span>
+              <p class="text-sm font-medium text-slate-800 mt-1">📅 ${obra.fechaInicio || 'Pendiente'}</p>
+            </div>
+            <div>
+              <span class="text-xs font-bold text-slate-400 uppercase">Fin Estimado</span>
+              <p class="text-sm font-medium text-slate-800 mt-1">🏁 ${obra.fechaFin || 'Pendiente'}</p>
+            </div>
+            <div>
+              <span class="text-xs font-bold text-slate-400 uppercase">Teléfonos de Obra</span>
+              <div class="text-xs text-slate-700 mt-1 space-y-0.5 font-medium">
+                ${obra.tel1 ? `<p>📞 <a href="tel:${obra.tel1}" class="hover:underline">${obra.tel1}</a></p>` : ''}
+                ${obra.tel2 ? `<p>📞 <a href="tel:${obra.tel2}" class="hover:underline">${obra.tel2}</a></p>` : ''}
+                ${obra.tel3 ? `<p>📞 <a href="tel:${obra.tel3}" class="hover:underline">${obra.tel3}</a></p>` : ''}
+                ${!obra.tel1 && !obra.tel2 && !obra.tel3 ? '<p class="text-slate-400 italic">Sin teléfonos</p>' : ''}
+              </div>
+            </div>
+          </div>
+
+          ${obra.descripcion ? `
+          <div>
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Alcance de la obra</h3>
+            <p class="text-sm text-slate-700 leading-relaxed bg-slate-50 p-4 rounded-xl border">${obra.descripcion}</p>
+          </div>` : ''}
+
+          <!-- Tajos y Materiales -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="p-6 rounded-xl border border-slate-200 bg-white">
+              <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-4 flex items-center justify-between">
+                <span>📋 Trabajos y Partidas</span>
+                <span class="text-xs bg-amber-100 text-amber-900 px-2 py-0.5 rounded font-semibold">${obra.trabajos ? obra.trabajos.length : 0}</span>
+              </h3>
+              <ul class="space-y-1">${trabajosLi}</ul>
+            </div>
+
+            <div class="p-6 rounded-xl border border-slate-200 bg-white">
+              <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-4 flex items-center justify-between">
+                <span>📦 Lista de Materiales</span>
+                <span class="text-xs bg-slate-200 text-slate-800 px-2 py-0.5 rounded font-semibold">${obra.materiales ? obra.materiales.length : 0}</span>
+              </h3>
+              <ul class="space-y-1">${materialesLi}</ul>
+            </div>
+          </div>
+
+          <!-- Operarios asignados -->
+          <div>
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Personal Asignado a este proyecto</h3>
+            <div class="flex flex-wrap gap-2">${operariosBadges}</div>
+          </div>
+
+        </div>
+      `;
+
+      cambiarVista('detalleObra');
+    };
+
+    // BOTÓN EDITAR OBRA (Cargar datos en el modal)
+    document.getElementById("btn-editar-obra-actual").onclick = () => {
+      if (!obraSeleccionadaActual) return;
+      const d = obraSeleccionadaActual;
+
+      document.getElementById("edit-obra-id").value = d.id;
+      document.getElementById("titulo-modal-obra").textContent = "Editar Ficha de Obra";
+      document.getElementById("btn-submit-obra").textContent = "Guardar Cambios";
+
+      document.getElementById("input-nombre").value = d.nombre || "";
+      document.getElementById("select-cliente-obra").value = d.cliente || "";
+      document.getElementById("input-direccion").value = d.direccion || "";
+      document.getElementById("input-estado").value = d.estado || "En curso";
+      document.getElementById("input-fecha-inicio").value = d.fechaInicio || "";
+      document.getElementById("input-fecha-fin").value = d.fechaFin || "";
+      document.getElementById("input-presupuesto").value = d.presupuesto || "";
+      document.getElementById("input-descripcion").value = d.descripcion || "";
+      document.getElementById("input-tel1").value = d.tel1 || "";
+      document.getElementById("input-tel2").value = d.tel2 || "";
+      document.getElementById("input-tel3").value = d.tel3 || "";
+
+      // Precargar Tajos
+      const cTrabajos = document.getElementById("contenedor-trabajos");
+      cTrabajos.innerHTML = "";
+      if (d.trabajos && d.trabajos.length > 0) {
+        d.trabajos.forEach(t => agregarFilaRepeater("contenedor-trabajos", "item-trabajo", "Tajo...", t));
+      } else {
+        agregarFilaRepeater("contenedor-trabajos", "item-trabajo", "Tajo...");
+      }
+
+      // Precargar Materiales
+      const cMateriales = document.getElementById("contenedor-materiales");
+      cMateriales.innerHTML = "";
+      if (d.materiales && d.materiales.length > 0) {
+        d.materiales.forEach(m => agregarFilaRepeater("contenedor-materiales", "item-material", "Material...", m));
+      } else {
+        agregarFilaRepeater("contenedor-materiales", "item-material", "Material...");
+      }
+
+      // Marcar Checkboxes de Operarios
+      document.querySelectorAll("#contenedor-checkbox-operarios input").forEach(chk => {
+        chk.checked = d.operarios && d.operarios.includes(chk.value);
+      });
+
+      modalObra.style.display = "flex";
+    };
+
+    // BOTÓN BORRAR OBRA ACTUAL
+    document.getElementById("btn-borrar-obra-actual").onclick = () => {
+      if (obraSeleccionadaActual) {
+        window.borrarRegistro('proyectos', obraSeleccionadaActual.id);
+        cambiarVista('obras');
+      }
+    };
+
+    // Escuchar Obras de Firestore
     onSnapshot(colObras, (snap) => {
       cacheObras = [];
       const selectObraIncidencia = document.getElementById("select-obra-incidencia");
       const selectObraHerramienta = document.getElementById("select-obra-herramienta");
-      selectObraIncidencia.innerHTML = '<option value="">Selecciona una obra...</option>';
+      selectObraIncidencia.innerHTML = '<option value="">Selecciona obra...</option>';
       selectObraHerramienta.innerHTML = '<option value="Almacén central">📦 Almacén central</option>';
 
       snap.forEach(doc => {
@@ -630,32 +769,36 @@
         const opt2 = document.createElement("option"); opt2.value = data.nombre; opt2.textContent = "🏗️ " + data.nombre;
         selectObraHerramienta.appendChild(opt2);
       });
+
       renderizarObras();
+
+      // Si estábamos viendo el detalle de una obra que se modificó, refrescarlo
+      if (obraSeleccionadaActual && !vistas.detalleObra.classList.contains("hidden")) {
+        const actualizada = cacheObras.find(o => o.id === obraSeleccionadaActual.id);
+        if (actualizada) window.abrirDetalleObra(actualizada.id);
+      }
     });
 
-    // Guardar Obra con todos los campos
+    // GUARDAR OBRA (CREAR O EDITAR)
     document.getElementById("form-nueva-obra").onsubmit = async (e) => {
       e.preventDefault();
 
-      // Recoger repeater de trabajos
       const trabajos = [];
       document.querySelectorAll("#contenedor-trabajos .item-trabajo input").forEach(inp => {
         if (inp.value.trim()) trabajos.push(inp.value.trim());
       });
 
-      // Recoger repeater de materiales
       const materiales = [];
       document.querySelectorAll("#contenedor-materiales .item-material input").forEach(inp => {
         if (inp.value.trim()) materiales.push(inp.value.trim());
       });
 
-      // Recoger operarios seleccionados
       const operariosSeleccionados = [];
       document.querySelectorAll("#contenedor-checkbox-operarios input:checked").forEach(chk => {
         operariosSeleccionados.push(chk.value);
       });
 
-      await addDoc(colObras, {
+      const obraData = {
         nombre: document.getElementById("input-nombre").value.trim(),
         cliente: document.getElementById("select-cliente-obra").value,
         direccion: document.getElementById("input-direccion").value.trim(),
@@ -670,19 +813,29 @@
         operarios: operariosSeleccionados,
         trabajos: trabajos,
         materiales: materiales,
-        fechaCreacion: serverTimestamp()
-      });
+        fechaModificacion: serverTimestamp()
+      };
 
-      document.getElementById("form-nueva-obra").reset();
+      const editId = document.getElementById("edit-obra-id").value;
+
+      if (editId) {
+        // Actualizar existente
+        await updateDoc(doc(db, "proyectos", editId), obraData);
+      } else {
+        // Crear nueva
+        obraData.fechaCreacion = serverTimestamp();
+        await addDoc(colObras, obraData);
+      }
+
       modalObra.style.display = "none";
     };
 
-    // Sincronizar CLIENTES
+    // CLIENTES
     const listaClientesEl = document.getElementById("lista-clientes");
     const selectClienteObra = document.getElementById("select-cliente-obra");
     onSnapshot(colClientes, (snap) => {
       listaClientesEl.innerHTML = "";
-      selectClienteObra.innerHTML = '<option value="">Selecciona un cliente...</option>';
+      selectClienteObra.innerHTML = '<option value="">Selecciona cliente...</option>';
 
       if (snap.empty) {
         listaClientesEl.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay clientes dados de alta.</p></div>`;
@@ -698,11 +851,8 @@
           card.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between";
           card.innerHTML = `
             <div>
-              <div class="flex justify-between items-start mb-2">
-                <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-800">Cliente</span>
-                <span class="text-xs text-slate-400">#${doc.id.substring(0, 5).toUpperCase()}</span>
-              </div>
-              <h3 class="text-base font-bold text-slate-900">${d.nombre}</h3>
+              <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-800">Cliente</span>
+              <h3 class="text-base font-bold text-slate-900 mt-2">${d.nombre}</h3>
               <p class="text-xs text-slate-600 mt-2">📞 ${d.telefono}</p>
               ${d.email ? `<p class="text-xs text-slate-500 mt-1">✉️ ${d.email}</p>` : ''}
               ${d.direccion ? `<p class="text-xs text-slate-500 mt-1">📍 ${d.direccion}</p>` : ''}
@@ -731,7 +881,7 @@
       modalCliente.style.display = "none";
     };
 
-    // Sincronizar OPERARIOS
+    // OPERARIOS
     const listaOperariosEl = document.getElementById("lista-operarios");
     const contenedorCheckboxes = document.getElementById("contenedor-checkbox-operarios");
     onSnapshot(colOperarios, (snap) => {
@@ -740,18 +890,15 @@
 
       if (snap.empty) {
         listaOperariosEl.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay operarios registrados.</p></div>`;
-        contenedorCheckboxes.innerHTML = `<span class="text-xs text-slate-400 col-span-full">Primero registra operarios en la pestaña 'Operarios'.</span>`;
+        contenedorCheckboxes.innerHTML = `<span class="text-xs text-slate-400 col-span-full">Primero registra operarios.</span>`;
       } else {
         snap.forEach((doc) => {
           const d = doc.data();
-
-          // Checkbox para el modal de obra
           const lbl = document.createElement("label");
           lbl.className = "flex items-center gap-2 text-xs text-slate-700 cursor-pointer bg-white p-2 rounded border hover:bg-slate-100";
           lbl.innerHTML = `<input type="checkbox" value="${d.nombre}" class="rounded text-amber-500"> <span>${d.nombre} (${d.oficio})</span>`;
           contenedorCheckboxes.appendChild(lbl);
 
-          // Tarjeta de operario
           const card = document.createElement("div");
           card.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between";
           card.innerHTML = `
@@ -782,7 +929,7 @@
       modalOperario.style.display = "none";
     };
 
-    // Sincronizar INCIDENCIAS
+    // INCIDENCIAS
     const listaIncidenciasEl = document.getElementById("lista-incidencias");
     onSnapshot(colIncidencias, (snap) => {
       listaIncidenciasEl.innerHTML = "";
@@ -828,7 +975,7 @@
       modalIncidencia.style.display = "none";
     };
 
-    // Sincronizar HERRAMIENTAS
+    // HERRAMIENTAS
     const listaHerramientasEl = document.getElementById("lista-herramientas");
     onSnapshot(colHerramientas, (snap) => {
       listaHerramientasEl.innerHTML = "";
