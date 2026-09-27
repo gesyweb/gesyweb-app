@@ -47,7 +47,7 @@
   <!-- Contenedor Principal -->
   <main class="flex-1 p-6 md:p-10 overflow-y-auto">
 
-    <!-- SECCIÓN 1: LISTADO DE OBRAS -->
+    <!-- SECCIÓN: LISTADO DE OBRAS -->
     <div id="vista-obras">
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
@@ -73,7 +73,7 @@
       </section>
     </div>
 
-    <!-- SECCIÓN 1.1: FICHA DETALLADA A PANTALLA COMPLETA -->
+    <!-- SECCIÓN: FICHA DETALLADA A PANTALLA COMPLETA -->
     <div id="vista-detalle-obra" class="hidden">
       <div class="flex items-center justify-between pb-6 border-b border-slate-200">
         <button id="btn-volver-obras" class="inline-flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-amber-600 transition bg-white border px-4 py-2 rounded-lg shadow-sm">
@@ -92,7 +92,7 @@
       <div id="contenedor-detalle-obra" class="mt-6"></div>
     </div>
 
-    <!-- SECCIÓN 2: CLIENTES -->
+    <!-- SECCIÓN: CLIENTES -->
     <div id="vista-clientes" class="hidden">
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
@@ -108,7 +108,7 @@
       </section>
     </div>
 
-    <!-- SECCIÓN 3: INCIDENCIAS -->
+    <!-- SECCIÓN: INCIDENCIAS -->
     <div id="vista-incidencias" class="hidden">
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
@@ -124,7 +124,7 @@
       </section>
     </div>
 
-    <!-- SECCIÓN 4: OPERARIOS -->
+    <!-- SECCIÓN: OPERARIOS -->
     <div id="vista-operarios" class="hidden">
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
@@ -140,7 +140,7 @@
       </section>
     </div>
 
-    <!-- SECCIÓN 5: HERRAMIENTAS -->
+    <!-- SECCIÓN: HERRAMIENTAS -->
     <div id="vista-herramientas" class="hidden">
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
@@ -178,20 +178,20 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre del Proyecto *</label>
-              <input id="input-nombre" type="text" required placeholder="Ej. Reforma Integral Gran Vía 12" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+              <input id="input-nombre" type="text" required placeholder="Ej. Reforma C/ Mayor 12" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
             </div>
             <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1">Cliente Vinculado *</label>
-              <select id="select-cliente-obra" required class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none bg-white">
-                <option value="">Selecciona cliente...</option>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Cliente Vinculado</label>
+              <select id="select-cliente-obra" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none bg-white">
+                <option value="Particular / Sin asignar">Selecciona cliente o particular...</option>
               </select>
             </div>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1">Dirección completa *</label>
-              <input id="input-direccion" type="text" required placeholder="Calle, número, piso y ciudad" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Dirección de la obra *</label>
+              <input id="input-direccion" type="text" required placeholder="Calle, número y ciudad" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
             </div>
             <div>
               <label class="block text-xs font-semibold text-slate-600 mb-1">Estado</label>
@@ -206,7 +206,7 @@
 
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1">Fecha de Inicio</label>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Fecha Inicio</label>
               <input id="input-fecha-inicio" type="date" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none bg-white">
             </div>
             <div>
@@ -220,25 +220,25 @@
           </div>
 
           <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Descripción del Alcance</label>
-            <textarea id="input-descripcion" rows="2" placeholder="Resumen general de las actuaciones..." class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none"></textarea>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Descripción</label>
+            <textarea id="input-descripcion" rows="2" placeholder="Resumen del trabajo a realizar..." class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none"></textarea>
           </div>
         </div>
 
         <!-- Bloque 2: Contactos -->
         <div class="pt-4 border-t border-slate-100 space-y-4">
-          <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Teléfonos de Contacto</h4>
+          <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Teléfonos de Contacto (Hasta 3)</h4>
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1">Teléfono 1 (Principal)</label>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Teléfono 1</label>
               <input id="input-tel1" type="tel" placeholder="611000000" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
             </div>
             <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1">Teléfono 2 (Obra / Encargado)</label>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Teléfono 2</label>
               <input id="input-tel2" type="tel" placeholder="622000000" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
             </div>
             <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1">Teléfono 3 (Adicional)</label>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Teléfono 3</label>
               <input id="input-tel3" type="tel" placeholder="633000000" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
             </div>
           </div>
@@ -246,7 +246,7 @@
 
         <!-- Bloque 3: Operarios -->
         <div class="pt-4 border-t border-slate-100 space-y-2">
-          <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Operarios y Gremios Asignados</h4>
+          <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Operarios y Gremios</h4>
           <div id="contenedor-checkbox-operarios" class="grid grid-cols-2 sm:grid-cols-3 gap-2 p-3 bg-slate-50 border rounded-lg max-h-36 overflow-y-auto">
             <span class="text-xs text-slate-400 col-span-full">Cargando operarios...</span>
           </div>
@@ -255,16 +255,16 @@
         <!-- Bloque 4: Repeater Trabajos -->
         <div class="pt-4 border-t border-slate-100 space-y-3">
           <div class="flex justify-between items-center">
-            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Trabajos a Realizar / Partidas</h4>
+            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Trabajos a Realizar / Tajos</h4>
             <button type="button" id="btn-add-trabajo" class="text-xs bg-amber-100 text-amber-900 font-semibold px-2.5 py-1 rounded hover:bg-amber-200">+ Añadir Trabajo</button>
           </div>
           <div id="contenedor-trabajos" class="space-y-2"></div>
         </div>
 
-        <!-- Bloque 5: Repeater Materiales -->
+        <!-- Bloque 5: Repeater Materiales con Unidades -->
         <div class="pt-4 border-t border-slate-100 space-y-3">
           <div class="flex justify-between items-center">
-            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Lista de Materiales</h4>
+            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Lista de Materiales Necesarios</h4>
             <button type="button" id="btn-add-material" class="text-xs bg-slate-200 text-slate-800 font-semibold px-2.5 py-1 rounded hover:bg-slate-300">+ Añadir Material</button>
           </div>
           <div id="contenedor-materiales" class="space-y-2"></div>
@@ -278,156 +278,101 @@
     </div>
   </div>
 
-  <!-- MODAL: CLIENTE -->
+  <!-- MODALES SECUNDARIOS -->
   <div id="modal-cliente" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 z-50">
-    <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl">
-      <div class="flex justify-between items-center pb-4 border-b border-slate-100">
-        <h3 class="text-lg font-bold text-slate-900">Alta de Cliente</h3>
-        <button type="button" id="btn-cerrar-modal-cliente" class="text-slate-400 hover:text-slate-700 text-2xl font-bold">&times;</button>
+    <div class="bg-white rounded-2xl p-6 max-w-lg w-full shadow-2xl">
+      <div class="flex justify-between items-center pb-4 border-b">
+        <h3 class="text-lg font-bold">Alta de Cliente</h3>
+        <button type="button" id="btn-cerrar-modal-cliente" class="text-slate-400 text-2xl font-bold">&times;</button>
       </div>
-      <form id="form-nuevo-cliente" class="mt-6 space-y-4">
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre Completo o Razón Social *</label>
-          <input id="input-nombre-cliente" type="text" required placeholder="Ej. Ana Fernández" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+      <form id="form-nuevo-cliente" class="mt-4 space-y-3">
+        <input id="input-nombre-cliente" type="text" required placeholder="Nombre o Razón Social *" class="w-full px-3 py-2 border rounded-lg text-sm">
+        <div class="grid grid-cols-2 gap-2">
+          <input id="input-tel-cliente" type="tel" required placeholder="Teléfono *" class="w-full px-3 py-2 border rounded-lg text-sm">
+          <input id="input-email-cliente" type="email" placeholder="Email" class="w-full px-3 py-2 border rounded-lg text-sm">
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Teléfono *</label>
-            <input id="input-tel-cliente" type="tel" required placeholder="612345678" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Email</label>
-            <input id="input-email-cliente" type="email" placeholder="cliente@correo.com" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
-          </div>
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Dirección</label>
-          <input id="input-dir-cliente" type="text" placeholder="Calle, número, ciudad" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Notas</label>
-          <textarea id="input-notas-cliente" rows="2" placeholder="Notas..." class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none"></textarea>
-        </div>
-        <div class="mt-6 flex justify-end gap-3 pt-4 border-t border-slate-100">
-          <button type="button" id="btn-cancelar-cliente" class="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg">Cancelar</button>
-          <button type="submit" class="px-5 py-2 text-sm bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg">Guardar</button>
+        <input id="input-dir-cliente" type="text" placeholder="Dirección" class="w-full px-3 py-2 border rounded-lg text-sm">
+        <textarea id="input-notas-cliente" rows="2" placeholder="Notas..." class="w-full px-3 py-2 border rounded-lg text-sm"></textarea>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" id="btn-cancelar-cliente" class="px-4 py-2 text-sm text-slate-600">Cancelar</button>
+          <button type="submit" class="px-5 py-2 text-sm bg-indigo-600 text-white font-semibold rounded-lg">Guardar</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- MODAL: INCIDENCIA -->
   <div id="modal-incidencia" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 z-50">
-    <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl">
-      <div class="flex justify-between items-center pb-4 border-b border-slate-100">
-        <h3 class="text-lg font-bold text-slate-900">Reportar Incidencia</h3>
-        <button type="button" id="btn-cerrar-modal-incidencia" class="text-slate-400 hover:text-slate-700 text-2xl font-bold">&times;</button>
+    <div class="bg-white rounded-2xl p-6 max-w-lg w-full shadow-2xl">
+      <div class="flex justify-between items-center pb-4 border-b">
+        <h3 class="text-lg font-bold">Reportar Incidencia</h3>
+        <button type="button" id="btn-cerrar-modal-incidencia" class="text-slate-400 text-2xl font-bold">&times;</button>
       </div>
-      <form id="form-nueva-incidencia" class="mt-6 space-y-4">
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Obra afectada *</label>
-          <select id="select-obra-incidencia" required class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-rose-500 outline-none bg-white">
-            <option value="">Selecciona obra...</option>
+      <form id="form-nueva-incidencia" class="mt-4 space-y-3">
+        <select id="select-obra-incidencia" required class="w-full px-3 py-2 border rounded-lg text-sm bg-white"></select>
+        <input id="input-titulo-incidencia" type="text" required placeholder="Título del problema *" class="w-full px-3 py-2 border rounded-lg text-sm">
+        <textarea id="input-desc-incidencia" rows="3" placeholder="Detalles de lo sucedido..." class="w-full px-3 py-2 border rounded-lg text-sm"></textarea>
+        <div class="grid grid-cols-2 gap-2">
+          <select id="input-prioridad-incidencia" class="w-full px-3 py-2 border rounded-lg text-sm bg-white">
+            <option value="Normal">🟡 Normal</option>
+            <option value="Urgente">🔴 Urgente</option>
+            <option value="Baja">🟢 Baja</option>
+          </select>
+          <select id="input-estado-incidencia" class="w-full px-3 py-2 border rounded-lg text-sm bg-white">
+            <option value="Abierta">Abierta</option>
+            <option value="En curso">En curso</option>
+            <option value="Resuelta">Resuelta</option>
           </select>
         </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Título *</label>
-          <input id="input-titulo-incidencia" type="text" required placeholder="Ej. Fuga en tubería" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-rose-500 outline-none">
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Descripción</label>
-          <textarea id="input-desc-incidencia" rows="3" placeholder="Detalles..." class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-rose-500 outline-none"></textarea>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Prioridad</label>
-            <select id="input-prioridad-incidencia" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-rose-500 outline-none bg-white">
-              <option value="Normal">🟡 Normal</option>
-              <option value="Urgente">🔴 Urgente</option>
-              <option value="Baja">🟢 Baja</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Estado</label>
-            <select id="input-estado-incidencia" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-rose-500 outline-none bg-white">
-              <option value="Abierta">Abierta</option>
-              <option value="En curso">En curso</option>
-              <option value="Resuelta">Resuelta</option>
-            </select>
-          </div>
-        </div>
-        <div class="mt-6 flex justify-end gap-3 pt-4 border-t border-slate-100">
-          <button type="button" id="btn-cancelar-incidencia" class="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg">Cancelar</button>
-          <button type="submit" class="px-5 py-2 text-sm bg-rose-500 hover:bg-rose-600 text-white font-semibold rounded-lg">Guardar</button>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" id="btn-cancelar-incidencia" class="px-4 py-2 text-sm text-slate-600">Cancelar</button>
+          <button type="submit" class="px-5 py-2 text-sm bg-rose-500 text-white font-semibold rounded-lg">Guardar</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- MODAL: OPERARIO -->
   <div id="modal-operario" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 z-50">
-    <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl">
-      <div class="flex justify-between items-center pb-4 border-b border-slate-100">
-        <h3 class="text-lg font-bold text-slate-900">Alta de Operario</h3>
-        <button type="button" id="btn-cerrar-modal-operario" class="text-slate-400 hover:text-slate-700 text-2xl font-bold">&times;</button>
+    <div class="bg-white rounded-2xl p-6 max-w-lg w-full shadow-2xl">
+      <div class="flex justify-between items-center pb-4 border-b">
+        <h3 class="text-lg font-bold">Alta de Operario</h3>
+        <button type="button" id="btn-cerrar-modal-operario" class="text-slate-400 text-2xl font-bold">&times;</button>
       </div>
-      <form id="form-nuevo-operario" class="mt-6 space-y-4">
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre Completo *</label>
-          <input id="input-nombre-operario" type="text" required placeholder="Ej. Manuel García" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-sky-500 outline-none">
+      <form id="form-nuevo-operario" class="mt-4 space-y-3">
+        <input id="input-nombre-operario" type="text" required placeholder="Nombre Completo *" class="w-full px-3 py-2 border rounded-lg text-sm">
+        <div class="grid grid-cols-2 gap-2">
+          <select id="input-oficio-operario" class="w-full px-3 py-2 border rounded-lg text-sm bg-white">
+            <option value="Albañil">Albañilería</option>
+            <option value="Fontanero">Fontanería</option>
+            <option value="Electricista">Electricidad</option>
+            <option value="Pintor">Pintura</option>
+            <option value="Carpintero">Carpintería / Pladur</option>
+            <option value="Encargado">Encargado de Obra</option>
+          </select>
+          <input id="input-tel-operario" type="tel" placeholder="Teléfono" class="w-full px-3 py-2 border rounded-lg text-sm">
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Oficio</label>
-            <select id="input-oficio-operario" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-sky-500 outline-none bg-white">
-              <option value="Albañil">Albañilería</option>
-              <option value="Fontanero">Fontanería</option>
-              <option value="Electricista">Electricidad</option>
-              <option value="Pintor">Pintura</option>
-              <option value="Carpintero">Carpintería / Pladur</option>
-              <option value="Encargado">Encargado de Obra</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Teléfono</label>
-            <input id="input-tel-operario" type="tel" placeholder="600000000" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-sky-500 outline-none">
-          </div>
-        </div>
-        <div class="mt-6 flex justify-end gap-3 pt-4 border-t border-slate-100">
-          <button type="button" id="btn-cancelar-operario" class="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg">Cancelar</button>
-          <button type="submit" class="px-5 py-2 text-sm bg-sky-500 hover:bg-sky-600 text-white font-semibold rounded-lg">Guardar</button>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" id="btn-cancelar-operario" class="px-4 py-2 text-sm text-slate-600">Cancelar</button>
+          <button type="submit" class="px-5 py-2 text-sm bg-sky-500 text-white font-semibold rounded-lg">Guardar</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- MODAL: HERRAMIENTA -->
   <div id="modal-herramienta" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 z-50">
-    <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl">
-      <div class="flex justify-between items-center pb-4 border-b border-slate-100">
-        <h3 class="text-lg font-bold text-slate-900">Registrar Herramienta</h3>
-        <button type="button" id="btn-cerrar-modal-herramienta" class="text-slate-400 hover:text-slate-700 text-2xl font-bold">&times;</button>
+    <div class="bg-white rounded-2xl p-6 max-w-lg w-full shadow-2xl">
+      <div class="flex justify-between items-center pb-4 border-b">
+        <h3 class="text-lg font-bold">Registrar Herramienta</h3>
+        <button type="button" id="btn-cerrar-modal-herramienta" class="text-slate-400 text-2xl font-bold">&times;</button>
       </div>
-      <form id="form-nueva-herramienta" class="mt-6 space-y-4">
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre o Máquina *</label>
-          <input id="input-nombre-herramienta" type="text" required placeholder="Ej. Hormigonera 200L" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+      <form id="form-nueva-herramienta" class="mt-4 space-y-3">
+        <input id="input-nombre-herramienta" type="text" required placeholder="Nombre de herramienta *" class="w-full px-3 py-2 border rounded-lg text-sm">
+        <div class="grid grid-cols-2 gap-2">
+          <input id="input-serie-herramienta" type="text" placeholder="Nº Serie" class="w-full px-3 py-2 border rounded-lg text-sm">
+          <select id="select-obra-herramienta" class="w-full px-3 py-2 border rounded-lg text-sm bg-white"></select>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Nº Serie</label>
-            <input id="input-serie-herramienta" type="text" placeholder="SER-9842" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Ubicación</label>
-            <select id="select-obra-herramienta" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none bg-white">
-              <option value="Almacén central">📦 Almacén central</option>
-            </select>
-          </div>
-        </div>
-        <div class="mt-6 flex justify-end gap-3 pt-4 border-t border-slate-100">
-          <button type="button" id="btn-cancelar-herramienta" class="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg">Cancelar</button>
-          <button type="submit" class="px-5 py-2 text-sm bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg">Guardar</button>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" id="btn-cancelar-herramienta" class="px-4 py-2 text-sm text-slate-600">Cancelar</button>
+          <button type="submit" class="px-5 py-2 text-sm bg-emerald-600 text-white font-semibold rounded-lg">Guardar</button>
         </div>
       </form>
     </div>
@@ -487,7 +432,7 @@
     botonesNav.herramientas.onclick = () => cambiarVista('herramientas');
     document.getElementById("btn-volver-obras").onclick = () => cambiarVista('obras');
 
-    // Manejo seguro de Modales
+    // Modales con cierre garantizado
     function vincularModal(btnAbrirId, modalId, btnCerrarId, btnCancelarId) {
       const modal = document.getElementById(modalId);
       document.getElementById(btnAbrirId).onclick = () => {
@@ -498,8 +443,8 @@
           document.getElementById("btn-submit-obra").textContent = "Guardar Ficha de Obra";
           document.getElementById("contenedor-trabajos").innerHTML = "";
           document.getElementById("contenedor-materiales").innerHTML = "";
-          agregarFilaRepeater("contenedor-trabajos", "item-trabajo", "Ej. Instalación eléctrica general");
-          agregarFilaRepeater("contenedor-materiales", "item-material", "Ej. 100m cable libre de halógenos");
+          agregarFilaTrabajo("");
+          agregarFilaMaterial("", "ud", "");
         }
         modal.style.display = "flex";
       };
@@ -514,21 +459,45 @@
     const modalOperario = vincularModal("btn-abrir-modal-operario", "modal-operario", "btn-cerrar-modal-operario", "btn-cancelar-operario");
     const modalHerramienta = vincularModal("btn-abrir-modal-herramienta", "modal-herramienta", "btn-cerrar-modal-herramienta", "btn-cancelar-herramienta");
 
-    // Repeaters
-    function agregarFilaRepeater(contenedorId, claseItem, placeholder, valor = "") {
-      const contenedor = document.getElementById(contenedorId);
-      const fila = document.createElement("div");
-      fila.className = `flex gap-2 ${claseItem}`;
-      fila.innerHTML = `
-        <input type="text" value="${valor}" placeholder="${placeholder}" class="w-full px-3 py-1.5 border rounded-lg text-sm outline-none focus:ring-1 focus:ring-amber-500">
+    // REPEATER: TRABAJOS
+    function agregarFilaTrabajo(valor = "") {
+      const c = document.getElementById("contenedor-trabajos");
+      const f = document.createElement("div");
+      f.className = "flex gap-2 item-trabajo";
+      f.innerHTML = `
+        <input type="text" value="${valor}" placeholder="Ej. Demolición de tabiquería y desescombro" class="w-full px-3 py-1.5 border rounded-lg text-sm outline-none focus:ring-1 focus:ring-amber-500">
         <button type="button" class="btn-eliminar-fila text-rose-500 hover:text-rose-700 px-2 font-bold text-lg">&times;</button>
       `;
-      fila.querySelector(".btn-eliminar-fila").onclick = () => fila.remove();
-      contenedor.appendChild(fila);
+      f.querySelector(".btn-eliminar-fila").onclick = () => f.remove();
+      c.appendChild(f);
     }
+    document.getElementById("btn-add-trabajo").onclick = () => agregarFilaTrabajo("");
 
-    document.getElementById("btn-add-trabajo").onclick = () => agregarFilaRepeater("contenedor-trabajos", "item-trabajo", "Ej. Alicatado baño principal");
-    document.getElementById("btn-add-material").onclick = () => agregarFilaRepeater("contenedor-materiales", "item-material", "Ej. 25m² azulejo porcelánico");
+    // REPEATER: MATERIALES (CON CANTIDAD Y SELECT DE UNIDAD)
+    function agregarFilaMaterial(cant = "", unidad = "ud", desc = "") {
+      const c = document.getElementById("contenedor-materiales");
+      const f = document.createElement("div");
+      f.className = "flex gap-2 items-center item-material";
+      f.innerHTML = `
+        <input type="number" step="any" value="${cant}" placeholder="Cant." class="w-20 px-2 py-1.5 border rounded-lg text-sm outline-none focus:ring-1 focus:ring-amber-500">
+        <select class="px-2 py-1.5 border rounded-lg text-sm outline-none bg-white focus:ring-1 focus:ring-amber-500">
+          <option value="ud" ${unidad === 'ud' ? 'selected' : ''}>ud</option>
+          <option value="m" ${unidad === 'm' ? 'selected' : ''}>m (metros)</option>
+          <option value="m²" ${unidad === 'm²' ? 'selected' : ''}>m²</option>
+          <option value="m³" ${unidad === 'm³' ? 'selected' : ''}>m³</option>
+          <option value="L" ${unidad === 'L' ? 'selected' : ''}>L (litros)</option>
+          <option value="kg" ${unidad === 'kg' ? 'selected' : ''}>kg</option>
+          <option value="sacos" ${unidad === 'sacos' ? 'selected' : ''}>sacos</option>
+          <option value="cajas" ${unidad === 'cajas' ? 'selected' : ''}>cajas</option>
+          <option value="botes" ${unidad === 'botes' ? 'selected' : ''}>botes</option>
+        </select>
+        <input type="text" value="${desc}" placeholder="Ej. Mortero autonivelante" class="flex-1 px-3 py-1.5 border rounded-lg text-sm outline-none focus:ring-1 focus:ring-amber-500">
+        <button type="button" class="btn-eliminar-fila text-rose-500 hover:text-rose-700 px-2 font-bold text-lg">&times;</button>
+      `;
+      f.querySelector(".btn-eliminar-fila").onclick = () => f.remove();
+      c.appendChild(f);
+    }
+    document.getElementById("btn-add-material").onclick = () => agregarFilaMaterial("", "ud", "");
 
     // Colecciones Firestore
     const colObras = collection(db, "proyectos");
@@ -571,17 +540,15 @@
             </div>
 
             <h3 class="text-base font-bold text-slate-900 leading-snug">${d.nombre}</h3>
-            
-            <p class="text-xs text-slate-500 mt-1">👤 ${d.cliente || 'Sin cliente'}</p>
+            <p class="text-xs text-slate-500 mt-1">👤 ${d.cliente || 'Particular'}</p>
             <p class="text-xs text-slate-500 mt-1">📍 ${d.direccion || 'Sin dirección'}</p>
 
             <div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-xs text-slate-500">
-              <span>Partidas: <strong>${d.trabajos ? d.trabajos.length : 0}</strong></span>
-              <span>Equipo: <strong>${d.operarios ? d.operarios.length : 0}</strong></span>
+              <span>Tajos: <strong>${d.trabajos ? d.trabajos.length : 0}</strong></span>
+              <span>Materiales: <strong>${d.materiales ? d.materiales.length : 0}</strong></span>
             </div>
           </div>
 
-          <!-- BOTONES DE ACCIÓN VISIBLES -->
           <div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
             <a href="${urlMaps}" target="_blank" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold transition">
               🗺️ Ruta
@@ -610,7 +577,10 @@
         : '<p class="text-sm text-slate-400 italic">No hay tajos definidos aún.</p>';
 
       const materialesLi = obra.materiales && obra.materiales.length > 0
-        ? obra.materiales.map(m => `<li class="flex items-center gap-2 py-1.5 text-sm text-slate-700 border-b border-slate-100 last:border-0"><span class="text-amber-500 font-bold">▪</span> ${m}</li>`).join('')
+        ? obra.materiales.map(m => {
+            const texto = typeof m === 'object' ? `<strong>${m.cantidad || ''} ${m.unidad || ''}</strong> — ${m.nombre || ''}` : m;
+            return `<li class="flex items-center gap-2 py-1.5 text-sm text-slate-700 border-b border-slate-100 last:border-0"><span class="text-amber-500 font-bold">▪</span> <span>${texto}</span></li>`;
+          }).join('')
         : '<p class="text-sm text-slate-400 italic">No hay lista de materiales registrada.</p>';
 
       const operariosBadges = obra.operarios && obra.operarios.length > 0
@@ -697,7 +667,7 @@
       cambiarVista('detalleObra');
     };
 
-    // BOTÓN EDITAR OBRA
+    // BOTÓN EDITAR OBRA (CARGA PREVIA CON NUEVO FORMATO DE MATERIALES)
     document.getElementById("btn-editar-obra-actual").onclick = () => {
       if (!obraSeleccionadaActual) return;
       const d = obraSeleccionadaActual;
@@ -707,7 +677,7 @@
       document.getElementById("btn-submit-obra").textContent = "Actualizar Ficha";
 
       document.getElementById("input-nombre").value = d.nombre || "";
-      document.getElementById("select-cliente-obra").value = d.cliente || "";
+      document.getElementById("select-cliente-obra").value = d.cliente || "Particular / Sin asignar";
       document.getElementById("input-direccion").value = d.direccion || "";
       document.getElementById("input-estado").value = d.estado || "En curso";
       document.getElementById("input-fecha-inicio").value = d.fechaInicio || "";
@@ -718,22 +688,31 @@
       document.getElementById("input-tel2").value = d.tel2 || "";
       document.getElementById("input-tel3").value = d.tel3 || "";
 
+      // Precargar Trabajos
       const cTrabajos = document.getElementById("contenedor-trabajos");
       cTrabajos.innerHTML = "";
       if (d.trabajos && d.trabajos.length > 0) {
-        d.trabajos.forEach(t => agregarFilaRepeater("contenedor-trabajos", "item-trabajo", "Tajo...", t));
+        d.trabajos.forEach(t => agregarFilaTrabajo(t));
       } else {
-        agregarFilaRepeater("contenedor-trabajos", "item-trabajo", "Tajo...");
+        agregarFilaTrabajo("");
       }
 
+      // Precargar Materiales
       const cMateriales = document.getElementById("contenedor-materiales");
       cMateriales.innerHTML = "";
       if (d.materiales && d.materiales.length > 0) {
-        d.materiales.forEach(m => agregarFilaRepeater("contenedor-materiales", "item-material", "Material...", m));
+        d.materiales.forEach(m => {
+          if (typeof m === 'object') {
+            agregarFilaMaterial(m.cantidad || "", m.unidad || "ud", m.nombre || "");
+          } else {
+            agregarFilaMaterial("", "ud", m);
+          }
+        });
       } else {
-        agregarFilaRepeater("contenedor-materiales", "item-material", "Material...");
+        agregarFilaMaterial("", "ud", "");
       }
 
+      // Checkboxes operarios
       document.querySelectorAll("#contenedor-checkbox-operarios input").forEach(chk => {
         chk.checked = d.operarios && d.operarios.includes(chk.value);
       });
@@ -749,7 +728,7 @@
       }
     };
 
-    // Escuchar Obras de Firestore
+    // Sincronizar Obras
     onSnapshot(colObras, (snap) => {
       cacheObras = [];
       const selectObraIncidencia = document.getElementById("select-obra-incidencia");
@@ -774,72 +753,88 @@
       }
     });
 
-    // GUARDAR OBRA (CON CIERRE FORZADO GARANTIZADO)
-    document.getElementById("form-nueva-obra").onsubmit = async (e) => {
+    // GUARDAR OBRA (CIERRE INMEDIATO Y LIMPIEZA DE DATOS)
+    document.getElementById("form-nueva-obra").addEventListener("submit", async (e) => {
       e.preventDefault();
+      const modal = document.getElementById("modal-obra");
       const btn = document.getElementById("btn-submit-obra");
+      const editId = document.getElementById("edit-obra-id").value;
+
       btn.disabled = true;
       btn.textContent = "Guardando...";
 
+      // Recoger tajos
+      const trabajos = [];
+      document.querySelectorAll("#contenedor-trabajos .item-trabajo input").forEach(inp => {
+        const v = inp.value.trim();
+        if (v) trabajos.push(v);
+      });
+
+      // Recoger materiales con select de unidades
+      const materiales = [];
+      document.querySelectorAll("#contenedor-materiales .item-material").forEach(row => {
+        const cant = row.querySelector("input[type='number']").value.trim();
+        const unidad = row.querySelector("select").value;
+        const nombre = row.querySelector("input[type='text']").value.trim();
+        if (nombre) {
+          materiales.push({
+            cantidad: cant || "1",
+            unidad: unidad || "ud",
+            nombre: nombre
+          });
+        }
+      });
+
+      // Recoger operarios
+      const operariosSeleccionados = [];
+      document.querySelectorAll("#contenedor-checkbox-operarios input:checked").forEach(chk => {
+        operariosSeleccionados.push(chk.value);
+      });
+
+      const obraData = {
+        nombre: document.getElementById("input-nombre").value.trim(),
+        cliente: document.getElementById("select-cliente-obra").value || "Particular",
+        direccion: document.getElementById("input-direccion").value.trim(),
+        estado: document.getElementById("input-estado").value || "En curso",
+        fechaInicio: document.getElementById("input-fecha-inicio").value || "",
+        fechaFin: document.getElementById("input-fecha-fin").value || "",
+        presupuesto: document.getElementById("input-presupuesto").value || "",
+        descripcion: document.getElementById("input-descripcion").value.trim() || "",
+        tel1: document.getElementById("input-tel1").value.trim() || "",
+        tel2: document.getElementById("input-tel2").value.trim() || "",
+        tel3: document.getElementById("input-tel3").value.trim() || "",
+        operarios: operariosSeleccionados,
+        trabajos: trabajos,
+        materiales: materiales,
+        fechaModificacion: serverTimestamp()
+      };
+
       try {
-        const trabajos = [];
-        document.querySelectorAll("#contenedor-trabajos .item-trabajo input").forEach(inp => {
-          if (inp.value.trim()) trabajos.push(inp.value.trim());
-        });
-
-        const materiales = [];
-        document.querySelectorAll("#contenedor-materiales .item-material input").forEach(inp => {
-          if (inp.value.trim()) materiales.push(inp.value.trim());
-        });
-
-        const operariosSeleccionados = [];
-        document.querySelectorAll("#contenedor-checkbox-operarios input:checked").forEach(chk => {
-          operariosSeleccionados.push(chk.value);
-        });
-
-        const obraData = {
-          nombre: document.getElementById("input-nombre").value.trim(),
-          cliente: document.getElementById("select-cliente-obra").value,
-          direccion: document.getElementById("input-direccion").value.trim(),
-          estado: document.getElementById("input-estado").value,
-          fechaInicio: document.getElementById("input-fecha-inicio").value,
-          fechaFin: document.getElementById("input-fecha-fin").value,
-          presupuesto: document.getElementById("input-presupuesto").value,
-          descripcion: document.getElementById("input-descripcion").value.trim(),
-          tel1: document.getElementById("input-tel1").value.trim(),
-          tel2: document.getElementById("input-tel2").value.trim(),
-          tel3: document.getElementById("input-tel3").value.trim(),
-          operarios: operariosSeleccionados,
-          trabajos: trabajos,
-          materiales: materiales,
-          fechaModificacion: serverTimestamp()
-        };
-
-        const editId = document.getElementById("edit-obra-id").value;
-
         if (editId) {
           await updateDoc(doc(db, "proyectos", editId), obraData);
         } else {
           obraData.fechaCreacion = serverTimestamp();
           await addDoc(colObras, obraData);
         }
-
-        document.getElementById("form-nueva-obra").reset();
       } catch (err) {
-        alert("Error al guardar: " + err.message);
+        console.error("Error guardando obra:", err);
+        alert("Aviso: " + err.message);
       } finally {
-        modalObra.style.display = "none";
+        // Cierre y reseteo garantizado
+        modal.style.display = "none";
+        document.getElementById("form-nueva-obra").reset();
+        document.getElementById("edit-obra-id").value = "";
         btn.disabled = false;
         btn.textContent = "Guardar Ficha";
       }
-    };
+    });
 
     // CLIENTES
     const listaClientesEl = document.getElementById("lista-clientes");
     const selectClienteObra = document.getElementById("select-cliente-obra");
     onSnapshot(colClientes, (snap) => {
       listaClientesEl.innerHTML = "";
-      selectClienteObra.innerHTML = '<option value="">Selecciona cliente...</option>';
+      selectClienteObra.innerHTML = '<option value="Particular / Sin asignar">Particular / Sin asignar</option>';
 
       if (snap.empty) {
         listaClientesEl.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay clientes dados de alta.</p></div>`;
@@ -871,22 +866,22 @@
       }
     });
 
-    document.getElementById("form-nuevo-cliente").onsubmit = async (e) => {
+    document.getElementById("form-nuevo-cliente").addEventListener("submit", async (e) => {
       e.preventDefault();
       try {
         await addDoc(colClientes, {
           nombre: document.getElementById("input-nombre-cliente").value.trim(),
           telefono: document.getElementById("input-tel-cliente").value.trim(),
-          email: document.getElementById("input-email-cliente").value.trim(),
-          direccion: document.getElementById("input-dir-cliente").value.trim(),
-          notas: document.getElementById("input-notas-cliente").value.trim(),
+          email: document.getElementById("input-email-cliente").value.trim() || "",
+          direccion: document.getElementById("input-dir-cliente").value.trim() || "",
+          notas: document.getElementById("input-notas-cliente").value.trim() || "",
           fechaCreacion: serverTimestamp()
         });
         document.getElementById("form-nuevo-cliente").reset();
       } finally {
         modalCliente.style.display = "none";
       }
-    };
+    });
 
     // OPERARIOS
     const listaOperariosEl = document.getElementById("lista-operarios");
@@ -897,7 +892,7 @@
 
       if (snap.empty) {
         listaOperariosEl.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay operarios registrados.</p></div>`;
-        contenedorCheckboxes.innerHTML = `<span class="text-xs text-slate-400 col-span-full">Primero registra operarios en la pestaña 'Operarios'.</span>`;
+        contenedorCheckboxes.innerHTML = `<span class="text-xs text-slate-400 col-span-full">Primero registra operarios.</span>`;
       } else {
         snap.forEach((docSnap) => {
           const d = docSnap.data();
@@ -924,20 +919,20 @@
       }
     });
 
-    document.getElementById("form-nuevo-operario").onsubmit = async (e) => {
+    document.getElementById("form-nuevo-operario").addEventListener("submit", async (e) => {
       e.preventDefault();
       try {
         await addDoc(colOperarios, {
           nombre: document.getElementById("input-nombre-operario").value.trim(),
           oficio: document.getElementById("input-oficio-operario").value,
-          telefono: document.getElementById("input-tel-operario").value.trim(),
+          telefono: document.getElementById("input-tel-operario").value.trim() || "",
           fechaCreacion: serverTimestamp()
         });
         document.getElementById("form-nuevo-operario").reset();
       } finally {
         modalOperario.style.display = "none";
       }
-    };
+    });
 
     // INCIDENCIAS
     const listaIncidenciasEl = document.getElementById("lista-incidencias");
@@ -971,13 +966,13 @@
       }
     });
 
-    document.getElementById("form-nueva-incidencia").onsubmit = async (e) => {
+    document.getElementById("form-nueva-incidencia").addEventListener("submit", async (e) => {
       e.preventDefault();
       try {
         await addDoc(colIncidencias, {
           obra: document.getElementById("select-obra-incidencia").value,
           titulo: document.getElementById("input-titulo-incidencia").value.trim(),
-          descripcion: document.getElementById("input-desc-incidencia").value.trim(),
+          descripcion: document.getElementById("input-desc-incidencia").value.trim() || "",
           prioridad: document.getElementById("input-prioridad-incidencia").value,
           estado: document.getElementById("input-estado-incidencia").value,
           fechaCreacion: serverTimestamp()
@@ -986,7 +981,7 @@
       } finally {
         modalIncidencia.style.display = "none";
       }
-    };
+    });
 
     // HERRAMIENTAS
     const listaHerramientasEl = document.getElementById("lista-herramientas");
@@ -1016,12 +1011,12 @@
       }
     });
 
-    document.getElementById("form-nueva-herramienta").onsubmit = async (e) => {
+    document.getElementById("form-nueva-herramienta").addEventListener("submit", async (e) => {
       e.preventDefault();
       try {
         await addDoc(colHerramientas, {
           nombre: document.getElementById("input-nombre-herramienta").value.trim(),
-          serie: document.getElementById("input-serie-herramienta").value.trim(),
+          serie: document.getElementById("input-serie-herramienta").value.trim() || "",
           ubicacion: document.getElementById("select-obra-herramienta").value,
           fechaCreacion: serverTimestamp()
         });
@@ -1029,11 +1024,11 @@
       } finally {
         modalHerramienta.style.display = "none";
       }
-    };
+    });
 
     // Borrado universal
     window.borrarRegistro = async (coleccion, id) => {
-      if (confirm("¿Estás seguro de que quieres eliminar este registro?")) {
+      if (confirm("¿Estás seguro de que deseas eliminar este registro?")) {
         await deleteDoc(doc(db, coleccion, id));
       }
     };
