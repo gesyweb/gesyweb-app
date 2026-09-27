@@ -1132,6 +1132,7 @@
       const cuotaImpuesto = totalFinal - base;
 
       cont.innerHTML = '<div class="card-print bg-white rounded-2xl p-5 sm:p-7 border border-slate-200 shadow-sm space-y-4">' +
+  window.generarCabeceraMarcaBlanca() +
         '<div class="flex flex-col sm:flex-row justify-between items-start gap-2 pb-3 border-b border-slate-200">' +
           '<div>' +
             '<div class="flex items-center gap-2">' +
@@ -1806,6 +1807,7 @@
       }
 
       cont.innerHTML = '<div class="card-print bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">' +
+  window.generarCabeceraMarcaBlanca() +
         '<div class="flex flex-col sm:flex-row justify-between items-start gap-4 pb-4 border-b border-slate-200">' +
           '<div>' +
             '<div class="flex items-center gap-2">' +
@@ -2180,20 +2182,17 @@
         };
 
         try {
-          await updateDoc(docConfigEmpresa, dataToSave).catch(async (err) => {
-            // Si el documento aún no existe en Firestore, lo crea
+          await updateDoc(docConfigEmpresa, dataToSave).catch(async () => {
             const { setDoc } = await import("https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js");
             await setDoc(docConfigEmpresa, dataToSave);
           });
 
-          const msg = document.getElementById("msg-guardado-empresa");
-          if (msg) {
-            msg.classList.remove("hidden");
-            setTimeout(() => msg.classList.add("hidden"), 3000);
-          }
+          datosEmpresaActual = dataToSave;
+          alert("✓ Datos de empresa y logotipo guardados correctamente.");
+          window.cambiarVista('obras');
         } catch (error) {
           console.error("Error guardando empresa:", error);
-          alert("Error guardando configuración de empresa.");
+          alert("Hubo un error al guardar los datos.");
         }
       };
     }
