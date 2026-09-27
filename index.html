@@ -47,14 +47,14 @@
   <!-- Contenedor Principal -->
   <main class="flex-1 p-6 md:p-10 overflow-y-auto">
 
-    <!-- SECCIÓN 1: VISTA LISTADO DE OBRAS -->
+    <!-- SECCIÓN 1: LISTADO DE OBRAS -->
     <div id="vista-obras">
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
           <h2 class="text-2xl font-bold text-slate-900">Obras y Proyectos</h2>
           <p class="text-sm text-slate-500">Planificación de tajos, partidas, materiales y rutas.</p>
         </div>
-        <button id="btn-abrir-modal-obra" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-semibold px-4 py-2.5 rounded-lg shadow-sm transition">
+        <button id="btn-abrir-modal-obra" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-4 py-2.5 rounded-lg shadow-sm transition">
           + Nueva Obra
         </button>
       </header>
@@ -76,22 +76,20 @@
     <!-- SECCIÓN 1.1: FICHA DETALLADA A PANTALLA COMPLETA -->
     <div id="vista-detalle-obra" class="hidden">
       <div class="flex items-center justify-between pb-6 border-b border-slate-200">
-        <button id="btn-volver-obras" class="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-slate-950 transition">
+        <button id="btn-volver-obras" class="inline-flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-amber-600 transition bg-white border px-4 py-2 rounded-lg shadow-sm">
           ← Volver al listado
         </button>
         <div class="flex gap-2">
-          <button id="btn-editar-obra-actual" class="bg-slate-900 hover:bg-slate-800 text-white text-sm font-medium px-4 py-2 rounded-lg transition">
+          <button id="btn-editar-obra-actual" class="bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold px-4 py-2 rounded-lg transition">
             ✏️ Editar Obra
           </button>
-          <button id="btn-borrar-obra-actual" class="bg-rose-50 hover:bg-rose-100 text-rose-700 text-sm font-medium px-4 py-2 rounded-lg border border-rose-200 transition">
+          <button id="btn-borrar-obra-actual" class="bg-rose-50 hover:bg-rose-100 text-rose-700 text-sm font-semibold px-4 py-2 rounded-lg border border-rose-200 transition">
             Eliminar
           </button>
         </div>
       </div>
 
-      <div id="contenedor-detalle-obra" class="mt-6">
-        <!-- Contenido dinámico inyectado por JS -->
-      </div>
+      <div id="contenedor-detalle-obra" class="mt-6"></div>
     </div>
 
     <!-- SECCIÓN 2: CLIENTES -->
@@ -168,7 +166,7 @@
           <h3 id="titulo-modal-obra" class="text-lg font-bold text-slate-900">Registrar Nueva Obra</h3>
           <p class="text-xs text-slate-500">Detalles técnicos, contactos, tajos y materiales.</p>
         </div>
-        <button id="btn-cerrar-modal-obra" class="text-slate-400 hover:text-slate-700 text-xl font-bold">&times;</button>
+        <button type="button" id="btn-cerrar-modal-obra" class="text-slate-400 hover:text-slate-700 text-2xl font-bold">&times;</button>
       </div>
 
       <form id="form-nueva-obra" class="mt-6 space-y-6">
@@ -274,7 +272,7 @@
 
         <div class="mt-8 flex justify-end gap-3 pt-4 border-t border-slate-100">
           <button type="button" id="btn-cancelar-obra" class="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg">Cancelar</button>
-          <button type="submit" id="btn-submit-obra" class="px-5 py-2 text-sm bg-amber-500 hover:bg-amber-600 text-slate-950 font-semibold rounded-lg shadow-sm">Guardar Ficha</button>
+          <button type="submit" id="btn-submit-obra" class="px-6 py-2.5 text-sm bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg shadow-sm">Guardar Ficha</button>
         </div>
       </form>
     </div>
@@ -285,7 +283,7 @@
     <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl">
       <div class="flex justify-between items-center pb-4 border-b border-slate-100">
         <h3 class="text-lg font-bold text-slate-900">Alta de Cliente</h3>
-        <button id="btn-cerrar-modal-cliente" class="text-slate-400 hover:text-slate-700 text-xl font-bold">&times;</button>
+        <button type="button" id="btn-cerrar-modal-cliente" class="text-slate-400 hover:text-slate-700 text-2xl font-bold">&times;</button>
       </div>
       <form id="form-nuevo-cliente" class="mt-6 space-y-4">
         <div>
@@ -323,7 +321,7 @@
     <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl">
       <div class="flex justify-between items-center pb-4 border-b border-slate-100">
         <h3 class="text-lg font-bold text-slate-900">Reportar Incidencia</h3>
-        <button id="btn-cerrar-modal-incidencia" class="text-slate-400 hover:text-slate-700 text-xl font-bold">&times;</button>
+        <button type="button" id="btn-cerrar-modal-incidencia" class="text-slate-400 hover:text-slate-700 text-2xl font-bold">&times;</button>
       </div>
       <form id="form-nueva-incidencia" class="mt-6 space-y-4">
         <div>
@@ -371,7 +369,7 @@
     <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl">
       <div class="flex justify-between items-center pb-4 border-b border-slate-100">
         <h3 class="text-lg font-bold text-slate-900">Alta de Operario</h3>
-        <button id="btn-cerrar-modal-operario" class="text-slate-400 hover:text-slate-700 text-xl font-bold">&times;</button>
+        <button type="button" id="btn-cerrar-modal-operario" class="text-slate-400 hover:text-slate-700 text-2xl font-bold">&times;</button>
       </div>
       <form id="form-nuevo-operario" class="mt-6 space-y-4">
         <div>
@@ -408,7 +406,7 @@
     <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl">
       <div class="flex justify-between items-center pb-4 border-b border-slate-100">
         <h3 class="text-lg font-bold text-slate-900">Registrar Herramienta</h3>
-        <button id="btn-cerrar-modal-herramienta" class="text-slate-400 hover:text-slate-700 text-xl font-bold">&times;</button>
+        <button type="button" id="btn-cerrar-modal-herramienta" class="text-slate-400 hover:text-slate-700 text-2xl font-bold">&times;</button>
       </div>
       <form id="form-nueva-herramienta" class="mt-6 space-y-4">
         <div>
@@ -489,10 +487,10 @@
     botonesNav.herramientas.onclick = () => cambiarVista('herramientas');
     document.getElementById("btn-volver-obras").onclick = () => cambiarVista('obras');
 
+    // Manejo seguro de Modales
     function vincularModal(btnAbrirId, modalId, btnCerrarId, btnCancelarId) {
       const modal = document.getElementById(modalId);
       document.getElementById(btnAbrirId).onclick = () => {
-        // Reset a modo creación si es modal-obra
         if (modalId === "modal-obra") {
           document.getElementById("form-nueva-obra").reset();
           document.getElementById("edit-obra-id").value = "";
@@ -516,14 +514,14 @@
     const modalOperario = vincularModal("btn-abrir-modal-operario", "modal-operario", "btn-cerrar-modal-operario", "btn-cancelar-operario");
     const modalHerramienta = vincularModal("btn-abrir-modal-herramienta", "modal-herramienta", "btn-cerrar-modal-herramienta", "btn-cancelar-herramienta");
 
-    // Repeaters Helper
+    // Repeaters
     function agregarFilaRepeater(contenedorId, claseItem, placeholder, valor = "") {
       const contenedor = document.getElementById(contenedorId);
       const fila = document.createElement("div");
       fila.className = `flex gap-2 ${claseItem}`;
       fila.innerHTML = `
         <input type="text" value="${valor}" placeholder="${placeholder}" class="w-full px-3 py-1.5 border rounded-lg text-sm outline-none focus:ring-1 focus:ring-amber-500">
-        <button type="button" class="btn-eliminar-fila text-rose-500 hover:text-rose-700 px-2 font-bold">&times;</button>
+        <button type="button" class="btn-eliminar-fila text-rose-500 hover:text-rose-700 px-2 font-bold text-lg">&times;</button>
       `;
       fila.querySelector(".btn-eliminar-fila").onclick = () => fila.remove();
       contenedor.appendChild(fila);
@@ -563,16 +561,16 @@
         const urlMaps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.direccion || '')}`;
 
         const card = document.createElement("div");
-        card.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between hover:shadow-md transition cursor-pointer";
+        card.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between hover:shadow-md transition";
         
         card.innerHTML = `
-          <div onclick="window.abrirDetalleObra('${d.id}')">
+          <div>
             <div class="flex justify-between items-start mb-2">
               <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold ${badge}">${d.estado || 'En curso'}</span>
               <span class="text-xs font-bold text-slate-700">${d.presupuesto ? Number(d.presupuesto).toLocaleString('es-ES') + ' €' : '-'}</span>
             </div>
 
-            <h3 class="text-base font-bold text-slate-900 leading-snug hover:text-amber-600 transition">${d.nombre}</h3>
+            <h3 class="text-base font-bold text-slate-900 leading-snug">${d.nombre}</h3>
             
             <p class="text-xs text-slate-500 mt-1">👤 ${d.cliente || 'Sin cliente'}</p>
             <p class="text-xs text-slate-500 mt-1">📍 ${d.direccion || 'Sin dirección'}</p>
@@ -583,9 +581,14 @@
             </div>
           </div>
 
-          <div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-xs">
-            <a href="${urlMaps}" target="_blank" onclick="event.stopPropagation();" class="text-amber-600 font-semibold hover:underline">🗺️ Cómo llegar</a>
-            <button onclick="event.stopPropagation(); window.abrirDetalleObra('${d.id}')" class="font-semibold text-slate-900 hover:text-amber-600">Ver Ficha →</button>
+          <!-- BOTONES DE ACCIÓN VISIBLES -->
+          <div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+            <a href="${urlMaps}" target="_blank" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold transition">
+              🗺️ Ruta
+            </a>
+            <button onclick="window.abrirDetalleObra('${d.id}')" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg text-xs shadow-sm transition">
+              🔍 Ver Ficha Completa
+            </button>
           </div>
         `;
         listaObrasEl.appendChild(card);
@@ -607,7 +610,7 @@
         : '<p class="text-sm text-slate-400 italic">No hay tajos definidos aún.</p>';
 
       const materialesLi = obra.materiales && obra.materiales.length > 0
-        ? obra.materiales.map(m => `<li class="flex items-center gap-2 py-1.5 text-sm text-slate-700 border-b border-slate-100 last:border-0"><span class="text-amber-500">▪</span> ${m}</li>`).join('')
+        ? obra.materiales.map(m => `<li class="flex items-center gap-2 py-1.5 text-sm text-slate-700 border-b border-slate-100 last:border-0"><span class="text-amber-500 font-bold">▪</span> ${m}</li>`).join('')
         : '<p class="text-sm text-slate-400 italic">No hay lista de materiales registrada.</p>';
 
       const operariosBadges = obra.operarios && obra.operarios.length > 0
@@ -617,17 +620,16 @@
       cont.innerHTML = `
         <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-8">
           
-          <!-- Encabezado ficha -->
           <div class="flex flex-col sm:flex-row justify-between items-start gap-4 pb-6 border-b border-slate-200">
             <div>
               <div class="flex items-center gap-3">
                 <span class="px-3 py-1 rounded-full text-xs font-semibold ${badge}">${obra.estado}</span>
-                <span class="text-xs text-slate-400 font-mono">ID: ${obra.id}</span>
+                <span class="text-xs text-slate-400 font-mono">ID: ${obra.id.substring(0, 6).toUpperCase()}</span>
               </div>
               <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">${obra.nombre}</h1>
-              <p class="text-sm text-slate-500 mt-1 flex items-center gap-1.5">
+              <p class="text-sm text-slate-500 mt-1 flex items-center gap-2">
                 📍 ${obra.direccion}
-                <a href="${urlMaps}" target="_blank" class="ml-2 text-xs font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 hover:bg-amber-100">🗺️ Abrir en Google Maps</a>
+                <a href="${urlMaps}" target="_blank" class="text-xs font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 hover:bg-amber-100">🗺️ Abrir en Google Maps</a>
               </p>
             </div>
             <div class="sm:text-right">
@@ -636,7 +638,6 @@
             </div>
           </div>
 
-          <!-- Cuadrícula de Datos Clave -->
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-4 bg-slate-50 rounded-xl border border-slate-200">
             <div>
               <span class="text-xs font-bold text-slate-400 uppercase">Cliente</span>
@@ -651,7 +652,7 @@
               <p class="text-sm font-medium text-slate-800 mt-1">🏁 ${obra.fechaFin || 'Pendiente'}</p>
             </div>
             <div>
-              <span class="text-xs font-bold text-slate-400 uppercase">Teléfonos de Obra</span>
+              <span class="text-xs font-bold text-slate-400 uppercase">Teléfonos de Contacto</span>
               <div class="text-xs text-slate-700 mt-1 space-y-0.5 font-medium">
                 ${obra.tel1 ? `<p>📞 <a href="tel:${obra.tel1}" class="hover:underline">${obra.tel1}</a></p>` : ''}
                 ${obra.tel2 ? `<p>📞 <a href="tel:${obra.tel2}" class="hover:underline">${obra.tel2}</a></p>` : ''}
@@ -667,7 +668,6 @@
             <p class="text-sm text-slate-700 leading-relaxed bg-slate-50 p-4 rounded-xl border">${obra.descripcion}</p>
           </div>` : ''}
 
-          <!-- Tajos y Materiales -->
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div class="p-6 rounded-xl border border-slate-200 bg-white">
               <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-4 flex items-center justify-between">
@@ -686,7 +686,6 @@
             </div>
           </div>
 
-          <!-- Operarios asignados -->
           <div>
             <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Personal Asignado a este proyecto</h3>
             <div class="flex flex-wrap gap-2">${operariosBadges}</div>
@@ -698,14 +697,14 @@
       cambiarVista('detalleObra');
     };
 
-    // BOTÓN EDITAR OBRA (Cargar datos en el modal)
+    // BOTÓN EDITAR OBRA
     document.getElementById("btn-editar-obra-actual").onclick = () => {
       if (!obraSeleccionadaActual) return;
       const d = obraSeleccionadaActual;
 
       document.getElementById("edit-obra-id").value = d.id;
       document.getElementById("titulo-modal-obra").textContent = "Editar Ficha de Obra";
-      document.getElementById("btn-submit-obra").textContent = "Guardar Cambios";
+      document.getElementById("btn-submit-obra").textContent = "Actualizar Ficha";
 
       document.getElementById("input-nombre").value = d.nombre || "";
       document.getElementById("select-cliente-obra").value = d.cliente || "";
@@ -719,7 +718,6 @@
       document.getElementById("input-tel2").value = d.tel2 || "";
       document.getElementById("input-tel3").value = d.tel3 || "";
 
-      // Precargar Tajos
       const cTrabajos = document.getElementById("contenedor-trabajos");
       cTrabajos.innerHTML = "";
       if (d.trabajos && d.trabajos.length > 0) {
@@ -728,7 +726,6 @@
         agregarFilaRepeater("contenedor-trabajos", "item-trabajo", "Tajo...");
       }
 
-      // Precargar Materiales
       const cMateriales = document.getElementById("contenedor-materiales");
       cMateriales.innerHTML = "";
       if (d.materiales && d.materiales.length > 0) {
@@ -737,7 +734,6 @@
         agregarFilaRepeater("contenedor-materiales", "item-material", "Material...");
       }
 
-      // Marcar Checkboxes de Operarios
       document.querySelectorAll("#contenedor-checkbox-operarios input").forEach(chk => {
         chk.checked = d.operarios && d.operarios.includes(chk.value);
       });
@@ -746,9 +742,9 @@
     };
 
     // BOTÓN BORRAR OBRA ACTUAL
-    document.getElementById("btn-borrar-obra-actual").onclick = () => {
-      if (obraSeleccionadaActual) {
-        window.borrarRegistro('proyectos', obraSeleccionadaActual.id);
+    document.getElementById("btn-borrar-obra-actual").onclick = async () => {
+      if (obraSeleccionadaActual && confirm("¿Deseas eliminar definitivamente este proyecto?")) {
+        await deleteDoc(doc(db, "proyectos", obraSeleccionadaActual.id));
         cambiarVista('obras');
       }
     };
@@ -761,8 +757,8 @@
       selectObraIncidencia.innerHTML = '<option value="">Selecciona obra...</option>';
       selectObraHerramienta.innerHTML = '<option value="Almacén central">📦 Almacén central</option>';
 
-      snap.forEach(doc => {
-        const data = { id: doc.id, ...doc.data() };
+      snap.forEach(docSnap => {
+        const data = { id: docSnap.id, ...docSnap.data() };
         cacheObras.push(data);
         const opt1 = document.createElement("option"); opt1.value = data.nombre; opt1.textContent = data.nombre;
         selectObraIncidencia.appendChild(opt1);
@@ -772,62 +768,70 @@
 
       renderizarObras();
 
-      // Si estábamos viendo el detalle de una obra que se modificó, refrescarlo
       if (obraSeleccionadaActual && !vistas.detalleObra.classList.contains("hidden")) {
         const actualizada = cacheObras.find(o => o.id === obraSeleccionadaActual.id);
         if (actualizada) window.abrirDetalleObra(actualizada.id);
       }
     });
 
-    // GUARDAR OBRA (CREAR O EDITAR)
+    // GUARDAR OBRA (CON CIERRE FORZADO GARANTIZADO)
     document.getElementById("form-nueva-obra").onsubmit = async (e) => {
       e.preventDefault();
+      const btn = document.getElementById("btn-submit-obra");
+      btn.disabled = true;
+      btn.textContent = "Guardando...";
 
-      const trabajos = [];
-      document.querySelectorAll("#contenedor-trabajos .item-trabajo input").forEach(inp => {
-        if (inp.value.trim()) trabajos.push(inp.value.trim());
-      });
+      try {
+        const trabajos = [];
+        document.querySelectorAll("#contenedor-trabajos .item-trabajo input").forEach(inp => {
+          if (inp.value.trim()) trabajos.push(inp.value.trim());
+        });
 
-      const materiales = [];
-      document.querySelectorAll("#contenedor-materiales .item-material input").forEach(inp => {
-        if (inp.value.trim()) materiales.push(inp.value.trim());
-      });
+        const materiales = [];
+        document.querySelectorAll("#contenedor-materiales .item-material input").forEach(inp => {
+          if (inp.value.trim()) materiales.push(inp.value.trim());
+        });
 
-      const operariosSeleccionados = [];
-      document.querySelectorAll("#contenedor-checkbox-operarios input:checked").forEach(chk => {
-        operariosSeleccionados.push(chk.value);
-      });
+        const operariosSeleccionados = [];
+        document.querySelectorAll("#contenedor-checkbox-operarios input:checked").forEach(chk => {
+          operariosSeleccionados.push(chk.value);
+        });
 
-      const obraData = {
-        nombre: document.getElementById("input-nombre").value.trim(),
-        cliente: document.getElementById("select-cliente-obra").value,
-        direccion: document.getElementById("input-direccion").value.trim(),
-        estado: document.getElementById("input-estado").value,
-        fechaInicio: document.getElementById("input-fecha-inicio").value,
-        fechaFin: document.getElementById("input-fecha-fin").value,
-        presupuesto: document.getElementById("input-presupuesto").value,
-        descripcion: document.getElementById("input-descripcion").value.trim(),
-        tel1: document.getElementById("input-tel1").value.trim(),
-        tel2: document.getElementById("input-tel2").value.trim(),
-        tel3: document.getElementById("input-tel3").value.trim(),
-        operarios: operariosSeleccionados,
-        trabajos: trabajos,
-        materiales: materiales,
-        fechaModificacion: serverTimestamp()
-      };
+        const obraData = {
+          nombre: document.getElementById("input-nombre").value.trim(),
+          cliente: document.getElementById("select-cliente-obra").value,
+          direccion: document.getElementById("input-direccion").value.trim(),
+          estado: document.getElementById("input-estado").value,
+          fechaInicio: document.getElementById("input-fecha-inicio").value,
+          fechaFin: document.getElementById("input-fecha-fin").value,
+          presupuesto: document.getElementById("input-presupuesto").value,
+          descripcion: document.getElementById("input-descripcion").value.trim(),
+          tel1: document.getElementById("input-tel1").value.trim(),
+          tel2: document.getElementById("input-tel2").value.trim(),
+          tel3: document.getElementById("input-tel3").value.trim(),
+          operarios: operariosSeleccionados,
+          trabajos: trabajos,
+          materiales: materiales,
+          fechaModificacion: serverTimestamp()
+        };
 
-      const editId = document.getElementById("edit-obra-id").value;
+        const editId = document.getElementById("edit-obra-id").value;
 
-      if (editId) {
-        // Actualizar existente
-        await updateDoc(doc(db, "proyectos", editId), obraData);
-      } else {
-        // Crear nueva
-        obraData.fechaCreacion = serverTimestamp();
-        await addDoc(colObras, obraData);
+        if (editId) {
+          await updateDoc(doc(db, "proyectos", editId), obraData);
+        } else {
+          obraData.fechaCreacion = serverTimestamp();
+          await addDoc(colObras, obraData);
+        }
+
+        document.getElementById("form-nueva-obra").reset();
+      } catch (err) {
+        alert("Error al guardar: " + err.message);
+      } finally {
+        modalObra.style.display = "none";
+        btn.disabled = false;
+        btn.textContent = "Guardar Ficha";
       }
-
-      modalObra.style.display = "none";
     };
 
     // CLIENTES
@@ -840,8 +844,8 @@
       if (snap.empty) {
         listaClientesEl.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay clientes dados de alta.</p></div>`;
       } else {
-        snap.forEach((doc) => {
-          const d = doc.data();
+        snap.forEach((docSnap) => {
+          const d = docSnap.data();
           const opt = document.createElement("option");
           opt.value = d.nombre;
           opt.textContent = d.nombre + (d.telefono ? ` (${d.telefono})` : '');
@@ -859,7 +863,7 @@
               ${d.notas ? `<p class="text-xs bg-slate-50 p-2.5 rounded-lg border text-slate-600 mt-3 italic">"${d.notas}"</p>` : ''}
             </div>
             <div class="mt-6 pt-4 border-t border-slate-100 flex justify-end">
-              <button onclick="window.borrarRegistro('clientes', '${doc.id}')" class="text-xs text-rose-500 hover:underline">Eliminar</button>
+              <button onclick="window.borrarRegistro('clientes', '${docSnap.id}')" class="text-xs text-rose-500 hover:underline">Eliminar</button>
             </div>
           `;
           listaClientesEl.appendChild(card);
@@ -869,16 +873,19 @@
 
     document.getElementById("form-nuevo-cliente").onsubmit = async (e) => {
       e.preventDefault();
-      await addDoc(colClientes, {
-        nombre: document.getElementById("input-nombre-cliente").value.trim(),
-        telefono: document.getElementById("input-tel-cliente").value.trim(),
-        email: document.getElementById("input-email-cliente").value.trim(),
-        direccion: document.getElementById("input-dir-cliente").value.trim(),
-        notas: document.getElementById("input-notas-cliente").value.trim(),
-        fechaCreacion: serverTimestamp()
-      });
-      document.getElementById("form-nuevo-cliente").reset();
-      modalCliente.style.display = "none";
+      try {
+        await addDoc(colClientes, {
+          nombre: document.getElementById("input-nombre-cliente").value.trim(),
+          telefono: document.getElementById("input-tel-cliente").value.trim(),
+          email: document.getElementById("input-email-cliente").value.trim(),
+          direccion: document.getElementById("input-dir-cliente").value.trim(),
+          notas: document.getElementById("input-notas-cliente").value.trim(),
+          fechaCreacion: serverTimestamp()
+        });
+        document.getElementById("form-nuevo-cliente").reset();
+      } finally {
+        modalCliente.style.display = "none";
+      }
     };
 
     // OPERARIOS
@@ -890,10 +897,10 @@
 
       if (snap.empty) {
         listaOperariosEl.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay operarios registrados.</p></div>`;
-        contenedorCheckboxes.innerHTML = `<span class="text-xs text-slate-400 col-span-full">Primero registra operarios.</span>`;
+        contenedorCheckboxes.innerHTML = `<span class="text-xs text-slate-400 col-span-full">Primero registra operarios en la pestaña 'Operarios'.</span>`;
       } else {
-        snap.forEach((doc) => {
-          const d = doc.data();
+        snap.forEach((docSnap) => {
+          const d = docSnap.data();
           const lbl = document.createElement("label");
           lbl.className = "flex items-center gap-2 text-xs text-slate-700 cursor-pointer bg-white p-2 rounded border hover:bg-slate-100";
           lbl.innerHTML = `<input type="checkbox" value="${d.nombre}" class="rounded text-amber-500"> <span>${d.nombre} (${d.oficio})</span>`;
@@ -908,8 +915,8 @@
               <p class="text-sm text-slate-500 mt-1">📞 ${d.telefono || 'Sin teléfono'}</p>
             </div>
             <div class="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center text-xs">
-              <span class="text-slate-400">#${doc.id.substring(0, 5).toUpperCase()}</span>
-              <button onclick="window.borrarRegistro('operarios', '${doc.id}')" class="text-rose-500 hover:underline">Eliminar</button>
+              <span class="text-slate-400">#${docSnap.id.substring(0, 5).toUpperCase()}</span>
+              <button onclick="window.borrarRegistro('operarios', '${docSnap.id}')" class="text-rose-500 hover:underline">Eliminar</button>
             </div>
           `;
           listaOperariosEl.appendChild(card);
@@ -919,14 +926,17 @@
 
     document.getElementById("form-nuevo-operario").onsubmit = async (e) => {
       e.preventDefault();
-      await addDoc(colOperarios, {
-        nombre: document.getElementById("input-nombre-operario").value.trim(),
-        oficio: document.getElementById("input-oficio-operario").value,
-        telefono: document.getElementById("input-tel-operario").value.trim(),
-        fechaCreacion: serverTimestamp()
-      });
-      document.getElementById("form-nuevo-operario").reset();
-      modalOperario.style.display = "none";
+      try {
+        await addDoc(colOperarios, {
+          nombre: document.getElementById("input-nombre-operario").value.trim(),
+          oficio: document.getElementById("input-oficio-operario").value,
+          telefono: document.getElementById("input-tel-operario").value.trim(),
+          fechaCreacion: serverTimestamp()
+        });
+        document.getElementById("form-nuevo-operario").reset();
+      } finally {
+        modalOperario.style.display = "none";
+      }
     };
 
     // INCIDENCIAS
@@ -936,8 +946,8 @@
       if (snap.empty) {
         listaIncidenciasEl.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay incidencias registradas.</p></div>`;
       } else {
-        snap.forEach((doc) => {
-          const d = doc.data();
+        snap.forEach((docSnap) => {
+          const d = docSnap.data();
           let badgeUrgencia = d.prioridad === "Urgente" ? "bg-rose-100 text-rose-800" : "bg-amber-100 text-amber-800";
           const card = document.createElement("div");
           card.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between";
@@ -952,8 +962,8 @@
               <p class="text-sm text-slate-500 mt-2">${d.descripcion || 'Sin descripción.'}</p>
             </div>
             <div class="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center text-xs">
-              <span class="text-slate-400">#${doc.id.substring(0, 5).toUpperCase()}</span>
-              <button onclick="window.borrarRegistro('incidencias', '${doc.id}')" class="text-rose-500 hover:underline">Eliminar</button>
+              <span class="text-slate-400">#${docSnap.id.substring(0, 5).toUpperCase()}</span>
+              <button onclick="window.borrarRegistro('incidencias', '${docSnap.id}')" class="text-rose-500 hover:underline">Eliminar</button>
             </div>
           `;
           listaIncidenciasEl.appendChild(card);
@@ -963,16 +973,19 @@
 
     document.getElementById("form-nueva-incidencia").onsubmit = async (e) => {
       e.preventDefault();
-      await addDoc(colIncidencias, {
-        obra: document.getElementById("select-obra-incidencia").value,
-        titulo: document.getElementById("input-titulo-incidencia").value.trim(),
-        descripcion: document.getElementById("input-desc-incidencia").value.trim(),
-        prioridad: document.getElementById("input-prioridad-incidencia").value,
-        estado: document.getElementById("input-estado-incidencia").value,
-        fechaCreacion: serverTimestamp()
-      });
-      document.getElementById("form-nueva-incidencia").reset();
-      modalIncidencia.style.display = "none";
+      try {
+        await addDoc(colIncidencias, {
+          obra: document.getElementById("select-obra-incidencia").value,
+          titulo: document.getElementById("input-titulo-incidencia").value.trim(),
+          descripcion: document.getElementById("input-desc-incidencia").value.trim(),
+          prioridad: document.getElementById("input-prioridad-incidencia").value,
+          estado: document.getElementById("input-estado-incidencia").value,
+          fechaCreacion: serverTimestamp()
+        });
+        document.getElementById("form-nueva-incidencia").reset();
+      } finally {
+        modalIncidencia.style.display = "none";
+      }
     };
 
     // HERRAMIENTAS
@@ -982,8 +995,8 @@
       if (snap.empty) {
         listaHerramientasEl.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay maquinaria registrada.</p></div>`;
       } else {
-        snap.forEach((doc) => {
-          const d = doc.data();
+        snap.forEach((docSnap) => {
+          const d = docSnap.data();
           const card = document.createElement("div");
           card.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between";
           card.innerHTML = `
@@ -994,8 +1007,8 @@
               <p class="text-xs text-slate-400 mt-1">Serie: ${d.serie || 'N/A'}</p>
             </div>
             <div class="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center text-xs">
-              <span class="text-slate-400">#${doc.id.substring(0, 5).toUpperCase()}</span>
-              <button onclick="window.borrarRegistro('herramientas', '${doc.id}')" class="text-rose-500 hover:underline">Eliminar</button>
+              <span class="text-slate-400">#${docSnap.id.substring(0, 5).toUpperCase()}</span>
+              <button onclick="window.borrarRegistro('herramientas', '${docSnap.id}')" class="text-rose-500 hover:underline">Eliminar</button>
             </div>
           `;
           listaHerramientasEl.appendChild(card);
@@ -1005,14 +1018,17 @@
 
     document.getElementById("form-nueva-herramienta").onsubmit = async (e) => {
       e.preventDefault();
-      await addDoc(colHerramientas, {
-        nombre: document.getElementById("input-nombre-herramienta").value.trim(),
-        serie: document.getElementById("input-serie-herramienta").value.trim(),
-        ubicacion: document.getElementById("select-obra-herramienta").value,
-        fechaCreacion: serverTimestamp()
-      });
-      document.getElementById("form-nueva-herramienta").reset();
-      modalHerramienta.style.display = "none";
+      try {
+        await addDoc(colHerramientas, {
+          nombre: document.getElementById("input-nombre-herramienta").value.trim(),
+          serie: document.getElementById("input-serie-herramienta").value.trim(),
+          ubicacion: document.getElementById("select-obra-herramienta").value,
+          fechaCreacion: serverTimestamp()
+        });
+        document.getElementById("form-nueva-herramienta").reset();
+      } finally {
+        modalHerramienta.style.display = "none";
+      }
     };
 
     // Borrado universal
