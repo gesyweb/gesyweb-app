@@ -479,7 +479,45 @@
         </div>
       </div>
     </div>
-    
+    <!-- SECCIÓN BACKUP Y EXPORTACIÓN EXCEL/CSV -->
+      <div class="mt-8 max-w-2xl bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        <div>
+          <h3 class="text-base font-bold text-slate-900">Copia de Seguridad y Exportación (Excel / CSV)</h3>
+          <p class="text-xs text-slate-500">Descarga los registros completos de tu operativa en archivos compatibles con hojas de cálculo.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+          <button type="button" onclick="window.exportarCSV('obras')" class="flex items-center justify-between p-3.5 bg-slate-50 hover:bg-amber-50 border rounded-xl text-xs font-bold text-slate-700 hover:text-amber-900 transition">
+            <span>🏗️ Descargar Obras / Proyectos</span>
+            <span>⬇️</span>
+          </button>
+
+          <button type="button" onclick="window.exportarCSV('clientes')" class="flex items-center justify-between p-3.5 bg-slate-50 hover:bg-indigo-50 border rounded-xl text-xs font-bold text-slate-700 hover:text-indigo-900 transition">
+            <span>👥 Descargar Directorio Clientes</span>
+            <span>⬇️</span>
+          </button>
+
+          <button type="button" onclick="window.exportarCSV('incidencias')" class="flex items-center justify-between p-3.5 bg-slate-50 hover:bg-rose-50 border rounded-xl text-xs font-bold text-slate-700 hover:text-rose-900 transition">
+            <span>⚠️ Descargar Partes / Incidencias</span>
+            <span>⬇️</span>
+          </button>
+
+          <button type="button" onclick="window.exportarCSV('operarios')" class="flex items-center justify-between p-3.5 bg-slate-50 hover:bg-sky-50 border rounded-xl text-xs font-bold text-slate-700 hover:text-sky-900 transition">
+            <span>👷 Descargar Personal y PRL</span>
+            <span>⬇️</span>
+          </button>
+
+          <button type="button" onclick="window.exportarCSV('herramientas')" class="flex items-center justify-between p-3.5 bg-slate-50 hover:bg-emerald-50 border rounded-xl text-xs font-bold text-slate-700 hover:text-emerald-900 transition">
+            <span>🔨 Descargar Inventario Herramientas</span>
+            <span>⬇️</span>
+          </button>
+
+          <button type="button" onclick="window.exportarCSV('vehiculos')" class="flex items-center justify-between p-3.5 bg-slate-50 hover:bg-purple-50 border rounded-xl text-xs font-bold text-slate-700 hover:text-purple-900 transition">
+            <span>🚐 Descargar Flota y Furgonetas</span>
+            <span>⬇️</span>
+          </button>
+        </div>
+      </div>
     <!-- 2.10: CALENDARIO OPERATIVO Y LOGÍSTICA -->
     <div id="vista-calendario" class="hidden">
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
@@ -3204,6 +3242,118 @@
         }
       };
     }
+
+    // ========================================================
+    // MOTOR DE EXPORTACIÓN Y BACKUP CSV (COMPATIBLE EXCEL)
+    // ========================================================
+    window.exportarCSV = (tipo) => {
+      let columnas = [];
+      let filas = [];
+      const fechaHoy = new Date().toISOString().split("T")[0];
+      let nombreArchivo = "gesyweb-" + tipo + "-" + fechaHoy + ".csv";
+
+      if (tipo === "obras") {
+        columnas = ["Nombre Obra", "Cliente", "Direccion", "Estado", "Fecha Inicio", "Fecha Fin", "Base Imponible", "Tipo Impuesto %", "Total Presupuesto", "Telefonos", "Operarios Asignados"];
+        filas = cacheObras.map(o => [
+          o.nombre || "",
+          o.cliente || "",
+          o.direccion || "",
+          o.estado || "",
+          o.fechaInicio || "",
+          o.fechaFin || "",
+          o.baseImponible || 0,
+          o.tipoImpuesto || 0,
+          o.totalPresupuesto || 0,
+          [o.tel1, o.tel2, o.tel3].filter(Boolean).join(" / "),
+          (o.operarios || []).join(", ")
+        ]);
+      } else if (tipo === "clientes") {
+        columnas = ["Nombre / Razon Social", "CIF / NIF", "Telefono", "Email", "Direccion", "Notas Comerciales"];
+        filas = cacheClientes.map(c => [
+          c.nombre || "",
+          c.cif || "",
+          c.telefono || "",
+          c.email || "",
+          c.direccion || "",
+          c.notas || ""
+        ]);
+      } else if (tipo === "incidencias") {
+        columnas = ["Titulo", "Obra", "Prioridad", "Estado", "Operario Asignado", "Fecha Cita", "Direccion", "Telefonos", "Firmado por", "DNI Firmante"];
+        filas = cacheIncidencias.map(i => [
+          i.titulo || "",
+          i.obra || "",
+          i.prioridad || "",
+          i.estado || "",
+          i.operario || "",
+          i.fechaHora || "",
+          i.direccion || "",
+          [i.tel1, i.tel2].filter(Boolean).join(" / "),
+          i.firmanteNombre || "",
+          i.firmanteDni || ""
+        ]);
+      } else if (tipo === "operarios") {
+        columnas = ["Nombre", "DNI", "Oficio", "Telefono", "Fecha Alta", "Cursos PRL", "Fecha Reconocimiento Medico", "Tallas", "EPIs Entregados"];
+        filas = cacheOperarios.map(op => [
+          op.nombre || "",
+          op.dni || "",
+          op.oficio || "",
+          op.telefono || "",
+          op.fechaAlta || "",
+          op.cursos || "",
+          op.fechaMedico || "",
+          op.tallas || "",
+          op.epis || ""
+        ]);
+      } else if (tipo === "herramientas") {
+        columnas = ["Codigo Interno", "Nombre / Modelo", "Categoria", "Numero Serie", "Estado", "Ubicacion", "Operario Custodia", "Observaciones"];
+        filas = cacheHerramientas.map(h => [
+          h.codigo || "",
+          h.nombre || "",
+          h.categoria || "",
+          h.serie || "",
+          h.estado || "",
+          h.ubicacion || "",
+          h.operarioCustodia || "",
+          h.observaciones || ""
+        ]);
+      } else if (tipo === "vehiculos") {
+        columnas = ["Matricula", "Modelo / Furgoneta", "Estado", "Conductor Asignado", "Vencimiento ITV", "Proxima Revision", "Observaciones"];
+        filas = cacheVehiculos.map(v => [
+          v.matricula || "",
+          v.modelo || "",
+          v.estado || "",
+          v.conductor || "",
+          v.fechaItv || "",
+          v.fechaRevision || "",
+          v.observaciones || ""
+        ]);
+      }
+
+      if (filas.length === 0) {
+        alert("No hay registros en " + tipo + " para exportar.");
+        return;
+      }
+
+      // Generar contenido CSV separado por punto y coma (estándar español de Excel)
+      const escapar = (val) => {
+        const texto = String(val == null ? "" : val).replace(/"/g, '""');
+        return '"' + texto + '"';
+      };
+
+      let csvContenido = "\uFEFF"; // BOM UTF-8 para que Excel detecte tildes y eñes
+      csvContenido += columnas.map(escapar).join(";") + "\r\n";
+      filas.forEach(f => {
+        csvContenido += f.map(escapar).join(";") + "\r\n";
+      });
+
+      const blob = new Blob([csvContenido], { type: "text/csv;charset=utf-8;" });
+      const enlace = document.createElement("a");
+      enlace.href = URL.createObjectURL(blob);
+      enlace.setAttribute("download", nombreArchivo);
+      document.body.appendChild(enlace);
+      enlace.click();
+      document.body.removeChild(enlace);
+    };
   </script>
 </body>
 </html>
