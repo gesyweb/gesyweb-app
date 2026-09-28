@@ -1,0 +1,18 @@
+{
+  "name": "Gesyweb ERP — Control de Obras",
+  "short_name": "Gesyweb",
+  "description": "Control de obras, logística, flota e intervenciones técnicas.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23f59e0b'/><text x='50' y='68' font-size='50' font-weight='900' font-family='sans-serif' text-anchor='middle' fill='%230f172a'>G</text></svg>",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
