@@ -100,7 +100,7 @@
       </header>
 
       <!-- KPI Cards -->
-      <section class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <section class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
           <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center text-xl shrink-0">💶</div>
           <div>
@@ -130,6 +130,14 @@
           <div>
             <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Equipo Activo</span>
             <p id="dash-operarios-total" class="text-xl font-black text-slate-900 mt-0.5">0</p>
+          </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4 cursor-pointer hover:shadow-md transition" onclick="window.cambiarVista('vehiculos')">
+          <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-800 flex items-center justify-center text-xl shrink-0">🚐</div>
+          <div>
+            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Furgonetas / Flota</span>
+            <p id="dash-vehiculos-total" class="text-xl font-black text-slate-900 mt-0.5">0</p>
           </div>
         </div>
       </section>
@@ -1271,7 +1279,12 @@
 
       const elOp = document.getElementById("dash-operarios-total");
       if (elOp) elOp.textContent = cacheOperarios.length;
-
+      // 3.1 Flota y Vehículos
+      const elVeh = document.getElementById("dash-vehiculos-total");
+      if (elVeh) {
+        const activas = cacheVehiculos.filter(v => v.estado === "Operativa").length;
+        elVeh.textContent = cacheVehiculos.length > 0 ? activas + ' / ' + cacheVehiculos.length : '0';
+      }
       const cIncDash = document.getElementById("dash-lista-incidencias");
       if (cIncDash) {
         if (incPendientes.length === 0) {
@@ -3148,6 +3161,7 @@
       if (typeof window.renderizarCalendario === 'function') {
         window.renderizarCalendario();
       }
+      window.actualizarDashboard();
     });
 
     window.abrirModalNuevoVehiculo = () => {
