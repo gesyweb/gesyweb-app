@@ -8,12 +8,12 @@
   <style>
     @media print {
       @page { margin: 10mm 12mm; size: A4 portrait; }
-      aside, header, #btn-volver-obras, #btn-volver-clientes, #btn-volver-incidencias, #btn-volver-operarios, #acciones-ficha, #acciones-ficha-cliente, #acciones-ficha-incidencia, #acciones-ficha-operario, .no-print {
+      aside, header, #btn-volver-obras, #btn-volver-clientes, #btn-volver-incidencias, #acciones-ficha, #acciones-ficha-cliente, #acciones-ficha-incidencia, .no-print {
         display: none !important;
       }
-      body { background-color: white !important; color: #0f172a !important; font-size: 9.5pt !important; line-height: 1.25 !important; }
+      body { background-color: white !important; color: #5685f3 !important; font-size: 9.5pt !important; line-height: 1.25 !important; }
       main { padding: 0 !important; margin: 0 !important; width: 100% !important; }
-      #vista-detalle-obra, #vista-detalle-cliente, #vista-detalle-incidencia, #vista-detalle-operario { display: block !important; }
+      #vista-detalle-obra, #vista-detalle-cliente, #vista-detalle-incidencia { display: block !important; }
       .card-print { border: 1px solid #cbd5e1 !important; padding: 12px 16px !important; box-shadow: none !important; border-radius: 6px !important; }
       .print-title { font-size: 15pt !important; line-height: 1.15 !important; }
       .print-subtitle { font-size: 11pt !important; }
@@ -60,7 +60,7 @@
           <span>🔨</span> Herramientas
         </button>
         <button id="nav-ajustes" onclick="window.cambiarVista('ajustes')" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
-          <span>⚙️</span> Mi Empresa (Marca Blanca)
+          <span>⚙️</span> Mi Empresa 
         </button>
       </nav>
     </div>
@@ -75,7 +75,6 @@
   <!-- [BLOQUE 2]: VISTAS PRINCIPALES (HTML)                   -->
   <!-- ======================================================== -->
   <main class="flex-1 p-6 md:p-10 overflow-y-auto">
-
     <!-- 2.0: DASHBOARD / CUADRO DE MANDO -->
     <div id="vista-dashboard">
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
@@ -130,6 +129,7 @@
 
       <!-- Tableros de Actividad Urgente -->
       <section class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Incidencias Pendientes -->
         <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
           <div class="flex justify-between items-center pb-3 border-b border-slate-100">
             <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
@@ -142,6 +142,7 @@
           </div>
         </div>
 
+        <!-- Obras Activas -->
         <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
           <div class="flex justify-between items-center pb-3 border-b border-slate-100">
             <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
@@ -155,7 +156,6 @@
         </div>
       </section>
     </div>
-
     <!-- 2.1: OBRAS -->
     <div id="vista-obras" class="hidden">
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
@@ -828,7 +828,8 @@
     </div>
   </div>
 
-  <!-- 3.4: MODAL OPERARIO / EXPEDIENTE TÉCNICO -->
+  <!-- 3.4: MODAL OPERARIO -->
+ <!-- 3.4: MODAL OPERARIO / EXPEDIENTE TÉCNICO -->
   <div id="modal-operario" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 z-50 overflow-y-auto">
     <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-2xl w-full shadow-2xl my-8 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center pb-4 border-b border-slate-100">
@@ -871,7 +872,7 @@
             </div>
             <div>
               <label class="block text-xs font-semibold text-slate-600 mb-1">Teléfono Directo *</label>
-              <input id="input-tel-operario" type="tel" placeholder="Ej. 655123456" class="w-full px-3.5 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-sky-500">
+              <input id="input-tel-operario" type="tel" placeholder="Ej. 655123456" class="w-full px-3 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-sky-500">
             </div>
             <div>
               <label class="block text-xs font-semibold text-slate-600 mb-1">Fecha de Alta</label>
@@ -1019,30 +1020,7 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Colecciones y cachés globales
-    const colObras = collection(db, "proyectos");
-    const colClientes = collection(db, "clientes");
-    const colIncidencias = collection(db, "incidencias");
-    const colOperarios = collection(db, "operarios");
-    const colHerramientas = collection(db, "herramientas");
-    const docConfigEmpresa = doc(db, "configuracion", "empresa");
-
-    let cacheObras = [];
-    let cacheClientes = [];
-    let cacheIncidencias = [];
-    let cacheOperarios = [];
-    let cacheHerramientas = [];
-
-    let datosEmpresaActual = {
-      nombre: "Gesyweb Reformas",
-      cif: "",
-      telefono: "",
-      email: "",
-      direccion: "",
-      logo: ""
-    };
-
-    const vistas = {
+   const vistas = {
       dashboard: document.getElementById("vista-dashboard"),
       obras: document.getElementById("vista-obras"),
       detalleObra: document.getElementById("vista-detalle-obra"),
@@ -1083,86 +1061,6 @@
         }
       });
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
-
-    // Función del Dashboard definida desde el inicio para evitar errores de sincronización
-    window.actualizarDashboard = () => {
-      const totalPresupuestado = cacheObras.reduce((acc, curr) => acc + (Number(curr.totalPresupuesto) || Number(curr.presupuesto) || 0), 0);
-      const obrasActivas = cacheObras.filter(o => o.estado === "En curso");
-
-      const elPresupuesto = document.getElementById("dash-total-presupuesto");
-      const elObrasActivas = document.getElementById("dash-obras-activas");
-      if (elPresupuesto) elPresupuesto.textContent = totalPresupuestado.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €';
-      if (elObrasActivas) elObrasActivas.textContent = obrasActivas.length;
-
-      const incPendientes = cacheIncidencias.filter(i => i.estado === "Abierta" || i.estado === "En curso");
-      const elInc = document.getElementById("dash-incidencias-abiertas");
-      if (elInc) elInc.textContent = incPendientes.length;
-
-      const elOp = document.getElementById("dash-operarios-total");
-      if (elOp) elOp.textContent = cacheOperarios.length;
-
-      const cIncDash = document.getElementById("dash-lista-incidencias");
-      if (cIncDash) {
-        if (incPendientes.length === 0) {
-          cIncDash.innerHTML = '<p class="text-xs text-slate-400 italic bg-slate-50 p-3 rounded-lg border">No hay incidencias pendientes de resolver. ¡Todo al día!</p>';
-        } else {
-          cIncDash.innerHTML = incPendientes.slice(0, 4).map(i => {
-            let bUrg = i.prioridad === "Urgente" ? "bg-rose-100 text-rose-800" : "bg-amber-100 text-amber-800";
-            return '<div class="flex items-center justify-between p-3 bg-slate-50 border rounded-xl hover:bg-rose-50/50 transition cursor-pointer" onclick="window.abrirDetalleIncidencia(\'' + i.id + '\')">' +
-              '<div>' +
-                '<div class="flex items-center gap-2 mb-0.5">' +
-                  '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold ' + bUrg + '">' + i.prioridad + '</span>' +
-                  '<span class="text-xs font-bold text-slate-800">' + i.titulo + '</span>' +
-                '</div>' +
-                '<p class="text-[11px] text-slate-500">🏗️ ' + i.obra + ' • 👷 ' + (i.operario || 'Sin asignar') + '</p>' +
-              '</div>' +
-              '<span class="text-xs text-rose-600 font-bold">Ver →</span>' +
-            '</div>';
-          }).join('');
-        }
-      }
-
-      const cObrasDash = document.getElementById("dash-lista-obras");
-      if (cObrasDash) {
-        if (obrasActivas.length === 0) {
-          cObrasDash.innerHTML = '<p class="text-xs text-slate-400 italic bg-slate-50 p-3 rounded-lg border">No hay obras en ejecución en este momento.</p>';
-        } else {
-          cObrasDash.innerHTML = obrasActivas.slice(0, 4).map(o => {
-            const precio = (Number(o.totalPresupuesto) || Number(o.presupuesto) || 0).toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €';
-            return '<div class="flex items-center justify-between p-3 bg-slate-50 border rounded-xl hover:bg-amber-50/50 transition cursor-pointer" onclick="window.abrirDetalleObra(\'' + o.id + '\')">' +
-              '<div>' +
-                '<h4 class="text-xs sm:text-sm font-bold text-slate-900">' + o.nombre + '</h4>' +
-                '<p class="text-[11px] text-slate-500">👤 ' + (o.cliente || 'Particular') + ' • 📍 ' + (o.direccion || 'Sin dirección') + '</p>' +
-              '</div>' +
-              '<div class="text-right">' +
-                '<span class="text-xs font-black text-slate-800">' + precio + '</span>' +
-                '<p class="text-[10px] text-amber-700 font-semibold">Detalle →</p>' +
-              '</div>' +
-            '</div>';
-          }).join('');
-        }
-      }
-    };
-
-    window.generarCabeceraMarcaBlanca = () => {
-      let logoHtml = '<div class="w-10 h-10 rounded-lg bg-amber-500 flex items-center justify-center font-black text-slate-950 text-xl">G</div>';
-      if (datosEmpresaActual.logo) {
-        logoHtml = '<img src="' + datosEmpresaActual.logo + '" class="max-h-12 w-auto object-contain">';
-      }
-      return '<div class="flex justify-between items-center pb-3 border-b-2 border-slate-800 mb-4">' +
-        '<div class="flex items-center gap-3">' +
-          logoHtml +
-          '<div>' +
-            '<h2 class="text-lg font-black text-slate-900 leading-tight">' + (datosEmpresaActual.nombre || 'Gesyweb') + '</h2>' +
-            '<p class="text-[11px] text-slate-500">' + (datosEmpresaActual.cif ? 'CIF: ' + datosEmpresaActual.cif + ' • ' : '') + (datosEmpresaActual.direccion || '') + '</p>' +
-          '</div>' +
-        '</div>' +
-        '<div class="text-right text-[11px] text-slate-600">' +
-          (datosEmpresaActual.telefono ? '<p>📞 ' + datosEmpresaActual.telefono + '</p>' : '') +
-          (datosEmpresaActual.email ? '<p>✉️ ' + datosEmpresaActual.email + '</p>' : '') +
-        '</div>' +
-      '</div>';
     };
 
     let archivoBase64Actual = null;
@@ -1346,6 +1244,8 @@
       };
     }
 
+    const colObras = collection(db, "proyectos");
+    let cacheObras = [];
     let filtroEstadoActual = 'todas';
     let obraSeleccionadaActual = null;
 
@@ -1489,7 +1389,7 @@
         '<div class="flex flex-col sm:flex-row justify-between items-start gap-2 pb-3 border-b border-slate-200">' +
           '<div>' +
             '<div class="flex items-center gap-2">' +
-              '<span class="px-2.5 py-0.5 rounded-full text-xs font-semibold ' + badge + '">' + obra.estado + '</span>' +
+              '<span class="px-2 py-0.5 rounded-full text-xs font-semibold ' + badge + '">' + obra.estado + '</span>' +
               '<span class="text-xs text-slate-400 font-mono">PRESUPUESTO: PR-' + obra.id.substring(0, 6).toUpperCase() + '</span>' +
             '</div>' +
             '<h1 class="print-title text-xl sm:text-2xl font-extrabold text-slate-900 mt-1">' + obra.nombre + '</h1>' +
@@ -1617,6 +1517,7 @@
       const selectObraHerramienta = document.getElementById("select-obra-herramienta");
       if (selectObraIncidencia) selectObraIncidencia.innerHTML = '<option value="">Selecciona una obra...</option>';
       if (selectObraHerramienta) selectObraHerramienta.innerHTML = '<option value="Almacén central">📦 Almacén central</option>';
+      window.actualizarDashboard();
 
       snap.forEach(docSnap => {
         const data = { id: docSnap.id, ...docSnap.data() };
@@ -1632,7 +1533,6 @@
       });
 
       renderizarObras();
-      window.actualizarDashboard();
 
       if (obraSeleccionadaActual && !vistas.detalleObra.classList.contains("hidden")) {
         const actualizada = cacheObras.find(o => o.id === obraSeleccionadaActual.id);
@@ -1733,6 +1633,8 @@
     // ========================================================
     // [BLOQUE 6]: LÓGICA JS: CLIENTES                         -->
     // ========================================================
+    const colClientes = collection(db, "clientes");
+    let cacheClientes = [];
     let clienteSeleccionadoActual = null;
 
     function renderizarClientes() {
@@ -1940,10 +1842,16 @@
     // ========================================================
     // [BLOQUE 7]: LÓGICA JS: INCIDENCIAS, FIRMA Y EQUIPO      -->
     // ========================================================
+    const colIncidencias = collection(db, "incidencias");
+    const colOperarios = collection(db, "operarios");
+    const colHerramientas = collection(db, "herramientas");
+
+    let cacheIncidencias = [];
+    let cacheOperarios = [];
+    let cacheHerramientas = [];
     let filtroIncidenciasActual = 'todas';
     let filtroHerramientasActual = 'todas';
     let incidenciaSeleccionadaActual = null;
-    let operarioSeleccionadoActual = null;
 
     // Canvas de Firma
     const canvas = document.getElementById("canvas-firma");
@@ -2097,13 +2005,13 @@
         cacheIncidencias.push({ id: docSnap.id, ...docSnap.data() });
       });
       renderizarIncidencias();
-      window.actualizarDashboard();
 
       if (incidenciaSeleccionadaActual && !vistas.detalleIncidencia.classList.contains("hidden")) {
         const actualizada = cacheIncidencias.find(i => i.id === incidenciaSeleccionadaActual.id);
         if (actualizada) window.abrirDetalleIncidencia(actualizada.id);
       }
     });
+    window.actualizarDashboard();
 
     window.abrirDetalleIncidencia = (id) => {
       const inc = cacheIncidencias.find(i => i.id === id);
@@ -2331,9 +2239,11 @@
     }
 
     // OPERARIOS
+    // OPERARIOS LOGIC
     const listaOperariosEl = document.getElementById("lista-operarios");
     const contenedorCheckboxes = document.getElementById("contenedor-checkbox-operarios");
     const selectOperarioIncidencia = document.getElementById("select-operario-incidencia");
+    let operarioSeleccionadoActual = null;
 
     function renderizarOperarios() {
       if (listaOperariosEl) listaOperariosEl.innerHTML = "";
@@ -2361,7 +2271,10 @@
           selectOperarioIncidencia.appendChild(optInc);
         }
 
-        const herramientasAsignadas = cacheHerramientas.filter(h => h.operarioCustodia === d.nombre);
+        // Conteo de herramientas que tiene asignadas
+        const herramientasAsignadas = cacheHerramientas.filter(h => 
+  h.operarioCustodia && d.nombre && h.operarioCustodia.trim().toLowerCase() === d.nombre.trim().toLowerCase()
+);
 
         if (listaOperariosEl) {
           const card = document.createElement("div");
@@ -2393,14 +2306,14 @@
         cacheOperarios.push({ id: docSnap.id, ...docSnap.data() });
       });
       renderizarOperarios();
-      window.actualizarDashboard();
 
       if (operarioSeleccionadoActual && !vistas.detalleOperario.classList.contains("hidden")) {
         const actualizado = cacheOperarios.find(o => o.id === operarioSeleccionadoActual.id);
         if (actualizado) window.abrirDetalleOperario(actualizado.id);
       }
     });
-
+    window.actualizarDashboard();
+    // Ficha detallada de operario
     window.abrirDetalleOperario = (id) => {
       const op = cacheOperarios.find(o => o.id === id);
       if (!op) return;
@@ -2477,6 +2390,7 @@
       cambiarVista('detalleOperario');
     };
 
+    // Apertura modal alta
     const btnAbrirOp = document.getElementById("btn-abrir-modal-operario");
     if (btnAbrirOp) {
       btnAbrirOp.onclick = () => {
@@ -2496,6 +2410,7 @@
       };
     }
 
+    // Editar operario
     const btnEditOpAct = document.getElementById("btn-editar-operario-actual");
     if (btnEditOpAct) {
       btnEditOpAct.onclick = () => {
@@ -2518,6 +2433,7 @@
       };
     }
 
+    // Borrar operario
     const btnBorrarOpAct = document.getElementById("btn-borrar-operario-actual");
     if (btnBorrarOpAct) {
       btnBorrarOpAct.onclick = async () => {
@@ -2528,6 +2444,7 @@
       };
     }
 
+    // Guardar / Actualizar operario
     const btnGuardarOp = document.getElementById("btn-guardar-operario");
     if (btnGuardarOp) {
       btnGuardarOp.onclick = async () => {
@@ -2628,6 +2545,8 @@
         cacheHerramientas.push({ id: docSnap.id, ...docSnap.data() });
       });
       renderizarHerramientas();
+      renderizarOperarios(); // <-- Esto actualiza el contador de las tarjetas al instante
+      window.actualizarDashboard();
     });
 
     const btnAbrirHer = document.getElementById("btn-abrir-modal-herramienta");
@@ -2727,8 +2646,19 @@
       };
     }
 
-    // MARCA BLANCA / AJUSTES DE EMPRESA
+    // MARCA BLANCA / AJUSTES DE EMPRESA (FIRESTORE)
+    const docConfigEmpresa = doc(db, "configuracion", "empresa");
+    let datosEmpresaActual = {
+      nombre: "Gesyweb Reformas",
+      cif: "",
+      telefono: "",
+      email: "",
+      direccion: "",
+      logo: ""
+    };
+
     let logoTempBase64 = null;
+
     const inLogo = document.getElementById("input-logo-empresa");
     if (inLogo) {
       inLogo.addEventListener("change", (e) => {
@@ -2796,7 +2726,7 @@
 
           datosEmpresaActual = dataToSave;
           alert("✓ Datos de empresa y logotipo guardados correctamente.");
-          window.cambiarVista('dashboard');
+          window.cambiarVista('obras');
         } catch (error) {
           console.error("Error guardando empresa:", error);
           alert("Hubo un error al guardar los datos.");
@@ -2804,9 +2734,96 @@
       };
     }
 
+    window.generarCabeceraMarcaBlanca = () => {
+      let logoHtml = '<div class="w-10 h-10 rounded-lg bg-amber-500 flex items-center justify-center font-black text-slate-950 text-xl">G</div>';
+      if (datosEmpresaActual.logo) {
+        logoHtml = '<img src="' + datosEmpresaActual.logo + '" class="max-h-12 w-auto object-contain">';
+      }
+      return '<div class="flex justify-between items-center pb-3 border-b-2 border-slate-800 mb-4">' +
+        '<div class="flex items-center gap-3">' +
+          logoHtml +
+          '<div>' +
+            '<h2 class="text-lg font-black text-slate-900 leading-tight">' + (datosEmpresaActual.nombre || 'Gesyweb') + '</h2>' +
+            '<p class="text-[11px] text-slate-500">' + (datosEmpresaActual.cif ? 'CIF: ' + datosEmpresaActual.cif + ' • ' : '') + (datosEmpresaActual.direccion || '') + '</p>' +
+          '</div>' +
+        '</div>' +
+        '<div class="text-right text-[11px] text-slate-600">' +
+          (datosEmpresaActual.telefono ? '<p>📞 ' + datosEmpresaActual.telefono + '</p>' : '') +
+          (datosEmpresaActual.email ? '<p>✉️ ' + datosEmpresaActual.email + '</p>' : '') +
+        '</div>' +
+      '</div>';
+    };
+
     window.borrarRegistro = async (coleccion, id) => {
       if (confirm("¿Estás seguro de que deseas eliminar este registro?")) {
         await deleteDoc(doc(db, coleccion, id));
+      }
+    };
+
+    // ========================================================
+    // DASHBOARD / CUADRO DE MANDO MOTOR
+    // ========================================================
+    window.actualizarDashboard = () => {
+      // 1. Métricas de Obras
+      const totalPresupuestado = cacheObras.reduce((acc, curr) => acc + (Number(curr.totalPresupuesto) || Number(curr.presupuesto) || 0), 0);
+      const obrasActivas = cacheObras.filter(o => o.estado === "En curso");
+
+      const elPresupuesto = document.getElementById("dash-total-presupuesto");
+      const elObrasActivas = document.getElementById("dash-obras-activas");
+      if (elPresupuesto) elPresupuesto.textContent = totalPresupuestado.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €';
+      if (elObrasActivas) elObrasActivas.textContent = obrasActivas.length;
+
+      // 2. Métricas de Incidencias
+      const incPendientes = cacheIncidencias.filter(i => i.estado === "Abierta" || i.estado === "En curso");
+      const elInc = document.getElementById("dash-incidencias-abiertas");
+      if (elInc) elInc.textContent = incPendientes.length;
+
+      // 3. Operarios
+      const elOp = document.getElementById("dash-operarios-total");
+      if (elOp) elOp.textContent = cacheOperarios.length;
+
+      // 4. Lista Incidencias Urgentes / Pendientes
+      const cIncDash = document.getElementById("dash-lista-incidencias");
+      if (cIncDash) {
+        if (incPendientes.length === 0) {
+          cIncDash.innerHTML = '<p class="text-xs text-slate-400 italic bg-slate-50 p-3 rounded-lg border">No hay incidencias pendientes de resolver. ¡Todo al día!</p>';
+        } else {
+          cIncDash.innerHTML = incPendientes.slice(0, 4).map(i => {
+            let bUrg = i.prioridad === "Urgente" ? "bg-rose-100 text-rose-800" : "bg-amber-100 text-amber-800";
+            return '<div class="flex items-center justify-between p-3 bg-slate-50 border rounded-xl hover:bg-rose-50/50 transition cursor-pointer" onclick="window.abrirDetalleIncidencia(\'' + i.id + '\')">' +
+              '<div>' +
+                '<div class="flex items-center gap-2 mb-0.5">' +
+                  '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold ' + bUrg + '">' + i.prioridad + '</span>' +
+                  '<span class="text-xs font-bold text-slate-800">' + i.titulo + '</span>' +
+                '</div>' +
+                '<p class="text-[11px] text-slate-500">🏗️ ' + i.obra + ' • 👷 ' + (i.operario || 'Sin asignar') + '</p>' +
+              '</div>' +
+              '<span class="text-xs text-rose-600 font-bold">Ver →</span>' +
+            '</div>';
+          }).join('');
+        }
+      }
+
+      // 5. Lista Obras Activas
+      const cObrasDash = document.getElementById("dash-lista-obras");
+      if (cObrasDash) {
+        if (obrasActivas.length === 0) {
+          cObrasDash.innerHTML = '<p class="text-xs text-slate-400 italic bg-slate-50 p-3 rounded-lg border">No hay obras en ejecución en este momento.</p>';
+        } else {
+          cObrasDash.innerHTML = obrasActivas.slice(0, 4).map(o => {
+            const precio = (Number(o.totalPresupuesto) || Number(o.presupuesto) || 0).toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €';
+            return '<div class="flex items-center justify-between p-3 bg-slate-50 border rounded-xl hover:bg-amber-50/50 transition cursor-pointer" onclick="window.abrirDetalleObra(\'' + o.id + '\')">' +
+              '<div>' +
+                '<h4 class="text-xs sm:text-sm font-bold text-slate-900">' + o.nombre + '</h4>' +
+                '<p class="text-[11px] text-slate-500">👤 ' + (o.cliente || 'Particular') + ' • 📍 ' + (o.direccion || 'Sin dirección') + '</p>' +
+              '</div>' +
+              '<div class="text-right">' +
+                '<span class="text-xs font-black text-slate-800">' + precio + '</span>' +
+                '<p class="text-[10px] text-amber-700 font-semibold">Detalle →</p>' +
+              '</div>' +
+            '</div>';
+          }).join('');
+        }
       }
     };
   </script>
