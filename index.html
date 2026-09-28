@@ -65,6 +65,9 @@
         <button id="nav-calendario" onclick="window.cambiarVista('calendario')" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
           <span>📅</span> Calendario Operativo
         </button>
+        <button id="nav-vehiculos" onclick="window.cambiarVista('vehiculos')" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
+          <span>🚐</span> Flota y Furgonetas
+        </button>
       </nav>
     </div>
 
@@ -401,6 +404,22 @@
 
       <section id="lista-herramientas" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <p class="text-sm text-slate-400">Cargando inventario...</p>
+      </section>
+    </div>
+    <!-- 2.8.1: FLOTA Y FURGONETAS -->
+    <div id="vista-vehiculos" class="hidden">
+      <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
+        <div>
+          <h2 class="text-2xl font-bold text-slate-900">Control de Flota y Vehículos</h2>
+          <p class="text-sm text-slate-500">Asignación de furgonetas a conductores, vencimientos de ITV y mantenimiento.</p>
+        </div>
+        <button id="btn-abrir-modal-vehiculo" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2.5 rounded-lg shadow-sm transition">
+          + Alta Vehículo / Furgoneta
+        </button>
+      </header>
+
+      <section id="lista-vehiculos" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <p class="text-sm text-slate-400">Cargando flota...</p>
       </section>
     </div>
 
@@ -1038,6 +1057,72 @@
         </div>
       </div>
     </div>
+    <!-- 3.6: MODAL VEHÍCULO / FURGONETA -->
+  <div id="modal-vehiculo" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 z-50 overflow-y-auto">
+    <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl my-8">
+      <div class="flex justify-between items-center pb-4 border-b border-slate-100">
+        <div>
+          <h3 id="titulo-modal-vehiculo" class="text-lg font-bold text-slate-900">Registro de Furgoneta / Vehículo</h3>
+          <p class="text-xs text-slate-500">Datos del furgón, conductor asignado y control preventivo de ITV.</p>
+        </div>
+        <button type="button" onclick="document.getElementById('modal-vehiculo').style.display='none'" class="text-slate-400 hover:text-slate-700 text-2xl font-bold">&times;</button>
+      </div>
+
+      <div class="mt-6 space-y-4">
+        <input type="hidden" id="edit-vehiculo-id" value="">
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Matrícula *</label>
+            <input id="input-matricula-vehiculo" type="text" placeholder="Ej. 1234-LMN" class="w-full px-3.5 py-2 border rounded-lg text-sm uppercase font-mono font-bold outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Estado</label>
+            <select id="input-estado-vehiculo" class="w-full px-3.5 py-2 border rounded-lg text-sm bg-white outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="Operativa" selected>🟢 Operativa / En ruta</option>
+              <option value="En taller">🟡 En taller / Revisión</option>
+              <option value="Inactiva">🔴 Fuera de servicio</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Marca, Modelo y Tipo *</label>
+          <input id="input-modelo-vehiculo" type="text" placeholder="Ej. Renault Master L2H2 / Citroën Berlingo" class="w-full px-3.5 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Operario / Conductor Habitual</label>
+          <select id="select-operario-vehiculo" class="w-full px-3.5 py-2 border rounded-lg text-sm bg-white outline-none focus:ring-2 focus:ring-indigo-500">
+            <option value="Sin asignar">Sin asignar / Rotación general</option>
+          </select>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-3 bg-slate-50 rounded-xl border border-slate-200">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 mb-1">Vencimiento ITV</label>
+            <input id="input-itv-vehiculo" type="date" class="w-full px-2.5 py-1.5 border rounded-lg text-xs bg-white outline-none">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 mb-1">Próxima Revisión / Aceite</label>
+            <input id="input-revision-vehiculo" type="date" class="w-full px-2.5 py-1.5 border rounded-lg text-xs bg-white outline-none">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Observaciones / Tarjeta de Combustible / Seguro</label>
+          <textarea id="input-obs-vehiculo" rows="2" placeholder="Póliza de seguro, tarjeta Solred, kilometraje..." class="w-full px-3.5 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+        </div>
+
+        <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
+          <button type="button" onclick="document.getElementById('modal-vehiculo').style.display='none'" class="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg">Cancelar</button>
+          <button type="button" id="btn-guardar-vehiculo" class="px-5 py-2 text-sm bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg shadow-sm transition">
+            Guardar Furgoneta
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
   </div>
 
   <!-- ======================================================== -->
@@ -1067,6 +1152,8 @@
     const colOperarios = collection(db, "operarios");
     const colHerramientas = collection(db, "herramientas");
     const docConfigEmpresa = doc(db, "configuracion", "empresa");
+    const colVehiculos = collection(db, "vehiculos");
+    let cacheVehiculos = [];
 
     let cacheObras = [];
     let cacheClientes = [];
@@ -1095,6 +1182,7 @@
       operarios: document.getElementById("vista-operarios"),
       detalleOperario: document.getElementById("vista-detalle-operario"),
       herramientas: document.getElementById("vista-herramientas"),
+      vehiculos: document.getElementById("vista-vehiculos"),
       ajustes: document.getElementById("vista-ajustes")
     };
 
@@ -1106,6 +1194,7 @@
       incidencias: document.getElementById("nav-incidencias"),
       operarios: document.getElementById("nav-operarios"),
       herramientas: document.getElementById("nav-herramientas"),
+      vehiculos: document.getElementById("nav-vehiculos"),
       ajustes: document.getElementById("nav-ajustes")
     };
 
@@ -2942,12 +3031,181 @@
             eventosHtml += '<div onclick="window.abrirDetalleOperario(\'' + op.id + '\')" class="p-1 rounded bg-sky-100 text-sky-900 border border-sky-200 text-[10px] font-bold truncate cursor-pointer hover:opacity-80" title="Reconocimiento médico de ' + op.nombre + '">🩺 Médico: ' + op.nombre + '</div>';
           }
         });
+        // 4. Vencimiento ITV de Furgonetas
+        cacheVehiculos.forEach(v => {
+          if (v.fechaItv === fechaStr) {
+            eventosHtml += '<div onclick="window.cambiarVista(\'vehiculos\')" class="p-1 rounded bg-purple-100 text-purple-900 border border-purple-200 text-[10px] font-bold truncate cursor-pointer hover:opacity-80" title="ITV Furgoneta ' + v.matricula + '">🚐 ITV: ' + v.matricula + '</div>';
+          }
+        });
 
         eventosHtml += '</div>';
         celda.innerHTML = cabeceraDia + eventosHtml;
         rejilla.appendChild(celda);
       }
     };
+
+    // ========================================================
+    // LOGÍSTICA DE FLOTA Y VEHÍCULOS
+    // ========================================================
+    const listaVehiculosEl = document.getElementById("lista-vehiculos");
+
+    function renderizarVehiculos() {
+      if (!listaVehiculosEl) return;
+      listaVehiculosEl.innerHTML = "";
+
+      if (cacheVehiculos.length === 0) {
+        listaVehiculosEl.innerHTML = '<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay furgonetas o vehículos registrados.</p></div>';
+        return;
+      }
+
+      cacheVehiculos.forEach((v) => {
+        let badgeEstado = v.estado === "Operativa" ? "bg-emerald-100 text-emerald-800" : v.estado === "En taller" ? "bg-amber-100 text-amber-800" : "bg-rose-100 text-rose-800";
+
+        // Comprobar si la ITV está próxima (menos de 30 días) o vencida
+        let alertaItv = '';
+        if (v.fechaItv) {
+          const hoy = new Date();
+          const itv = new Date(v.fechaItv);
+          const diffDias = Math.ceil((itv - hoy) / (1000 * 60 * 60 * 24));
+          if (diffDias < 0) {
+            alertaItv = '<span class="text-rose-600 font-bold">⚠️ ITV VENCIDA</span>';
+          } else if (diffDias <= 30) {
+            alertaItv = '<span class="text-amber-600 font-bold">⚠️ ITV en ' + diffDias + ' días</span>';
+          } else {
+            alertaItv = '<span class="text-slate-600">Vence: ' + v.fechaItv + '</span>';
+          }
+        } else {
+          alertaItv = '<span class="text-slate-400 italic">Sin fecha</span>';
+        }
+
+        const card = document.createElement("div");
+        card.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between hover:shadow-md transition";
+        card.innerHTML = '<div>' +
+            '<div class="flex justify-between items-start mb-2">' +
+              '<span class="px-2.5 py-0.5 rounded-full text-xs font-semibold ' + badgeEstado + '">' + (v.estado || 'Operativa') + '</span>' +
+              '<span class="text-sm font-mono font-black text-slate-900 bg-slate-100 px-2 py-0.5 rounded border border-slate-300">' + v.matricula + '</span>' +
+            '</div>' +
+            '<h3 class="text-base font-bold text-slate-900 mt-2 leading-snug">🚐 ' + v.modelo + '</h3>' +
+            '<p class="text-xs text-slate-500 mt-1">👤 <strong>Conductor habitual:</strong> ' + (v.conductor && v.conductor !== 'Sin asignar' ? '<span class="font-semibold text-slate-700">' + v.conductor + '</span>' : '<span class="italic text-slate-400">Sin asignar</span>') + '</p>' +
+            '<div class="mt-4 p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs space-y-1.5">' +
+              '<div class="flex justify-between"><span>Inspección ITV:</span>' + alertaItv + '</div>' +
+              (v.fechaRevision ? '<div class="flex justify-between text-slate-600"><span>Próxima revisión:</span><span class="font-medium">' + v.fechaRevision + '</span></div>' : '') +
+            '</div>' +
+            (v.observaciones ? '<p class="text-xs text-slate-500 mt-2 italic line-clamp-2">"' + v.observaciones + '"</p>' : '') +
+          '</div>' +
+          '<div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">' +
+            '<button onclick="window.editarVehiculo(\'' + v.id + '\')" class="text-indigo-600 font-bold hover:underline">✏️ Modificar / Asignar</button>' +
+            '<button onclick="window.borrarRegistro(\'vehiculos\', \'' + v.id + '\')" class="text-rose-500 hover:underline">Eliminar</button>' +
+          '</div>';
+        listaVehiculosEl.appendChild(card);
+      });
+    }
+
+    onSnapshot(colVehiculos, (snap) => {
+      cacheVehiculos = [];
+      snap.forEach((docSnap) => {
+        cacheVehiculos.push({ id: docSnap.id, ...docSnap.data() });
+      });
+      renderizarVehiculos();
+      if (typeof window.renderizarCalendario === 'function') {
+        window.renderizarCalendario();
+      }
+    });
+
+    const btnAbrirVehiculo = document.getElementById("btn-abrir-modal-vehiculo");
+    if (btnAbrirVehiculo) {
+      btnAbrirVehiculo.onclick = () => {
+        document.getElementById("edit-vehiculo-id").value = "";
+        document.getElementById("titulo-modal-vehiculo").textContent = "Registro de Furgoneta / Vehículo";
+        document.getElementById("btn-guardar-vehiculo").textContent = "Guardar Furgoneta";
+        document.getElementById("input-matricula-vehiculo").value = "";
+        document.getElementById("input-modelo-vehiculo").value = "";
+        document.getElementById("input-estado-vehiculo").value = "Operativa";
+        document.getElementById("input-itv-vehiculo").value = "";
+        document.getElementById("input-revision-vehiculo").value = "";
+        document.getElementById("input-obs-vehiculo").value = "";
+
+        const selCond = document.getElementById("select-operario-vehiculo");
+        if (selCond) {
+          selCond.innerHTML = '<option value="Sin asignar">Sin asignar / Rotación general</option>';
+          cacheOperarios.forEach(op => {
+            const opt = document.createElement("option");
+            opt.value = op.nombre;
+            opt.textContent = op.nombre + ' (' + op.oficio + ')';
+            selCond.appendChild(opt);
+          });
+        }
+        document.getElementById("modal-vehiculo").style.display = "flex";
+      };
+    }
+
+    window.editarVehiculo = (id) => {
+      const v = cacheVehiculos.find(item => item.id === id);
+      if (!v) return;
+
+      document.getElementById("edit-vehiculo-id").value = v.id;
+      document.getElementById("titulo-modal-vehiculo").textContent = "Modificar Vehículo: " + v.matricula;
+      document.getElementById("btn-guardar-vehiculo").textContent = "Actualizar Furgoneta";
+      document.getElementById("input-matricula-vehiculo").value = v.matricula || "";
+      document.getElementById("input-modelo-vehiculo").value = v.modelo || "";
+      document.getElementById("input-estado-vehiculo").value = v.estado || "Operativa";
+      document.getElementById("input-itv-vehiculo").value = v.fechaItv || "";
+      document.getElementById("input-revision-vehiculo").value = v.fechaRevision || "";
+      document.getElementById("input-obs-vehiculo").value = v.observaciones || "";
+
+      const selCond = document.getElementById("select-operario-vehiculo");
+      if (selCond) {
+        selCond.innerHTML = '<option value="Sin asignar">Sin asignar / Rotación general</option>';
+        cacheOperarios.forEach(op => {
+          const opt = document.createElement("option");
+          opt.value = op.nombre;
+          opt.textContent = op.nombre + ' (' + op.oficio + ')';
+          selCond.appendChild(opt);
+        });
+        selCond.value = v.conductor || "Sin asignar";
+      }
+
+      document.getElementById("modal-vehiculo").style.display = "flex";
+    };
+
+    const btnGuardarVeh = document.getElementById("btn-guardar-vehiculo");
+    if (btnGuardarVeh) {
+      btnGuardarVeh.onclick = async () => {
+        const modal = document.getElementById("modal-vehiculo");
+        const mat = document.getElementById("input-matricula-vehiculo").value.trim().toUpperCase();
+        const mod = document.getElementById("input-modelo-vehiculo").value.trim();
+
+        if (!mat || !mod) {
+          alert("Introduce la matrícula y el modelo del vehículo.");
+          return;
+        }
+
+        modal.style.display = "none";
+        const editId = document.getElementById("edit-vehiculo-id").value;
+
+        const vehData = {
+          matricula: mat,
+          modelo: mod,
+          estado: document.getElementById("input-estado-vehiculo").value,
+          conductor: document.getElementById("select-operario-vehiculo").value,
+          fechaItv: document.getElementById("input-itv-vehiculo").value || "",
+          fechaRevision: document.getElementById("input-revision-vehiculo").value || "",
+          observaciones: document.getElementById("input-obs-vehiculo").value.trim() || "",
+          fechaModificacion: serverTimestamp()
+        };
+
+        try {
+          if (editId) {
+            await updateDoc(doc(db, "vehiculos", editId), vehData);
+          } else {
+            vehData.fechaCreacion = serverTimestamp();
+            await addDoc(colVehiculos, vehData);
+          }
+        } catch (err) {
+          console.error("Error guardando vehículo:", err);
+        }
+      };
+    }
   </script>
 </body>
 </html>
