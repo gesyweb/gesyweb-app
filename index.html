@@ -61,6 +61,9 @@
         <button id="nav-operarios" onclick="window.cambiarVista('operarios')" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
           <span>👷</span> Operarios
         </button>
+        <button id="nav-fichajes" onclick="window.cambiarVista('fichajes')" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
+          <span>⏱️</span> Control Horario (Fichajes)
+        </button>
         <button id="nav-herramientas" onclick="window.cambiarVista('herramientas')" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
           <span>🔨</span> Herramientas
         </button>
@@ -387,7 +390,97 @@
         </button>
       </div>
     </div>
+    <!-- 2.7.2: CONTROL HORARIO Y FICHAJES (NORMATIVA LABORAL) -->
+    <div id="vista-fichajes" class="hidden">
+      <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
+        <div>
+          <h2 class="text-2xl font-bold text-slate-900">Registro Diario de Jornada Laboral</h2>
+          <p class="text-sm text-slate-500">Conforme al Art. 34.9 ET: registro inalterable de entradas, pausas y salidas con custodia digital.</p>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="window.imprimirInformeFichajes()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-3.5 py-2 rounded-lg text-xs shadow-sm transition flex items-center gap-1.5">
+            <span>🖨️</span> Informe Mensual Inspección
+          </button>
+        </div>
+      </header>
 
+      <!-- Terminal de Fichaje Rápido a pie de obra -->
+      <section class="mt-6 bg-gradient-to-br from-slate-900 to-slate-800 text-white p-6 sm:p-8 rounded-2xl shadow-lg border border-slate-700">
+        <div class="max-w-xl mx-auto text-center space-y-4">
+          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+            🟢 Terminal de Fichaje en Obra
+          </span>
+          <h3 id="fichaje-reloj-digital" class="text-3xl sm:text-4xl font-mono font-black tracking-wider text-amber-400">00:00:00</h3>
+          <p id="fichaje-fecha-actual" class="text-xs text-slate-400 capitalize"></p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-left">
+            <div>
+              <label class="block text-xs text-slate-300 font-semibold mb-1">Selecciona Operario *</label>
+              <select id="select-operario-fichaje" onchange="window.verificarEstadoFichajeOperario()" class="w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded-lg text-xs text-white outline-none focus:ring-2 focus:ring-amber-500">
+                <option value="">Selecciona trabajador...</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs text-slate-300 font-semibold mb-1">Ubicación / Obra</label>
+              <select id="select-obra-fichaje" class="w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded-lg text-xs text-white outline-none focus:ring-2 focus:ring-amber-500">
+                <option value="Sede / Almacén Central">📦 Sede / Almacén Central</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="fichaje-estado-actual-box" class="p-3 bg-slate-800/80 rounded-xl border border-slate-700 text-xs text-slate-300">
+            Selecciona un operario para registrar su jornada.
+          </div>
+
+          <!-- Botones de Acción Obligatorios -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2">
+            <button id="btn-fichar-entrada" onclick="window.registrarFichaje('ENTRADA')" class="p-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-md transition disabled:opacity-40 disabled:cursor-not-allowed">
+              ▶️ ENTRADA
+            </button>
+            <button id="btn-fichar-pausa" onclick="window.registrarFichaje('INICIO_PAUSA')" class="p-3 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs shadow-md transition disabled:opacity-40 disabled:cursor-not-allowed">
+              ☕ PAUSA
+            </button>
+            <button id="btn-fichar-vuelta" onclick="window.registrarFichaje('FIN_PAUSA')" class="p-3 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs shadow-md transition disabled:opacity-40 disabled:cursor-not-allowed">
+              ↩️ RETORNO
+            </button>
+            <button id="btn-fichar-salida" onclick="window.registrarFichaje('SALIDA')" class="p-3 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs shadow-md transition disabled:opacity-40 disabled:cursor-not-allowed">
+              ⏹️ SALIDA
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Filtro y Registro Histórico Legal -->
+      <section class="mt-8 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-4 border-b border-slate-100 gap-3">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider">Histórico de Jornadas (Últimos Registros)</h3>
+            <p class="text-xs text-slate-400">Datos auditables con trazabilidad horaria y marca inalterable.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <input type="month" id="filtro-mes-fichajes" onchange="window.renderizarFichajes()" class="px-3 py-1.5 border rounded-lg text-xs font-semibold text-slate-700 bg-slate-50 outline-none">
+          </div>
+        </div>
+
+        <div class="overflow-x-auto mt-4">
+          <table class="w-full text-left text-xs text-slate-600">
+            <thead class="bg-slate-50 text-[11px] font-bold text-slate-400 uppercase tracking-wider border-b">
+              <tr>
+                <th class="py-2.5 px-3">Fecha</th>
+                <th class="py-2.5 px-3">Operario</th>
+                <th class="py-2.5 px-3">Evento</th>
+                <th class="py-2.5 px-3">Hora Servidor</th>
+                <th class="py-2.5 px-3">Ubicación / Obra</th>
+                <th class="py-2.5 px-3 text-right">Geolocalización</th>
+              </tr>
+            </thead>
+            <tbody id="tabla-fichajes-body" class="divide-y divide-slate-100">
+              <tr><td colspan="6" class="py-4 text-center text-slate-400">Cargando registros...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
     <!-- 2.8: HERRAMIENTAS Y MAQUINARIA -->
     <div id="vista-herramientas" class="hidden">
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
@@ -491,8 +584,7 @@
           </button>
         </div>
       </div>
-    </div>
-    <!-- SECCIÓN BACKUP Y EXPORTACIÓN EXCEL/CSV -->
+      <!-- SECCIÓN BACKUP Y EXPORTACIÓN EXCEL/CSV -->
       <div class="mt-8 max-w-2xl bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4">
         <div>
           <h3 class="text-base font-bold text-slate-900">Copia de Seguridad y Exportación (Excel / CSV)</h3>
@@ -531,6 +623,7 @@
           </button>
         </div>
       </div>
+    </div>
     <!-- 2.10: CALENDARIO OPERATIVO Y LOGÍSTICA -->
     <div id="vista-calendario" class="hidden">
       <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
@@ -1238,6 +1331,7 @@
     const vistas = {
       dashboard: document.getElementById("vista-dashboard"),
       calendario: document.getElementById("vista-calendario"),
+      fichajes: document.getElementById("vista-fichajes"),
       obras: document.getElementById("vista-obras"),
       detalleObra: document.getElementById("vista-detalle-obra"),
       clientes: document.getElementById("vista-clientes"),
@@ -1254,6 +1348,7 @@
     const botonesNav = {
       dashboard: document.getElementById("nav-dashboard"),
       calendario: document.getElementById("nav-calendario"),
+      fichajes: document.getElementById("nav-fichajes"),
       obras: document.getElementById("nav-obras"),
       clientes: document.getElementById("nav-clientes"),
       incidencias: document.getElementById("nav-incidencias"),
@@ -1831,6 +1926,7 @@
           const opt2 = document.createElement("option"); opt2.value = data.nombre; opt2.textContent = "🏗️ " + data.nombre;
           selectObraHerramienta.appendChild(opt2);
         }
+        actualizarSelectoresFichaje();
       });
 
       renderizarObras();
@@ -2604,6 +2700,7 @@
         const actualizado = cacheOperarios.find(o => o.id === operarioSeleccionadoActual.id);
         if (actualizado) window.abrirDetalleOperario(actualizado.id);
       }
+      actualizarSelectoresFichaje();
     });
 
     window.abrirDetalleOperario = (id) => {
@@ -3386,6 +3483,229 @@
       document.body.appendChild(enlace);
       enlace.click();
       document.body.removeChild(enlace);
+    };
+
+    // ========================================================
+    // MOTOR DE CONTROL HORARIO Y FICHAJES (ART. 34.9 ET)
+    // ========================================================
+    
+    // 1. Reloj en tiempo real
+    setInterval(() => {
+      const now = new Date();
+      const relojEl = document.getElementById("fichaje-reloj-digital");
+      const fechaEl = document.getElementById("fichaje-fecha-actual");
+      if (relojEl) {
+        relojEl.textContent = now.toLocaleTimeString('es-ES', { hour12: false });
+      }
+      if (fechaEl && !fechaEl.textContent) {
+        fechaEl.textContent = new Intl.DateTimeFormat('es-ES', { dateStyle: 'full' }).format(now);
+      }
+    }, 1000);
+
+    // Inicializar mes por defecto en el filtro
+    const mesFiltroInp = document.getElementById("filtro-mes-fichajes");
+    if (mesFiltroInp) {
+      const d = new Date();
+      mesFiltroInp.value = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, '0');
+    }
+
+    // 2. Comprobar último estado del operario seleccionado
+    window.verificarEstadoFichajeOperario = () => {
+      const selOp = document.getElementById("select-operario-fichaje");
+      const opNombre = selOp ? selOp.value : "";
+      const box = document.getElementById("fichaje-estado-actual-box");
+      const bEntrada = document.getElementById("btn-fichar-entrada");
+      const bPausa = document.getElementById("btn-fichar-pausa");
+      const bVuelta = document.getElementById("btn-fichar-vuelta");
+      const bSalida = document.getElementById("btn-fichar-salida");
+
+      if (!opNombre) {
+        if (box) box.textContent = "Selecciona un operario para registrar su jornada.";
+        if (bEntrada) bEntrada.disabled = true;
+        if (bPausa) bPausa.disabled = true;
+        if (bVuelta) bVuelta.disabled = true;
+        if (bSalida) bSalida.disabled = true;
+        return;
+      }
+
+      // Buscar el último fichaje de hoy de este operario
+      const hoyStr = new Date().toISOString().split("T")[0];
+      const fichajesHoy = cacheFichajes.filter(f => f.operario === opNombre && f.fechaStr === hoyStr);
+      
+      let ultimoEvento = null;
+      if (fichajesHoy.length > 0) {
+        // Ordenar por hora
+        fichajesHoy.sort((a, b) => (b.timestampMs || 0) - (a.timestampMs || 0));
+        ultimoEvento = fichajesHoy[0].tipo;
+      }
+
+      if (!ultimoEvento || ultimoEvento === "SALIDA") {
+        box.innerHTML = 'Estado actual: <strong class="text-rose-400">FUERA DE JORNADA</strong>';
+        bEntrada.disabled = false;
+        bPausa.disabled = true;
+        bVuelta.disabled = true;
+        bSalida.disabled = true;
+      } else if (ultimoEvento === "ENTRADA" || ultimoEvento === "FIN_PAUSA") {
+        box.innerHTML = 'Estado actual: <strong class="text-emerald-400">TRABAJANDO / EN JORNADA</strong>';
+        bEntrada.disabled = true;
+        bPausa.disabled = false;
+        bVuelta.disabled = true;
+        bSalida.disabled = false;
+      } else if (ultimoEvento === "INICIO_PAUSA") {
+        box.innerHTML = 'Estado actual: <strong class="text-amber-400">EN PAUSA / DESCANSO</strong>';
+        bEntrada.disabled = true;
+        bPausa.disabled = true;
+        bVuelta.disabled = false;
+        bSalida.disabled = false;
+      }
+    };
+
+    // 3. Registrar el evento en Firestore con hora inalterable y GPS puntual
+    window.registrarFichaje = async (tipo) => {
+      const selOp = document.getElementById("select-operario-fichaje");
+      const opNombre = selOp ? selOp.value : "";
+      const ubicacionObra = document.getElementById("select-obra-fichaje").value || "Sede / Almacén Central";
+
+      if (!opNombre) {
+        alert("Selecciona primero el operario que va a fichar.");
+        return;
+      }
+
+      // Intentar obtener geolocalización rápida (solo en el momento del clic)
+      let coordenadas = null;
+      if (navigator.geolocation) {
+        try {
+          const pos = await new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 4000, maximumAge: 60000 });
+          });
+          coordenadas = {
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude
+          };
+        } catch (e) {
+          console.log("GPS no disponible o denegado por el usuario.");
+        }
+      }
+
+      const ahora = new Date();
+      const fechaStr = ahora.toISOString().split("T")[0];
+      const horaStr = ahora.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+      const nuevoFichaje = {
+        operario: opNombre,
+        tipo: tipo,
+        fechaStr: fechaStr,
+        horaStr: horaStr,
+        ubicacion: ubicacionObra,
+        coordenadas: coordenadas || null,
+        timestampMs: ahora.getTime(),
+        fechaCreacion: serverTimestamp()
+      };
+
+      try {
+        await addDoc(colFichajes, nuevoFichaje);
+        window.verificarEstadoFichajeOperario();
+      } catch (err) {
+        console.error("Error guardando fichaje:", err);
+        alert("Error al conectar con el servidor de fichajes.");
+      }
+    };
+
+    // 4. Renderizar la tabla histórica
+    window.renderizarFichajes = () => {
+      const tbody = document.getElementById("tabla-fichajes-body");
+      if (!tbody) return;
+      tbody.innerHTML = "";
+
+      const mesFiltro = document.getElementById("filtro-mes-fichajes").value; // "YYYY-MM"
+
+      const filtrados = cacheFichajes
+        .filter(f => !mesFiltro || (f.fechaStr && f.fechaStr.startsWith(mesFiltro)))
+        .sort((a, b) => (b.timestampMs || 0) - (a.timestampMs || 0));
+
+      if (filtrados.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="py-6 text-center text-slate-400 italic">No hay registros de fichajes en el periodo seleccionado.</td></tr>';
+        return;
+      }
+
+      filtrados.slice(0, 50).forEach(f => {
+        let badgeTipo = "";
+        let textoTipo = "";
+        if (f.tipo === "ENTRADA") {
+          badgeTipo = "bg-emerald-100 text-emerald-800 border-emerald-200";
+          textoTipo = "▶️ Entrada";
+        } else if (f.tipo === "SALIDA") {
+          badgeTipo = "bg-rose-100 text-rose-800 border-rose-200";
+          textoTipo = "⏹️ Salida";
+        } else if (f.tipo === "INICIO_PAUSA") {
+          badgeTipo = "bg-amber-100 text-amber-800 border-amber-200";
+          textoTipo = "☕ Pausa";
+        } else {
+          badgeTipo = "bg-sky-100 text-sky-800 border-sky-200";
+          textoTipo = "↩️ Retorno";
+        }
+
+        let gpsHtml = '<span class="text-slate-300 italic">Sin GPS</span>';
+        if (f.coordenadas && f.coordenadas.lat) {
+          const urlMaps = `https://www.google.com/maps?q=${f.coordenadas.lat},${f.coordenadas.lng}`;
+          gpsHtml = `<a href="${urlMaps}" target="_blank" class="text-indigo-600 hover:underline font-mono">📍 Ver mapa</a>`;
+        }
+
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-slate-50 transition border-b border-slate-100";
+        tr.innerHTML = `
+          <td class="py-2.5 px-3 font-medium text-slate-800">${f.fechaStr || '-'}</td>
+          <td class="py-2.5 px-3 font-bold text-slate-900">${f.operario}</td>
+          <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold border ${badgeTipo}">${textoTipo}</span></td>
+          <td class="py-2.5 px-3 font-mono font-bold text-slate-800">${f.horaStr || '-'}</td>
+          <td class="py-2.5 px-3 text-slate-600 truncate max-w-xs">🏗️ ${f.ubicacion || 'Sede'}</td>
+          <td class="py-2.5 px-3 text-right">${gpsHtml}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    };
+
+    // 5. Escucha en tiempo real de fichajes y selector de operarios
+    onSnapshot(colFichajes, (snap) => {
+      cacheFichajes = [];
+      snap.forEach(docSnap => {
+        cacheFichajes.push({ id: docSnap.id, ...docSnap.data() });
+      });
+      window.renderizarFichajes();
+      window.verificarEstadoFichajeOperario();
+    });
+
+    // Rellenar selectores de operarios y obras en el módulo de fichaje
+    function actualizarSelectoresFichaje() {
+      const selOp = document.getElementById("select-operario-fichaje");
+      const selObra = document.getElementById("select-obra-fichaje");
+      if (selOp) {
+        const valActual = selOp.value;
+        selOp.innerHTML = '<option value="">Selecciona trabajador...</option>';
+        cacheOperarios.forEach(op => {
+          const opt = document.createElement("option");
+          opt.value = op.nombre;
+          opt.textContent = `${op.nombre} (${op.oficio})`;
+          selOp.appendChild(opt);
+        });
+        selOp.value = valActual;
+      }
+      if (selObra) {
+        const valActual = selObra.value;
+        selObra.innerHTML = '<option value="Sede / Almacén Central">📦 Sede / Almacén Central</option>';
+        cacheObras.forEach(o => {
+          const opt = document.createElement("option");
+          opt.value = o.nombre;
+          opt.textContent = `🏗️ ${o.nombre}`;
+          selObra.appendChild(opt);
+        });
+        selObra.value = valActual;
+      }
+    }
+
+    // 6. Impresión de informe oficial mensual (para Inspección)
+    window.imprimirInformeFichajes = () => {
+      window.print();
     };
   </script>
 </body>
