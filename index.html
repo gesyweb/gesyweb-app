@@ -11,7 +11,7 @@
       aside, header, #btn-volver-obras, #btn-volver-clientes, #btn-volver-incidencias, #acciones-ficha, #acciones-ficha-cliente, #acciones-ficha-incidencia, .no-print {
         display: none !important;
       }
-      body { background-color: white !important; color: #0f172a !important; font-size: 9.5pt !important; line-height: 1.25 !important; }
+      body { background-color: white !important; color: #5685f3 !important; font-size: 9.5pt !important; line-height: 1.25 !important; }
       main { padding: 0 !important; margin: 0 !important; width: 100% !important; }
       #vista-detalle-obra, #vista-detalle-cliente, #vista-detalle-incidencia { display: block !important; }
       .card-print { border: 1px solid #cbd5e1 !important; padding: 12px 16px !important; box-shadow: none !important; border-radius: 6px !important; }
@@ -255,6 +255,35 @@
       <section id="lista-operarios" class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <p class="text-sm text-slate-400">Cargando operarios...</p>
       </section>
+    </div>
+
+    <!-- 2.7.1: FICHA DETALLADA OPERARIO -->
+    <div id="vista-detalle-operario" class="hidden">
+      <div class="flex flex-wrap items-center justify-between pb-6 border-b border-slate-200 gap-3 bg-slate-100 sticky top-0 z-10 no-print">
+        <button onclick="window.cambiarVista('operarios')" id="btn-volver-operarios" class="inline-flex items-center gap-2 text-sm font-bold text-slate-800 hover:text-sky-600 bg-white border border-slate-300 px-4 py-2 rounded-xl shadow-sm transition">
+          ← Volver a Operarios
+        </button>
+        
+        <div id="acciones-ficha-operario" class="flex flex-wrap gap-2">
+          <button onclick="window.print()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-xl shadow-sm transition flex items-center gap-2">
+            <span>🖨️</span> Imprimir Expediente / PDF
+          </button>
+          <button id="btn-editar-operario-actual" class="bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold px-4 py-2 rounded-xl transition">
+            ✏️ Editar Datos / EPIs / Cursos
+          </button>
+          <button id="btn-borrar-operario-actual" class="bg-rose-50 hover:bg-rose-100 text-rose-700 text-sm font-semibold px-4 py-2 rounded-xl border border-rose-200 transition">
+            Eliminar
+          </button>
+        </div>
+      </div>
+
+      <div id="contenedor-detalle-operario" class="mt-4"></div>
+
+      <div class="mt-6 pt-4 border-t border-slate-200 flex justify-start no-print">
+        <button onclick="window.cambiarVista('operarios')" class="inline-flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-sky-600 bg-white border px-5 py-2 rounded-xl shadow-sm transition">
+          ← Volver a Operarios
+        </button>
+      </div>
     </div>
 
     <!-- 2.8: HERRAMIENTAS Y MAQUINARIA -->
@@ -717,28 +746,87 @@
   </div>
 
   <!-- 3.4: MODAL OPERARIO -->
-  <div id="modal-operario" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 z-50">
-    <div class="bg-white rounded-2xl p-6 max-w-lg w-full shadow-2xl">
-      <div class="flex justify-between items-center pb-4 border-b">
-        <h3 class="text-lg font-bold">Alta de Operario</h3>
-        <button type="button" onclick="document.getElementById('modal-operario').style.display='none'" class="text-slate-400 text-2xl font-bold">&times;</button>
-      </div>
-      <div class="mt-4 space-y-3">
-        <input id="input-nombre-operario" type="text" placeholder="Nombre Completo *" class="w-full px-3.5 py-2 border rounded-lg text-sm">
-        <div class="grid grid-cols-2 gap-2">
-          <select id="input-oficio-operario" class="w-full px-3.5 py-2 border rounded-lg text-sm bg-white">
-            <option value="Albañil">Albañilería</option>
-            <option value="Fontanero">Fontanería</option>
-            <option value="Electricista">Electricidad</option>
-            <option value="Pintor">Pintura</option>
-            <option value="Carpintero">Carpintería / Pladur</option>
-            <option value="Encargado">Encargado de Obra</option>
-          </select>
-          <input id="input-tel-operario" type="tel" placeholder="Teléfono" class="w-full px-3.5 py-2 border rounded-lg text-sm">
+ <!-- 3.4: MODAL OPERARIO / EXPEDIENTE TÉCNICO -->
+  <div id="modal-operario" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 z-50 overflow-y-auto">
+    <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-2xl w-full shadow-2xl my-8 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center pb-4 border-b border-slate-100">
+        <div>
+          <h3 id="titulo-modal-operario" class="text-lg font-bold text-slate-900">Expediente de Personal</h3>
+          <p class="text-xs text-slate-500">Datos laborales, entrega de EPIs y control de formación PRL.</p>
         </div>
-        <div class="flex justify-end gap-2 pt-2">
-          <button type="button" onclick="document.getElementById('modal-operario').style.display='none'" class="px-4 py-2 text-sm text-slate-600">Cancelar</button>
-          <button type="button" id="btn-guardar-operario" class="px-5 py-2 text-sm bg-sky-500 text-white font-semibold rounded-lg">Guardar</button>
+        <button type="button" onclick="document.getElementById('modal-operario').style.display='none'" class="text-slate-400 hover:text-slate-700 text-2xl font-bold">&times;</button>
+      </div>
+
+      <div class="mt-6 space-y-5">
+        <input type="hidden" id="edit-operario-id" value="">
+
+        <div class="space-y-4">
+          <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Datos Personales y Categoría</h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre y Apellidos *</label>
+              <input id="input-nombre-operario" type="text" placeholder="Ej. Juan Pérez Gómez" class="w-full px-3.5 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-sky-500">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">DNI / NIE *</label>
+              <input id="input-dni-operario" type="text" placeholder="Ej. 12345678Z" class="w-full px-3.5 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-sky-500 font-mono">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Oficio / Especialidad</label>
+              <select id="input-oficio-operario" class="w-full px-3 py-2 border rounded-lg text-sm bg-white outline-none focus:ring-2 focus:ring-sky-500">
+                <option value="Albañil">Albañilería</option>
+                <option value="Fontanero">Fontanería</option>
+                <option value="Electricista">Electricidad</option>
+                <option value="Pintor">Pintura</option>
+                <option value="Carpintero">Carpintería / Pladur</option>
+                <option value="Alicatador">Alicatado / Solado</option>
+                <option value="Encargado">Encargado de Obra</option>
+                <option value="Peón">Peón Especialista</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Teléfono Directo *</label>
+              <input id="input-tel-operario" type="tel" placeholder="Ej. 655123456" class="w-full px-3 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-sky-500">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Fecha de Alta</label>
+              <input id="input-fecha-alta-operario" type="date" class="w-full px-3 py-2 border rounded-lg text-sm bg-white outline-none focus:ring-2 focus:ring-sky-500">
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-slate-100 space-y-4">
+          <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Prevención de Riesgos (PRL) y Salud</h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Cursos PRL Realizados</label>
+              <textarea id="input-cursos-operario" rows="2" placeholder="Ej. Aula permanente 8h, Segundo ciclo albañilería 20h, Trabajos en altura..." class="w-full px-3 py-1.5 border rounded-lg text-xs outline-none focus:ring-2 focus:ring-sky-500"></textarea>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Fecha Reconocimiento Médico</label>
+              <input id="input-medico-operario" type="date" class="w-full px-3 py-1.5 border rounded-lg text-xs bg-white outline-none focus:ring-2 focus:ring-sky-500 mb-2">
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Tallas de Ropa / Calzado</label>
+              <input id="input-tallas-operario" type="text" placeholder="Ej. Calzado 43 | Pantalón L | Camiseta XL" class="w-full px-3 py-1.5 border rounded-lg text-xs outline-none focus:ring-2 focus:ring-sky-500">
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-slate-100 space-y-3">
+          <div>
+            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Dotación de EPIs Entregados</h4>
+            <p class="text-[11px] text-slate-400">Detalla los equipos individuales entregados en custodia (casco, botas, arnés, etc.):</p>
+          </div>
+          <textarea id="input-epis-operario" rows="2" placeholder="Ej. Calzado seguridad S3 (15/01/2026), Casco de obra con barbuquejo, Gafas de protección antiimpacto..." class="w-full px-3 py-2 border rounded-lg text-xs outline-none focus:ring-2 focus:ring-sky-500"></textarea>
+        </div>
+
+        <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
+          <button type="button" onclick="document.getElementById('modal-operario').style.display='none'" class="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg">Cancelar</button>
+          <button type="button" id="btn-guardar-operario" class="px-5 py-2 text-sm bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-lg shadow-sm transition">
+            Guardar Ficha
+          </button>
         </div>
       </div>
     </div>
@@ -849,7 +937,7 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const vistas = {
+   const vistas = {
       obras: document.getElementById("vista-obras"),
       detalleObra: document.getElementById("vista-detalle-obra"),
       clientes: document.getElementById("vista-clientes"),
@@ -857,6 +945,7 @@
       incidencias: document.getElementById("vista-incidencias"),
       detalleIncidencia: document.getElementById("vista-detalle-incidencia"),
       operarios: document.getElementById("vista-operarios"),
+      detalleOperario: document.getElementById("vista-detalle-operario"),
       herramientas: document.getElementById("vista-herramientas"),
       ajustes: document.getElementById("vista-ajustes")
     };
@@ -2063,77 +2152,248 @@
     }
 
     // OPERARIOS
+    // OPERARIOS LOGIC
     const listaOperariosEl = document.getElementById("lista-operarios");
     const contenedorCheckboxes = document.getElementById("contenedor-checkbox-operarios");
     const selectOperarioIncidencia = document.getElementById("select-operario-incidencia");
+    let operarioSeleccionadoActual = null;
 
-    onSnapshot(colOperarios, (snap) => {
+    function renderizarOperarios() {
       if (listaOperariosEl) listaOperariosEl.innerHTML = "";
       if (contenedorCheckboxes) contenedorCheckboxes.innerHTML = "";
       if (selectOperarioIncidencia) selectOperarioIncidencia.innerHTML = '<option value="Sin asignar">Sin asignar / Equipo general</option>';
-      cacheOperarios = [];
 
-      if (snap.empty) {
-        if (listaOperariosEl) listaOperariosEl.innerHTML = '<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay operarios registrados.</p></div>';
+      if (cacheOperarios.length === 0) {
+        if (listaOperariosEl) listaOperariosEl.innerHTML = '<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay operarios dados de alta todavía.</p></div>';
         if (contenedorCheckboxes) contenedorCheckboxes.innerHTML = '<span class="text-xs text-slate-400 col-span-full">Primero registra operarios.</span>';
-      } else {
-        snap.forEach((docSnap) => {
-          const d = { id: docSnap.id, ...docSnap.data() };
-          cacheOperarios.push(d);
+        return;
+      }
 
-          if (contenedorCheckboxes) {
-            const lbl = document.createElement("label");
-            lbl.className = "flex items-center gap-2 text-xs text-slate-700 cursor-pointer bg-white p-2 rounded border hover:bg-slate-100";
-            lbl.innerHTML = '<input type="checkbox" value="' + d.nombre + '" class="rounded text-amber-500"> <span>' + d.nombre + ' (' + d.oficio + ')</span>';
-            contenedorCheckboxes.appendChild(lbl);
-          }
+      cacheOperarios.forEach((d) => {
+        if (contenedorCheckboxes) {
+          const lbl = document.createElement("label");
+          lbl.className = "flex items-center gap-2 text-xs text-slate-700 cursor-pointer bg-white p-2 rounded border hover:bg-slate-100";
+          lbl.innerHTML = '<input type="checkbox" value="' + d.nombre + '" class="rounded text-amber-500"> <span>' + d.nombre + ' (' + d.oficio + ')</span>';
+          contenedorCheckboxes.appendChild(lbl);
+        }
 
-          if (selectOperarioIncidencia) {
-            const optInc = document.createElement("option");
-            optInc.value = d.nombre;
-            optInc.textContent = d.nombre + " (" + d.oficio + ")";
-            selectOperarioIncidencia.appendChild(optInc);
-          }
+        if (selectOperarioIncidencia) {
+          const optInc = document.createElement("option");
+          optInc.value = d.nombre;
+          optInc.textContent = d.nombre + " (" + d.oficio + ")";
+          selectOperarioIncidencia.appendChild(optInc);
+        }
 
-          if (listaOperariosEl) {
-            const card = document.createElement("div");
-            card.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between";
-            card.innerHTML = '<div>' +
-                '<span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sky-100 text-sky-800">' + d.oficio + '</span>' +
-                '<h3 class="text-base font-bold text-slate-900 mt-3">' + d.nombre + '</h3>' +
-                '<p class="text-sm text-slate-500 mt-1">📞 <a href="tel:' + (d.telefono || '') + '" class="text-sky-600 hover:underline font-semibold">' + (d.telefono || 'Sin teléfono') + '</a></p>' +
+        // Conteo de herramientas que tiene asignadas
+        const herramientasAsignadas = cacheHerramientas.filter(h => h.operarioCustodia === d.nombre);
+
+        if (listaOperariosEl) {
+          const card = document.createElement("div");
+          card.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between hover:shadow-md transition";
+          card.innerHTML = '<div>' +
+              '<div class="flex justify-between items-start mb-2">' +
+                '<span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sky-100 text-sky-800">' + (d.oficio || 'Operario') + '</span>' +
+                '<span class="text-xs text-slate-400 font-mono font-bold">' + (d.dni || 'Sin DNI') + '</span>' +
               '</div>' +
-              '<div class="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center text-xs">' +
-                '<span class="text-slate-400">#' + docSnap.id.substring(0, 5).toUpperCase() + '</span>' +
-                '<button onclick="window.borrarRegistro(\'operarios\', \'' + docSnap.id + '\')" class="text-rose-500 hover:underline">Eliminar</button>' +
-              '</div>';
-            listaOperariosEl.appendChild(card);
-          }
-        });
+              '<h3 class="text-base font-bold text-slate-900 mt-1">' + d.nombre + '</h3>' +
+              '<p class="text-xs text-slate-500 mt-1">📞 <a href="tel:' + (d.telefono || '') + '" class="text-sky-600 hover:underline font-semibold">' + (d.telefono || 'Sin teléfono') + '</a></p>' +
+              '<div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-xs text-slate-500">' +
+                '<span>Herramientas en custodia: <strong>' + herramientasAsignadas.length + '</strong></span>' +
+                '<span>PRL: <strong>' + (d.cursos ? '✓ Al día' : 'Pendiente') + '</strong></span>' +
+              '</div>' +
+            '</div>' +
+            '<div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">' +
+              '<a href="tel:' + (d.telefono || '') + '" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold transition">📞 Llamar</a>' +
+              '<button onclick="window.abrirDetalleOperario(\'' + d.id + '\')" class="px-3 py-1.5 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-lg text-xs shadow-sm transition">🔍 Ver Expediente</button>' +
+            '</div>';
+          listaOperariosEl.appendChild(card);
+        }
+      });
+    }
+
+    onSnapshot(colOperarios, (snap) => {
+      cacheOperarios = [];
+      snap.forEach((docSnap) => {
+        cacheOperarios.push({ id: docSnap.id, ...docSnap.data() });
+      });
+      renderizarOperarios();
+
+      if (operarioSeleccionadoActual && !vistas.detalleOperario.classList.contains("hidden")) {
+        const actualizado = cacheOperarios.find(o => o.id === operarioSeleccionadoActual.id);
+        if (actualizado) window.abrirDetalleOperario(actualizado.id);
       }
     });
 
-    const btnAbrirOp = document.getElementById("btn-abrir-modal-operario");
-    if (btnAbrirOp) btnAbrirOp.onclick = () => document.getElementById("modal-operario").style.display = "flex";
+    // Ficha detallada de operario
+    window.abrirDetalleOperario = (id) => {
+      const op = cacheOperarios.find(o => o.id === id);
+      if (!op) return;
+      operarioSeleccionadoActual = op;
 
+      const cont = document.getElementById("contenedor-detalle-operario");
+      const herramientasCustodia = cacheHerramientas.filter(h => h.operarioCustodia === op.nombre);
+      const obrasAsignadas = cacheObras.filter(o => o.operarios && o.operarios.includes(op.nombre));
+      const incidenciasAsignadas = cacheIncidencias.filter(i => i.operario === op.nombre);
+
+      let herramientasHtml = '<p class="text-xs text-slate-400 italic bg-slate-50 p-3 rounded-lg border">No tiene herramientas asignadas en custodia.</p>';
+      if (herramientasCustodia.length > 0) {
+        herramientasHtml = '<div class="space-y-1.5">' + herramientasCustodia.map(h => {
+          return '<div class="flex justify-between items-center p-2.5 bg-slate-50 border rounded-lg text-xs">' +
+            '<div><span class="font-bold text-slate-800">' + (h.codigo ? '[' + h.codigo + '] ' : '') + h.nombre + '</span><span class="text-slate-400 ml-2">(' + (h.serie || 'S/N') + ')</span></div>' +
+            '<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-100 text-emerald-800">' + h.estado + '</span>' +
+          '</div>';
+        }).join('') + '</div>';
+      }
+
+      let obrasHtml = '<p class="text-xs text-slate-400 italic bg-slate-50 p-3 rounded-lg border">No participa actualmente en ninguna obra.</p>';
+      if (obrasAsignadas.length > 0) {
+        obrasHtml = '<div class="space-y-1.5">' + obrasAsignadas.map(o => {
+          return '<div class="flex justify-between items-center p-2.5 bg-slate-50 border rounded-lg text-xs cursor-pointer hover:bg-amber-50" onclick="window.abrirDetalleObra(\'' + o.id + '\')">' +
+            '<span class="font-bold text-slate-800">🏗️ ' + o.nombre + '</span>' +
+            '<span class="text-amber-700 font-semibold">' + o.estado + ' →</span>' +
+          '</div>';
+        }).join('') + '</div>';
+      }
+
+      let incidenciasHtml = '<p class="text-xs text-slate-400 italic bg-slate-50 p-3 rounded-lg border">Sin partes técnicos asignados.</p>';
+      if (incidenciasAsignadas.length > 0) {
+        incidenciasHtml = '<div class="space-y-1.5">' + incidenciasAsignadas.map(i => {
+          return '<div class="flex justify-between items-center p-2.5 bg-slate-50 border rounded-lg text-xs cursor-pointer hover:bg-rose-50" onclick="window.abrirDetalleIncidencia(\'' + i.id + '\')">' +
+            '<div><span class="font-bold text-slate-800">⚠️ ' + i.titulo + '</span><span class="text-slate-400 ml-1">(' + i.obra + ')</span></div>' +
+            '<span class="font-semibold text-rose-700">' + i.estado + ' →</span>' +
+          '</div>';
+        }).join('') + '</div>';
+      }
+
+      cont.innerHTML = '<div class="card-print bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">' +
+        window.generarCabeceraMarcaBlanca() +
+        '<div class="flex flex-col sm:flex-row justify-between items-start gap-4 pb-4 border-b border-slate-200">' +
+          '<div>' +
+            '<div class="flex items-center gap-2">' +
+              '<span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sky-100 text-sky-800">' + (op.oficio || 'Operario') + '</span>' +
+              '<span class="text-xs text-slate-400 font-mono">DNI: ' + (op.dni || 'No indicado') + '</span>' +
+            '</div>' +
+            '<h1 class="print-title text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">' + op.nombre + '</h1>' +
+            '<p class="text-xs sm:text-sm text-slate-500 mt-1">📅 Fecha de Alta: ' + (op.fechaAlta || 'No registrada') + '</p>' +
+          '</div>' +
+          '<div class="sm:text-right">' +
+            '<a href="tel:' + (op.telefono || '') + '" class="inline-flex items-center gap-2 text-sm font-bold text-sky-600 bg-sky-50 px-3 py-1.5 rounded-lg border border-sky-200 hover:bg-sky-100">📞 ' + (op.telefono || 'Sin teléfono') + '</a>' +
+          '</div>' +
+        '</div>' +
+        '<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs">' +
+          '<div><span class="text-[10px] font-bold text-slate-400 uppercase">Cursos de Formación PRL</span><p class="text-slate-800 font-medium mt-1 leading-relaxed whitespace-pre-line">' + (op.cursos || 'Sin cursos registrados.') + '</p></div>' +
+          '<div><span class="text-[10px] font-bold text-slate-400 uppercase">Reconocimiento Médico / Tallas</span><p class="text-slate-800 font-medium mt-1">🩺 Último: ' + (op.fechaMedico || 'Pendiente') + '</p><p class="text-slate-600 mt-0.5">👕 Tallas: ' + (op.tallas || 'No especificadas') + '</p></div>' +
+        '</div>' +
+        '<div>' +
+          '<h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Dotación de EPIs Entregados</h3>' +
+          '<div class="p-3 bg-slate-50 rounded-xl border text-xs text-slate-700 leading-relaxed whitespace-pre-line">' + (op.epis || 'Sin entrega de EPIs registrada.') + '</div>' +
+        '</div>' +
+        '<div>' +
+          '<h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">🔨 Herramientas Asignadas en Custodia (' + herramientasCustodia.length + ')</h3>' +
+          herramientasHtml +
+        '</div>' +
+        '<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">' +
+          '<div><h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">🏗️ Obras en las que participa (' + obrasAsignadas.length + ')</h3>' + obrasHtml + '</div>' +
+          '<div><h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">⚠️ Partes Técnicos / Incidencias (' + incidenciasAsignadas.length + ')</h3>' + incidenciasHtml + '</div>' +
+        '</div>' +
+      '</div>';
+
+      cambiarVista('detalleOperario');
+    };
+
+    // Apertura modal alta
+    const btnAbrirOp = document.getElementById("btn-abrir-modal-operario");
+    if (btnAbrirOp) {
+      btnAbrirOp.onclick = () => {
+        document.getElementById("edit-operario-id").value = "";
+        document.getElementById("titulo-modal-operario").textContent = "Alta de Operario";
+        document.getElementById("btn-guardar-operario").textContent = "Guardar Ficha";
+        document.getElementById("input-nombre-operario").value = "";
+        document.getElementById("input-dni-operario").value = "";
+        document.getElementById("input-oficio-operario").value = "Albañil";
+        document.getElementById("input-tel-operario").value = "";
+        document.getElementById("input-fecha-alta-operario").value = "";
+        document.getElementById("input-cursos-operario").value = "";
+        document.getElementById("input-medico-operario").value = "";
+        document.getElementById("input-tallas-operario").value = "";
+        document.getElementById("input-epis-operario").value = "";
+        document.getElementById("modal-operario").style.display = "flex";
+      };
+    }
+
+    // Editar operario
+    const btnEditOpAct = document.getElementById("btn-editar-operario-actual");
+    if (btnEditOpAct) {
+      btnEditOpAct.onclick = () => {
+        if (!operarioSeleccionadoActual) return;
+        const op = operarioSeleccionadoActual;
+
+        document.getElementById("edit-operario-id").value = op.id;
+        document.getElementById("titulo-modal-operario").textContent = "Editar Expediente de " + op.nombre;
+        document.getElementById("btn-guardar-operario").textContent = "Actualizar Ficha";
+        document.getElementById("input-nombre-operario").value = op.nombre || "";
+        document.getElementById("input-dni-operario").value = op.dni || "";
+        document.getElementById("input-oficio-operario").value = op.oficio || "Albañil";
+        document.getElementById("input-tel-operario").value = op.telefono || "";
+        document.getElementById("input-fecha-alta-operario").value = op.fechaAlta || "";
+        document.getElementById("input-cursos-operario").value = op.cursos || "";
+        document.getElementById("input-medico-operario").value = op.fechaMedico || "";
+        document.getElementById("input-tallas-operario").value = op.tallas || "";
+        document.getElementById("input-epis-operario").value = op.epis || "";
+        document.getElementById("modal-operario").style.display = "flex";
+      };
+    }
+
+    // Borrar operario
+    const btnBorrarOpAct = document.getElementById("btn-borrar-operario-actual");
+    if (btnBorrarOpAct) {
+      btnBorrarOpAct.onclick = async () => {
+        if (operarioSeleccionadoActual && confirm("¿Deseas eliminar a " + operarioSeleccionadoActual.nombre + "?")) {
+          await deleteDoc(doc(db, "operarios", operarioSeleccionadoActual.id));
+          cambiarVista('operarios');
+        }
+      };
+    }
+
+    // Guardar / Actualizar operario
     const btnGuardarOp = document.getElementById("btn-guardar-operario");
     if (btnGuardarOp) {
       btnGuardarOp.onclick = async () => {
         const modal = document.getElementById("modal-operario");
         const nom = document.getElementById("input-nombre-operario").value.trim();
-        if (!nom) {
-          alert("Introduce el nombre del operario.");
+        const tel = document.getElementById("input-tel-operario").value.trim();
+
+        if (!nom || !tel) {
+          alert("Introduce el nombre y teléfono del operario.");
           return;
         }
+
         modal.style.display = "none";
-        await addDoc(colOperarios, {
+        const editId = document.getElementById("edit-operario-id").value;
+
+        const opData = {
           nombre: nom,
+          dni: document.getElementById("input-dni-operario").value.trim() || "",
           oficio: document.getElementById("input-oficio-operario").value,
-          telefono: document.getElementById("input-tel-operario").value.trim() || "",
-          fechaCreacion: serverTimestamp()
-        });
-        document.getElementById("input-nombre-operario").value = "";
-        document.getElementById("input-tel-operario").value = "";
+          telefono: tel,
+          fechaAlta: document.getElementById("input-fecha-alta-operario").value || "",
+          cursos: document.getElementById("input-cursos-operario").value.trim() || "",
+          fechaMedico: document.getElementById("input-medico-operario").value || "",
+          tallas: document.getElementById("input-tallas-operario").value.trim() || "",
+          epis: document.getElementById("input-epis-operario").value.trim() || "",
+          fechaModificacion: serverTimestamp()
+        };
+
+        try {
+          if (editId) {
+            await updateDoc(doc(db, "operarios", editId), opData);
+          } else {
+            opData.fechaCreacion = serverTimestamp();
+            await addDoc(colOperarios, opData);
+          }
+        } catch (err) {
+          console.error("Error guardando operario:", err);
+        }
       };
     }
 
