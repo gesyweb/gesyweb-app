@@ -1310,7 +1310,9 @@
     const colOperarios = collection(db, "operarios");
     const colHerramientas = collection(db, "herramientas");
     const docConfigEmpresa = doc(db, "configuracion", "empresa");
-    const colVehiculos = collection(db, "vehiculos");
+    const colVehiculos = collection(db, "vehiculos"); 
+    const colFichajes = collection(db, "fichajes");
+    let cacheFichajes = [];
     let cacheVehiculos = [];
 
     let cacheObras = [];
@@ -3564,26 +3566,36 @@
     window.registrarFichaje = async (tipo) => {
       const selOp = document.getElementById("select-operario-fichaje");
       const opNombre = selOp ? selOp.value : "";
-      const ubicacionObra = document.getElementById("select-obra-fichaje").value || "Sede / Almacén Central";
-
+      const selObra = document.getElementById("select-obra-fichaje");
+      const ubicacionObra = (selObra && selObra.value) ? selObra.value : "Sede / Almacén Central";
       if (!opNombre) {
-        alert("Selecciona primero el operario que va a fichar.");
+        alert("Por favor, selecciona primero el operario que va a fichar.");
         return;
       }
 
-      // Intentar obtener geolocalización rápida (solo en el momento del clic)
-      let coordenadas = null;
-      if (navigator.geolocation) {
+      // Desactivar botones momentáneamente para evitar pulsaciones dobles
+      const botones = document.querySelectorAll("#btn-fichar-entrada, #btn-fichar-pausa, #btn-fichar-vuelta, #btn-fichar-salida");
+      botones.forEach(b => b.disabled = true);
+
+      // Obtener posición GPS si está disponible de forma rápida
+      let latitud = 0;
+      let longitud = 0;
+
+      if ("geolocation" in navigator) {
         try {
-          const pos = await new Promise((resolve, reject) => {
-            navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 4000, maximumAge: 60000 });
+          const posicion = await new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject, {
+              enableHighAccuracy: false,
+              timeout: 3000,
+              maximumAge: 60000
+            });
           });
-          coordenadas = {
-            lat: pos.coords.latitude,
-            lng: pos.coords.longitude
-          };
+          if (posicion && posicion.coords) {
+            latitud = Number(posicion.coords.latitude.toFixed(6));
+            longitud = Number(posicion.coords.longitude.toFixed(6));
+          }
         } catch (e) {
-          console.log("GPS no disponible o denegado por el usuario.");
+          console.warn("Aviso GPS:", e.message);
         }
       }
 
@@ -3591,13 +3603,15 @@
       const fechaStr = ahora.toISOString().split("T")[0];
       const horaStr = ahora.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
+      // Objeto estrictamente saneado sin ningún valor undefined
       const nuevoFichaje = {
-        operario: opNombre,
-        tipo: tipo,
-        fechaStr: fechaStr,
-        horaStr: horaStr,
-        ubicacion: ubicacionObra,
-        coordenadas: coordenadas || null,
+        operario: String(opNombre),
+        tipo: String(tipo),
+        fechaStr: String(fechaStr),
+        horaStr: String(horaStr),
+        ubicacion: String(ubicacionObra),
+        lat: latitud,
+        lng: longitud,
         timestampMs: ahora.getTime(),
         fechaCreacion: serverTimestamp()
       };
@@ -3606,74 +3620,11 @@
         await addDoc(colFichajes, nuevoFichaje);
         window.verificarEstadoFichajeOperario();
       } catch (err) {
-        console.error("Error guardando fichaje:", err);
-        alert("Error al conectar con el servidor de fichajes.");
+        console.error("Detalle del error Firestore:", err);
+        alert("Error técnico de Firestore: " + err.message);
+        window.verificarEstadoFichajeOperario();
       }
     };
-
-    // 4. Renderizar la tabla histórica
-    window.renderizarFichajes = () => {
-      const tbody = document.getElementById("tabla-fichajes-body");
-      if (!tbody) return;
-      tbody.innerHTML = "";
-
-      const mesFiltro = document.getElementById("filtro-mes-fichajes").value; // "YYYY-MM"
-
-      const filtrados = cacheFichajes
-        .filter(f => !mesFiltro || (f.fechaStr && f.fechaStr.startsWith(mesFiltro)))
-        .sort((a, b) => (b.timestampMs || 0) - (a.timestampMs || 0));
-
-      if (filtrados.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" class="py-6 text-center text-slate-400 italic">No hay registros de fichajes en el periodo seleccionado.</td></tr>';
-        return;
-      }
-
-      filtrados.slice(0, 50).forEach(f => {
-        let badgeTipo = "";
-        let textoTipo = "";
-        if (f.tipo === "ENTRADA") {
-          badgeTipo = "bg-emerald-100 text-emerald-800 border-emerald-200";
-          textoTipo = "▶️ Entrada";
-        } else if (f.tipo === "SALIDA") {
-          badgeTipo = "bg-rose-100 text-rose-800 border-rose-200";
-          textoTipo = "⏹️ Salida";
-        } else if (f.tipo === "INICIO_PAUSA") {
-          badgeTipo = "bg-amber-100 text-amber-800 border-amber-200";
-          textoTipo = "☕ Pausa";
-        } else {
-          badgeTipo = "bg-sky-100 text-sky-800 border-sky-200";
-          textoTipo = "↩️ Retorno";
-        }
-
-        let gpsHtml = '<span class="text-slate-300 italic">Sin GPS</span>';
-        if (f.coordenadas && f.coordenadas.lat) {
-          const urlMaps = `https://www.google.com/maps?q=${f.coordenadas.lat},${f.coordenadas.lng}`;
-          gpsHtml = `<a href="${urlMaps}" target="_blank" class="text-indigo-600 hover:underline font-mono">📍 Ver mapa</a>`;
-        }
-
-        const tr = document.createElement("tr");
-        tr.className = "hover:bg-slate-50 transition border-b border-slate-100";
-        tr.innerHTML = `
-          <td class="py-2.5 px-3 font-medium text-slate-800">${f.fechaStr || '-'}</td>
-          <td class="py-2.5 px-3 font-bold text-slate-900">${f.operario}</td>
-          <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold border ${badgeTipo}">${textoTipo}</span></td>
-          <td class="py-2.5 px-3 font-mono font-bold text-slate-800">${f.horaStr || '-'}</td>
-          <td class="py-2.5 px-3 text-slate-600 truncate max-w-xs">🏗️ ${f.ubicacion || 'Sede'}</td>
-          <td class="py-2.5 px-3 text-right">${gpsHtml}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-    };
-
-    // 5. Escucha en tiempo real de fichajes y selector de operarios
-    onSnapshot(colFichajes, (snap) => {
-      cacheFichajes = [];
-      snap.forEach(docSnap => {
-        cacheFichajes.push({ id: docSnap.id, ...docSnap.data() });
-      });
-      window.renderizarFichajes();
-      window.verificarEstadoFichajeOperario();
-    });
 
     // Rellenar selectores de operarios y obras en el módulo de fichaje
     function actualizarSelectoresFichaje() {
