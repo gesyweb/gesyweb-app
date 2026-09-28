@@ -62,6 +62,9 @@
         <button id="nav-ajustes" onclick="window.cambiarVista('ajustes')" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
           <span>⚙️</span> Mi Empresa (Marca Blanca)
         </button>
+        <button id="nav-calendario" onclick="window.cambiarVista('calendario')" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
+          <span>📅</span> Calendario Operativo
+        </button>
       </nav>
     </div>
 
@@ -457,7 +460,45 @@
         </div>
       </div>
     </div>
+    
+    <!-- 2.10: CALENDARIO OPERATIVO Y LOGÍSTICA -->
+    <div id="vista-calendario" class="hidden">
+      <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
+        <div>
+          <h2 class="text-2xl font-bold text-slate-900">Calendario Operativo y Planificación</h2>
+          <p class="text-sm text-slate-500">Cronograma de reformas, visitas técnicas de averías y control de plazos.</p>
+        </div>
+        <div class="flex items-center gap-2 bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-sm">
+          <button onclick="window.cambiarMesCalendario(-1)" class="p-1.5 rounded-lg hover:bg-slate-100 text-slate-700 font-bold">◀</button>
+          <span id="cal-mes-anio" class="text-sm font-bold text-slate-900 min-w-[130px] text-center capitalize"></span>
+          <button onclick="window.cambiarMesCalendario(1)" class="p-1.5 rounded-lg hover:bg-slate-100 text-slate-700 font-bold">▶</button>
+          <button onclick="window.irMesActualCalendario()" class="ml-2 text-xs font-semibold px-2.5 py-1 bg-slate-100 hover:bg-slate-200 rounded-lg text-slate-700">Hoy</button>
+        </div>
+      </header>
 
+      <!-- Leyenda de colores -->
+      <div class="mt-4 flex flex-wrap gap-4 text-xs">
+        <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-amber-500"></span> 🏗️ Inicio / Fin de Obra</span>
+        <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-rose-500"></span> ⚠️ Citas de Incidencias</span>
+        <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-sky-500"></span> 🩺 Reconocimiento Médico Operarios</span>
+      </div>
+
+      <!-- Cuícula del Calendario -->
+      <div class="mt-4 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="grid grid-cols-7 bg-slate-50 border-b border-slate-200 text-center text-xs font-bold text-slate-600 py-2.5">
+          <span>Lun</span>
+          <span>Mar</span>
+          <span>Mié</span>
+          <span>Jue</span>
+          <span>Vie</span>
+          <span class="text-amber-700">Sáb</span>
+          <span class="text-rose-700">Dom</span>
+        </div>
+        <div id="cal-rejilla-dias" class="grid grid-cols-7 auto-rows-fr divide-x divide-y divide-slate-100 min-h-[500px]">
+          <!-- Se genera dinámicamente -->
+        </div>
+      </div>
+    </div>
   </main>
 
   <!-- ======================================================== -->
@@ -1044,6 +1085,7 @@
 
     const vistas = {
       dashboard: document.getElementById("vista-dashboard"),
+      calendario: document.getElementById("vista-calendario"),
       obras: document.getElementById("vista-obras"),
       detalleObra: document.getElementById("vista-detalle-obra"),
       clientes: document.getElementById("vista-clientes"),
@@ -1058,6 +1100,7 @@
 
     const botonesNav = {
       dashboard: document.getElementById("nav-dashboard"),
+      calendario: document.getElementById("nav-calendario"),
       obras: document.getElementById("nav-obras"),
       clientes: document.getElementById("nav-clientes"),
       incidencias: document.getElementById("nav-incidencias"),
@@ -1633,6 +1676,7 @@
 
       renderizarObras();
       window.actualizarDashboard();
+      window.renderizarCalendario();
 
       if (obraSeleccionadaActual && !vistas.detalleObra.classList.contains("hidden")) {
         const actualizada = cacheObras.find(o => o.id === obraSeleccionadaActual.id);
@@ -2098,7 +2142,7 @@
       });
       renderizarIncidencias();
       window.actualizarDashboard();
-
+      window.renderizarCalendario();
       if (incidenciaSeleccionadaActual && !vistas.detalleIncidencia.classList.contains("hidden")) {
         const actualizada = cacheIncidencias.find(i => i.id === incidenciaSeleccionadaActual.id);
         if (actualizada) window.abrirDetalleIncidencia(actualizada.id);
@@ -2811,6 +2855,97 @@
     window.borrarRegistro = async (coleccion, id) => {
       if (confirm("¿Estás seguro de que deseas eliminar este registro?")) {
         await deleteDoc(doc(db, coleccion, id));
+      }
+    };
+
+    // ========================================================
+    // CALENDARIO OPERATIVO (MOTOR LOGÍSTICO)
+    // ========================================================
+    let fechaCalendarioActual = new Date();
+
+    window.cambiarMesCalendario = (delta) => {
+      fechaCalendarioActual.setMonth(fechaCalendarioActual.getMonth() + delta);
+      window.renderizarCalendario();
+    };
+
+    window.irMesActualCalendario = () => {
+      fechaCalendarioActual = new Date();
+      window.renderizarCalendario();
+    };
+
+    window.renderizarCalendario = () => {
+      const elMesAnio = document.getElementById("cal-mes-anio");
+      const rejilla = document.getElementById("cal-rejilla-dias");
+      if (!rejilla || !elMesAnio) return;
+
+      const anio = fechaCalendarioActual.getFullYear();
+      const mes = fechaCalendarioActual.getMonth();
+
+      const nombreMes = new Intl.DateTimeFormat('es-ES', { month: 'long', year: 'numeric' }).format(fechaCalendarioActual);
+      elMesAnio.textContent = nombreMes;
+
+      rejilla.innerHTML = "";
+
+      const primerDiaMes = new Date(anio, mes, 1);
+      const ultimoDiaMes = new Date(anio, mes + 1, 0);
+
+      // En JS 0 = Domingo, 1 = Lunes... Ajustamos para que Lunes sea 0
+      let primerDiaSemana = primerDiaMes.getDay() - 1;
+      if (primerDiaSemana === -1) primerDiaSemana = 6;
+
+      const totalDias = ultimoDiaMes.getDate();
+
+      // Días vacíos del mes anterior
+      for (let i = 0; i < primerDiaSemana; i++) {
+        const celdaVacia = document.createElement("div");
+        celdaVacia.className = "bg-slate-50/50 p-2 min-h-[90px] border-b border-r border-slate-100";
+        rejilla.appendChild(celdaVacia);
+      }
+
+      const hoyStr = new Date().toISOString().split("T")[0];
+
+      // Días del mes actual
+      for (let dia = 1; dia <= totalDias; dia++) {
+        const fechaStr = anio + "-" + String(mes + 1).padStart(2, '0') + "-" + String(dia).padStart(2, '0');
+        const esHoy = fechaStr === hoyStr;
+
+        const celda = document.createElement("div");
+        celda.className = "p-1.5 sm:p-2 min-h-[90px] sm:min-h-[110px] border-b border-r border-slate-100 flex flex-col justify-between transition hover:bg-slate-50/80 " + (esHoy ? "bg-amber-50/40" : "bg-white");
+
+        let cabeceraDia = '<div class="flex justify-between items-center mb-1">' +
+          '<span class="text-xs font-bold ' + (esHoy ? "w-6 h-6 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center font-black" : "text-slate-700") + '">' + dia + '</span>' +
+        '</div>';
+
+        let eventosHtml = '<div class="space-y-1 overflow-y-auto max-h-[85px]">';
+
+        // 1. Obras: Inicio o Fin en este día
+        cacheObras.forEach(o => {
+          if (o.fechaInicio === fechaStr) {
+            eventosHtml += '<div onclick="window.abrirDetalleObra(\'' + o.id + '\')" class="p-1 rounded bg-amber-100 text-amber-900 border border-amber-200 text-[10px] font-bold truncate cursor-pointer hover:opacity-80" title="Inicio: ' + o.nombre + '">🏗️ Inicia: ' + o.nombre + '</div>';
+          }
+          if (o.fechaFin === fechaStr) {
+            eventosHtml += '<div onclick="window.abrirDetalleObra(\'' + o.id + '\')" class="p-1 rounded bg-emerald-100 text-emerald-900 border border-emerald-200 text-[10px] font-bold truncate cursor-pointer hover:opacity-80" title="Fin estimado: ' + o.nombre + '">🏁 Entrega: ' + o.nombre + '</div>';
+          }
+        });
+
+        // 2. Incidencias: Cita programada en este día
+        cacheIncidencias.forEach(inc => {
+          if (inc.fechaHora && inc.fechaHora.startsWith(fechaStr)) {
+            const hora = inc.fechaHora.split("T")[1] ? inc.fechaHora.split("T")[1].substring(0, 5) : "";
+            eventosHtml += '<div onclick="window.abrirDetalleIncidencia(\'' + inc.id + '\')" class="p-1 rounded bg-rose-100 text-rose-900 border border-rose-200 text-[10px] font-bold truncate cursor-pointer hover:opacity-80" title="' + inc.titulo + ' (' + (inc.operario || 'Sin asignar') + ')">⚠️ ' + (hora ? hora + ' ' : '') + inc.titulo + '</div>';
+          }
+        });
+
+        // 3. Reconocimientos Médicos de Operarios
+        cacheOperarios.forEach(op => {
+          if (op.fechaMedico === fechaStr) {
+            eventosHtml += '<div onclick="window.abrirDetalleOperario(\'' + op.id + '\')" class="p-1 rounded bg-sky-100 text-sky-900 border border-sky-200 text-[10px] font-bold truncate cursor-pointer hover:opacity-80" title="Reconocimiento médico de ' + op.nombre + '">🩺 Médico: ' + op.nombre + '</div>';
+          }
+        });
+
+        eventosHtml += '</div>';
+        celda.innerHTML = cabeceraDia + eventosHtml;
+        rejilla.appendChild(celda);
       }
     };
   </script>
