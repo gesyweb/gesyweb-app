@@ -20,9 +20,7 @@ const db = initializeFirestore(app, {
 
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').catch((err) => {
-            console.log('SW registration failed:', err);
-        });
+        navigator.serviceWorker.register('./sw.js').catch((err) => console.log('SW error:', err));
     });
 }
 
@@ -32,41 +30,25 @@ const colClientes = collection(db, "clientes");
 const colIncidencias = collection(db, "incidencias");
 const colOperarios = collection(db, "operarios");
 const colHerramientas = collection(db, "herramientas");
-const docConfigEmpresa = doc(db, "configuracion", "empresa");
 const colVehiculos = collection(db, "vehiculos"); 
 const colFichajes = collection(db, "fichajes");
+const docConfigEmpresa = doc(db, "configuracion", "empresa");
 
-// Cachés globales
-let cacheFichajes = [];
-let cacheVehiculos = [];
-let cacheObras = [];
-let cacheClientes = [];
-let cacheIncidencias = [];
-let cacheOperarios = [];
-let cacheHerramientas = [];
-
-let datosEmpresaActual = {
-    nombre: "Gesyweb Reformas",
-    cif: "",
-    telefono: "",
-    email: "",
-    direccion: "",
-    logo: "",
-    claveAdmin: "admin1234"
-};
-
-// ========================================================
-// 1. SISTEMA DE AUTENTICACIÓN (RBAC)
-// ========================================================
+// Cachés
+let cacheFichajes = [], cacheVehiculos = [], cacheObras = [], cacheClientes = [];
+let cacheIncidencias = [], cacheOperarios = [], cacheHerramientas = [];
+let datosEmpresaActual = { nombre: "Gesyweb Reformas", cif: "", telefono: "", email: "", direccion: "", logo: "", claveAdmin: "admin1234" };
 let usuarioActivo = JSON.parse(localStorage.getItem("gesyweb_usuario_activo") || "null");
 
+// ========================================================
+// 1. AUTENTICACIÓN Y ROLES (RBAC)
+// ========================================================
 window.conmutarTabLogin = (tab) => {
     const btnGer = document.getElementById("tab-login-gerencia");
     const btnOpe = document.getElementById("tab-login-operario");
     const fGer = document.getElementById("form-login-gerencia");
     const fOpe = document.getElementById("form-login-operario");
-    const err = document.getElementById("login-error-msg");
-    if (err) err.classList.add("hidden");
+    document.getElementById("login-error-msg")?.classList.add("hidden");
 
     if (tab === "GERENCIA") {
         btnGer.className = "py-2.5 rounded-lg bg-slate-900 text-white shadow-sm transition";
@@ -95,18 +77,12 @@ window.procesarLogin = (rolSolicitado) => {
             localStorage.setItem("gesyweb_usuario_activo", JSON.stringify(usuarioActivo));
             aplicarSesionUsuario();
         } else {
-            err.textContent = "Credenciales de oficina incorrectas. Verifica usuario o clave.";
+            err.textContent = "Credenciales incorrectas.";
             err.classList.remove("hidden");
         }
     } else {
         const nom = document.getElementById("login-operario-nombre").value.trim().toLowerCase();
         const dni = document.getElementById("login-operario-dni").value.trim().toUpperCase().replace(/[\s-]/g, "");
-
-        if (!nom || !dni) {
-            err.textContent = "Introduce tu nombre completo y tu DNI/NIE.";
-            err.classList.remove("hidden");
-            return;
-        }
 
         const encontrado = cacheOperarios.find(o => {
             const dniLimpio = (o.dni || "").toUpperCase().replace(/[\s-]/g, "");
@@ -118,7 +94,7 @@ window.procesarLogin = (rolSolicitado) => {
             localStorage.setItem("gesyweb_usuario_activo", JSON.stringify(usuarioActivo));
             aplicarSesionUsuario();
         } else {
-            err.textContent = "Operario no encontrado o DNI incorrecto. Solicita tu alta a Gerencia.";
+            err.textContent = "Operario no encontrado o DNI incorrecto.";
             err.classList.remove("hidden");
         }
     }
@@ -132,291 +108,267 @@ window.cerrarSesion = () => {
 
 function aplicarSesionUsuario() {
     const modal = document.getElementById("modal-login");
-    if (!usuarioActivo) {
-        modal.classList.remove("hidden");
-        return;
-    }
+    if (!usuarioActivo) { modal.classList.remove("hidden"); return; }
     modal.classList.add("hidden");
 
     const badge = document.getElementById("badge-rol-usuario");
-    const nom = document.getElementById("nombre-usuario-sesion");
     if (badge) {
         badge.textContent = usuarioActivo.rol;
-        badge.className = usuarioActivo.rol === "GERENCIA"
-            ? "px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/30"
-            : "px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-sky-500/20 text-sky-300 border border-sky-500/30";
+        badge.className = usuarioActivo.rol === "GERENCIA" 
+            ? "px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-amber-500/20 text-amber-300" 
+            : "px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-sky-500/20 text-sky-300";
     }
-    if (nom) nom.textContent = usuarioActivo.nombre;
+    document.getElementById("nombre-usuario-sesion").textContent = usuarioActivo.nombre;
 
-    const navDash = document.getElementById("nav-dashboard");
-    const navCli = document.getElementById("nav-clientes");
-    const navOp = document.getElementById("nav-operarios");
-    const navAj = document.getElementById("nav-ajustes");
-    const btnNuevaObra = document.getElementById("btn-abrir-modal-obra");
+    const esOperario = usuarioActivo.rol === "OPERARIO";
+    ["nav-dashboard", "nav-clientes", "nav-operarios", "nav-ajustes", "btn-abrir-modal-obra"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) esOperario ? el.classList.add("hidden") : el.classList.remove("hidden");
+    });
 
-    if (usuarioActivo.rol === "OPERARIO") {
-        if (navDash) navDash.classList.add("hidden");
-        if (navCli) navCli.classList.add("hidden");
-        if (navOp) navOp.classList.add("hidden");
-        if (navAj) navAj.classList.add("hidden");
-        if (btnNuevaObra) btnNuevaObra.classList.add("hidden");
-        window.cambiarVista('fichajes');
-    } else {
-        if (navDash) navDash.classList.remove("hidden");
-        if (navCli) navCli.classList.remove("hidden");
-        if (navOp) navOp.classList.remove("hidden");
-        if (navAj) navAj.classList.remove("hidden");
-        if (btnNuevaObra) btnNuevaObra.classList.remove("hidden");
-        window.cambiarVista('dashboard');
-    }
-
-    if (typeof renderizarObras === 'function') renderizarObras();
-    if (typeof renderizarIncidencias === 'function') renderizarIncidencias();
-    if (typeof actualizarSelectoresFichaje === 'function') actualizarSelectoresFichaje();
+    window.cambiarVista(esOperario ? 'fichajes' : 'dashboard');
+    renderizarObras();
+    renderizarIncidencias();
+    actualizarSelectoresFichaje();
 }
 
 // ========================================================
-// 2. NAVEGACIÓN Y VISTAS
+// 2. NAVEGACIÓN GLOBAL
 // ========================================================
-const vistas = {
-    dashboard: document.getElementById("vista-dashboard"),
-    calendario: document.getElementById("vista-calendario"),
-    fichajes: document.getElementById("vista-fichajes"),
-    obras: document.getElementById("vista-obras"),
-    detalleObra: document.getElementById("vista-detalle-obra"),
-    clientes: document.getElementById("vista-clientes"),
-    detalleCliente: document.getElementById("vista-detalle-cliente"),
-    incidencias: document.getElementById("vista-incidencias"),
-    detalleIncidencia: document.getElementById("vista-detalle-incidencia"),
-    operarios: document.getElementById("vista-operarios"),
-    detalleOperario: document.getElementById("vista-detalle-operario"),
-    herramientas: document.getElementById("vista-herramientas"),
-    vehiculos: document.getElementById("vista-vehiculos"),
-    ajustes: document.getElementById("vista-ajustes")
-};
-
-const botonesNav = {
-    dashboard: document.getElementById("nav-dashboard"),
-    calendario: document.getElementById("nav-calendario"),
-    fichajes: document.getElementById("nav-fichajes"),
-    obras: document.getElementById("nav-obras"),
-    clientes: document.getElementById("nav-clientes"),
-    incidencias: document.getElementById("nav-incidencias"),
-    operarios: document.getElementById("nav-operarios"),
-    herramientas: document.getElementById("nav-herramientas"),
-    vehiculos: document.getElementById("nav-vehiculos"),
-    ajustes: document.getElementById("nav-ajustes")
-};
+const vistasIDs = ["dashboard", "obras", "detalle-obra", "clientes", "detalle-cliente", "incidencias", "detalle-incidencia", "operarios", "detalle-operario", "fichajes", "herramientas", "vehiculos", "calendario", "ajustes"];
 
 window.cambiarVista = (activa) => {
-    if (usuarioActivo && usuarioActivo.rol === "OPERARIO") {
-        if (["dashboard", "clientes", "detalleCliente", "operarios", "detalleOperario", "ajustes"].includes(activa)) {
-            activa = "fichajes";
-        }
+    if (usuarioActivo?.rol === "OPERARIO" && ["dashboard", "clientes", "detalle-cliente", "operarios", "detalle-operario", "ajustes"].includes(activa)) {
+        activa = "fichajes";
     }
-
-    Object.keys(vistas).forEach(k => {
-        if (vistas[k]) {
-            if (k === activa) {
-                vistas[k].classList.remove("hidden");
-                if (botonesNav[k]) {
-                    botonesNav[k].className = "nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg bg-slate-800 text-white font-medium transition";
-                }
-            } else {
-                vistas[k].classList.add("hidden");
-                if (botonesNav[k]) {
-                    botonesNav[k].className = "nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition";
-                }
-            }
-        }
+    vistasIDs.forEach(id => {
+        const vista = document.getElementById(`vista-${id}`);
+        const nav = document.getElementById(`nav-${id}`);
+        if (vista) vista.classList.toggle("hidden", activa !== id);
+        if (nav) nav.className = (activa === id || activa === `detalle-${id}`) 
+            ? "nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg bg-slate-800 text-white font-medium transition" 
+            : "nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition";
     });
     window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
 // ========================================================
-// 3. ACTUALIZACIÓN DEL DASHBOARD Y LISTENERS DE COLECCIONES
+// 3. UTILIDADES Y CORE
 // ========================================================
-window.actualizarDashboard = () => {
-    const totalPresupuestado = cacheObras.reduce((acc, curr) => acc + (Number(curr.totalPresupuesto) || Number(curr.presupuesto) || 0), 0);
-    const obrasActivas = cacheObras.filter(o => o.estado === "En curso");
-
-    const elPresupuesto = document.getElementById("dash-total-presupuesto");
-    const elObrasActivas = document.getElementById("dash-obras-activas");
-    if (elPresupuesto) elPresupuesto.textContent = totalPresupuestado.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €';
-    if (elObrasActivas) elObrasActivas.textContent = obrasActivas.length;
-
-    const incPendientes = cacheIncidencias.filter(i => i.estado === "Abierta" || i.estado === "En curso");
-    const elInc = document.getElementById("dash-incidencias-abiertas");
-    if (elInc) elInc.textContent = incPendientes.length;
-
-    const elOp = document.getElementById("dash-operarios-total");
-    if (elOp) elOp.textContent = cacheOperarios.length;
-
-    const elVeh = document.getElementById("dash-vehiculos-total");
-    if (elVeh) {
-        const activas = cacheVehiculos.filter(v => v.estado === "Operativa").length;
-        elVeh.textContent = cacheVehiculos.length > 0 ? activas + ' / ' + cacheVehiculos.length : '0';
-    }
-
-    const cIncDash = document.getElementById("dash-lista-incidencias");
-    if (cIncDash) {
-        if (incPendientes.length === 0) {
-            cIncDash.innerHTML = '<p class="text-xs text-slate-400 italic bg-slate-50 p-3 rounded-lg border">No hay incidencias pendientes de resolver. ¡Todo al día!</p>';
-        } else {
-            cIncDash.innerHTML = incPendientes.slice(0, 4).map(i => {
-                let bUrg = i.prioridad === "Urgente" ? "bg-rose-100 text-rose-800" : "bg-amber-100 text-amber-800";
-                return `<div class="flex items-center justify-between p-3 bg-slate-50 border rounded-xl hover:bg-rose-50/50 transition cursor-pointer" onclick="window.abrirDetalleIncidencia('${i.id}')">
-                    <div>
-                        <div class="flex items-center gap-2 mb-0.5">
-                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${bUrg}">${i.prioridad}</span>
-                            <span class="text-xs font-bold text-slate-800">${i.titulo}</span>
-                        </div>
-                        <p class="text-[11px] text-slate-500">🏗️ ${i.obra} • 👷 ${i.operario || 'Sin asignar'}</p>
-                    </div>
-                    <span class="text-xs text-rose-600 font-bold">Ver →</span>
-                </div>`;
-            }).join('');
-        }
-    }
-
-    const cObrasDash = document.getElementById("dash-lista-obras");
-    if (cObrasDash) {
-        if (obrasActivas.length === 0) {
-            cObrasDash.innerHTML = '<p class="text-xs text-slate-400 italic bg-slate-50 p-3 rounded-lg border">No hay obras en ejecución en este momento.</p>';
-        } else {
-            cObrasDash.innerHTML = obrasActivas.slice(0, 4).map(o => {
-                const precio = (Number(o.totalPresupuesto) || Number(o.presupuesto) || 0).toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €';
-                return `<div class="flex items-center justify-between p-3 bg-slate-50 border rounded-xl hover:bg-amber-50/50 transition cursor-pointer" onclick="window.abrirDetalleObra('${o.id}')">
-                    <div>
-                        <h4 class="text-xs sm:text-sm font-bold text-slate-900">${o.nombre}</h4>
-                        <p class="text-[11px] text-slate-500">👤 ${o.cliente || 'Particular'} • 📍 ${o.direccion || 'Sin dirección'}</p>
-                    </div>
-                    <div class="text-right">
-                        <span class="text-xs font-black text-slate-800">${precio}</span>
-                        <p class="text-[10px] text-amber-700 font-semibold">Detalle →</p>
-                    </div>
-                </div>`;
-            }).join('');
-        }
-    }
-};
-
 window.borrarRegistro = async (coleccion, id) => {
-    if (confirm("¿Estás seguro de que deseas eliminar este registro?")) {
+    if (confirm("¿Eliminar definitivamente este registro?")) {
         await deleteDoc(doc(db, coleccion, id));
-        window.cambiarVista(coleccion); // Vuelve al listado
+        window.cambiarVista(coleccion);
     }
 };
 
 window.generarCabeceraMarcaBlanca = () => {
-    let logoHtml = '<div class="w-10 h-10 rounded-lg bg-amber-500 flex items-center justify-center font-black text-slate-950 text-xl">G</div>';
-    if (datosEmpresaActual.logo) {
-        logoHtml = `<img src="${datosEmpresaActual.logo}" class="max-h-12 w-auto object-contain">`;
-    }
+    const logo = datosEmpresaActual.logo ? `<img src="${datosEmpresaActual.logo}" class="max-h-12">` : `<div class="w-10 h-10 rounded-lg bg-amber-500 flex items-center justify-center font-black text-slate-950">G</div>`;
     return `<div class="flex justify-between items-center pb-3 border-b-2 border-slate-800 mb-4">
-        <div class="flex items-center gap-3">
-            ${logoHtml}
-            <div>
-                <h2 class="text-lg font-black text-slate-900 leading-tight">${datosEmpresaActual.nombre || 'Gesyweb'}</h2>
-                <p class="text-[11px] text-slate-500">${datosEmpresaActual.cif ? 'CIF: ' + datosEmpresaActual.cif + ' • ' : ''}${datosEmpresaActual.direccion || ''}</p>
-            </div>
-        </div>
-        <div class="text-right text-[11px] text-slate-600">
-            ${datosEmpresaActual.telefono ? '<p>📞 ' + datosEmpresaActual.telefono + '</p>' : ''}
-            ${datosEmpresaActual.email ? '<p>✉️ ' + datosEmpresaActual.email + '</p>' : ''}
-        </div>
+        <div class="flex items-center gap-3">${logo}<div><h2 class="text-lg font-black">${datosEmpresaActual.nombre}</h2><p class="text-[11px] text-slate-500">${datosEmpresaActual.cif}</p></div></div>
     </div>`;
 };
 
-// Listeners de Firestore
-onSnapshot(docConfigEmpresa, (snapshot) => {
-    if (snapshot.exists()) {
-        datosEmpresaActual = snapshot.data();
-        const inpNom = document.getElementById("empresa-nombre");
-        const inpCif = document.getElementById("empresa-cif");
-        const inpTel = document.getElementById("empresa-tel");
-        const inpEml = document.getElementById("empresa-email");
-        const inpDir = document.getElementById("empresa-direccion");
-        const pLogo = document.getElementById("preview-logo-empresa");
-        const inpClave = document.getElementById("empresa-clave-admin");
+window.actualizarDashboard = () => {
+    const esOperario = usuarioActivo?.rol === "OPERARIO";
+    if (esOperario) return;
 
-        if (inpNom) inpNom.value = datosEmpresaActual.nombre || "";
-        if (inpCif) inpCif.value = datosEmpresaActual.cif || "";
-        if (inpTel) inpTel.value = datosEmpresaActual.telefono || "";
-        if (inpEml) inpEml.value = datosEmpresaActual.email || "";
-        if (inpDir) inpDir.value = datosEmpresaActual.direccion || "";
-        if (inpClave) inpClave.value = datosEmpresaActual.claveAdmin || "admin1234";
-        if (pLogo && datosEmpresaActual.logo) {
-            pLogo.innerHTML = `<img src="${datosEmpresaActual.logo}" class="w-full h-full object-contain">`;
-        }
+    const obrasActivas = cacheObras.filter(o => o.estado === "En curso");
+    const incActivas = cacheIncidencias.filter(i => i.estado !== "Resuelta");
+    const total = cacheObras.reduce((acc, curr) => acc + (Number(curr.totalPresupuesto) || 0), 0);
+    
+    if(document.getElementById("dash-total-presupuesto")) document.getElementById("dash-total-presupuesto").textContent = total.toLocaleString('es-ES') + ' €';
+    if(document.getElementById("dash-obras-activas")) document.getElementById("dash-obras-activas").textContent = obrasActivas.length;
+    if(document.getElementById("dash-incidencias-abiertas")) document.getElementById("dash-incidencias-abiertas").textContent = incActivas.length;
+    if(document.getElementById("dash-operarios-total")) document.getElementById("dash-operarios-total").textContent = cacheOperarios.length;
+};
+
+// ========================================================
+// 4. OBRAS Y PRESUPUESTOS
+// ========================================================
+let filtroObras = 'todas', obraSel = null;
+window.filtrarObras = (est, btn) => { filtroObras = est; if(btn) document.querySelectorAll('.btn-filtro').forEach(b => b.classList.remove('bg-slate-900', 'text-white')); if(btn) btn.classList.add('bg-slate-900', 'text-white'); renderizarObras(); };
+
+function renderizarObras() {
+    const el = document.getElementById("lista-proyectos");
+    if (!el) return;
+    const esOp = usuarioActivo?.rol === "OPERARIO";
+    let lista = esOp ? cacheObras.filter(o => o.operarios?.includes(usuarioActivo.nombre)) : cacheObras;
+    lista = filtroObras === 'todas' ? lista : lista.filter(o => o.estado === filtroObras);
+    
+    el.innerHTML = lista.map(o => `
+        <div class="bg-white p-6 rounded-2xl border shadow-sm hover:shadow-md transition">
+            <div class="flex justify-between items-start mb-2">
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100">${o.estado}</span>
+                ${!esOp ? `<span class="text-xs font-bold">${(Number(o.totalPresupuesto)||0).toLocaleString()} €</span>` : ''}
+            </div>
+            <h3 class="text-base font-bold">${o.nombre}</h3>
+            <p class="text-xs text-slate-500 mt-1">📍 ${o.direccion}</p>
+            <div class="mt-4 pt-3 border-t flex justify-end">
+                <button onclick="window.abrirDetalleObra('${o.id}')" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg text-xs shadow-sm">Ver Ficha</button>
+            </div>
+        </div>
+    `).join('') || `<p class="text-slate-500 col-span-full text-center">No hay obras.</p>`;
+}
+
+window.abrirDetalleObra = (id) => {
+    obraSel = cacheObras.find(o => o.id === id);
+    const esOp = usuarioActivo?.rol === "OPERARIO";
+    const total = Number(obraSel.totalPresupuesto)||0;
+    
+    document.getElementById("contenedor-detalle-obra").innerHTML = `
+        <div class="bg-white rounded-2xl p-6 border shadow-sm">
+            ${window.generarCabeceraMarcaBlanca()}
+            <div class="flex justify-between items-start mb-4">
+                <div><h1 class="text-2xl font-bold">${obraSel.nombre}</h1><p class="text-sm">📍 ${obraSel.direccion}</p></div>
+                ${!esOp ? `<div class="text-right"><span class="text-2xl font-black text-amber-700">${total.toLocaleString()} €</span></div>` : ''}
+            </div>
+            <div class="grid grid-cols-2 gap-4 mt-4 text-sm">
+                <div><strong>Cliente:</strong> ${obraSel.cliente || 'Particular'}</div>
+                <div><strong>Fechas:</strong> ${obraSel.fechaInicio || '-'} a ${obraSel.fechaFin || '-'}</div>
+            </div>
+            ${!esOp ? `
+                <div class="mt-6 flex gap-2">
+                    <button id="btn-editar-obra-actual" class="bg-slate-900 text-white px-4 py-2 rounded-lg text-sm" onclick="window.prepararEditarObra('${id}')">Editar</button>
+                    <button class="bg-rose-50 text-rose-700 px-4 py-2 rounded-lg text-sm border border-rose-200" onclick="window.borrarRegistro('proyectos', '${id}')">Eliminar</button>
+                </div>
+            ` : ''}
+        </div>
+    `;
+    window.cambiarVista('detalle-obra');
+};
+
+// Logica de Guardado Obra
+window.prepararEditarObra = (id) => {
+    document.getElementById("edit-obra-id").value = id;
+    document.getElementById("input-nombre").value = obraSel.nombre;
+    document.getElementById("input-direccion").value = obraSel.direccion;
+    document.getElementById("modal-obra").style.display = "flex";
+};
+
+document.getElementById("btn-submit-obra")?.addEventListener("click", async () => {
+    const nombre = document.getElementById("input-nombre").value.trim();
+    const id = document.getElementById("edit-obra-id").value;
+    if(!nombre) return alert("El nombre es obligatorio");
+    const data = { nombre, direccion: document.getElementById("input-direccion").value, fechaModificacion: serverTimestamp() };
+    id ? await updateDoc(doc(db, "proyectos", id), data) : await addDoc(colObras, { ...data, fechaCreacion: serverTimestamp(), estado: "Presupuestada" });
+    document.getElementById("modal-obra").style.display = "none";
+});
+
+// ========================================================
+// 5. INCIDENCIAS Y PARTES
+// ========================================================
+let filtroInc = 'todas';
+window.filtrarIncidencias = (est) => { filtroInc = est; renderizarIncidencias(); };
+
+function renderizarIncidencias() {
+    const el = document.getElementById("lista-incidencias");
+    if(!el) return;
+    const esOp = usuarioActivo?.rol === "OPERARIO";
+    let lista = esOp ? cacheIncidencias.filter(i => i.operario === usuarioActivo.nombre) : cacheIncidencias;
+    lista = filtroInc === 'todas' ? lista : lista.filter(i => i.estado === filtroInc);
+    
+    el.innerHTML = lista.map(i => `
+        <div class="bg-white p-6 rounded-2xl border shadow-sm cursor-pointer hover:shadow-md" onclick="window.abrirDetalleIncidencia('${i.id}')">
+            <span class="px-2 py-1 bg-slate-100 rounded text-xs font-bold">${i.estado}</span>
+            <h3 class="font-bold mt-2">${i.titulo}</h3>
+            <p class="text-xs mt-1">🏗️ ${i.obra}</p>
+        </div>
+    `).join('') || `<p class="text-slate-500 text-center col-span-full">No hay incidencias.</p>`;
+}
+
+window.abrirDetalleIncidencia = (id) => {
+    const inc = cacheIncidencias.find(i => i.id === id);
+    document.getElementById("contenedor-detalle-incidencia").innerHTML = `
+        <div class="bg-white rounded-2xl p-6 border shadow-sm">
+            <h1 class="text-2xl font-bold mb-2">${inc.titulo}</h1>
+            <p class="text-sm"><strong>Obra:</strong> ${inc.obra}</p>
+            <p class="text-sm"><strong>Responsable:</strong> ${inc.operario || 'Sin asignar'}</p>
+            <div class="mt-4"><button class="bg-slate-900 text-white px-4 py-2 rounded" onclick="window.prepararEditarInc('${id}')">Editar Parte</button></div>
+        </div>
+    `;
+    window.cambiarVista('detalle-incidencia');
+};
+
+window.prepararEditarInc = (id) => {
+    const d = cacheIncidencias.find(i => i.id === id);
+    document.getElementById("edit-incidencia-id").value = id;
+    document.getElementById("input-titulo-incidencia").value = d.titulo;
+    document.getElementById("select-obra-incidencia").value = d.obra;
+    document.getElementById("modal-incidencia").style.display = "flex";
+};
+
+document.getElementById("btn-guardar-incidencia")?.addEventListener("click", async () => {
+    const tit = document.getElementById("input-titulo-incidencia").value;
+    const id = document.getElementById("edit-incidencia-id").value;
+    const data = { titulo: tit, obra: document.getElementById("select-obra-incidencia").value, fechaModificacion: serverTimestamp() };
+    id ? await updateDoc(doc(db, "incidencias", id), data) : await addDoc(colIncidencias, { ...data, estado: "Abierta" });
+    document.getElementById("modal-incidencia").style.display = "none";
+});
+
+// ========================================================
+// 6. OPERARIOS Y FICHAJES
+// ========================================================
+function renderizarOperarios() {
+    const el = document.getElementById("lista-operarios");
+    if(el) el.innerHTML = cacheOperarios.map(op => `
+        <div class="bg-white p-6 rounded-2xl border shadow-sm">
+            <h3 class="font-bold">${op.nombre}</h3><p class="text-xs text-slate-500">${op.oficio}</p>
+            <div class="mt-4 flex gap-2"><button onclick="window.borrarRegistro('operarios','${op.id}')" class="text-rose-500 text-xs">Eliminar</button></div>
+        </div>
+    `).join('') || `<p>Sin operarios.</p>`;
+}
+
+document.getElementById("btn-guardar-operario")?.addEventListener("click", async () => {
+    const nombre = document.getElementById("input-nombre-operario").value;
+    await addDoc(colOperarios, { nombre, dni: document.getElementById("input-dni-operario").value, oficio: document.getElementById("input-oficio-operario").value });
+    document.getElementById("modal-operario").style.display = "none";
+});
+
+// Fichajes
+function actualizarSelectoresFichaje() {
+    const sel = document.getElementById("select-operario-fichaje");
+    if(sel) {
+        sel.innerHTML = `<option value="">Selecciona trabajador...</option>` + cacheOperarios.map(o => `<option value="${o.nombre}">${o.nombre}</option>`).join('');
+        if (usuarioActivo?.rol === "OPERARIO") { sel.value = usuarioActivo.nombre; sel.disabled = true; window.verificarEstadoFichajeOperario(); }
     }
-});
+}
 
-onSnapshot(colObras, (snap) => {
-    cacheObras = [];
-    snap.forEach(docSnap => {
-        cacheObras.push({ id: docSnap.id, ...docSnap.data() });
-    });
-    if (typeof renderizarObras === 'function') renderizarObras();
-    window.actualizarDashboard();
-    if (typeof actualizarSelectoresFichaje === 'function') actualizarSelectoresFichaje();
-});
+window.verificarEstadoFichajeOperario = () => {
+    const btnEntrada = document.getElementById("btn-fichar-entrada");
+    if(!btnEntrada) return;
+    const op = document.getElementById("select-operario-fichaje").value;
+    const hoyStr = new Date().toISOString().split("T")[0];
+    const fh = cacheFichajes.filter(f => f.operario === op && f.fechaStr === hoyStr).sort((a,b)=>b.timestampMs - a.timestampMs);
+    const est = fh.length ? fh[0].tipo : "SALIDA";
+    
+    btnEntrada.disabled = (est === "ENTRADA" || est === "FIN_PAUSA" || est === "INICIO_PAUSA");
+    document.getElementById("btn-fichar-salida").disabled = (est === "SALIDA");
+};
 
-onSnapshot(colIncidencias, (snap) => {
-    cacheIncidencias = [];
-    snap.forEach(docSnap => {
-        cacheIncidencias.push({ id: docSnap.id, ...docSnap.data() });
-    });
-    if (typeof renderizarIncidencias === 'function') renderizarIncidencias();
-    window.actualizarDashboard();
-});
+window.registrarFichaje = async (tipo) => {
+    const operario = document.getElementById("select-operario-fichaje").value;
+    if(!operario) return alert("Selecciona operario");
+    const ahora = new Date();
+    await addDoc(colFichajes, { operario, tipo, fechaStr: ahora.toISOString().split("T")[0], horaStr: ahora.toLocaleTimeString(), timestampMs: ahora.getTime() });
+};
 
-onSnapshot(colOperarios, (snap) => {
-    cacheOperarios = [];
-    snap.forEach(docSnap => {
-        cacheOperarios.push({ id: docSnap.id, ...docSnap.data() });
-    });
-    if (typeof renderizarOperarios === 'function') renderizarOperarios();
-    window.actualizarDashboard();
-    if (typeof actualizarSelectoresFichaje === 'function') actualizarSelectoresFichaje();
-});
+window.renderizarFichajes = () => {
+    const el = document.getElementById("tabla-fichajes-body");
+    if(el) el.innerHTML = cacheFichajes.sort((a,b)=>b.timestampMs - a.timestampMs).slice(0,50).map(f => `
+        <tr class="border-b"><td class="p-2">${f.fechaStr}</td><td class="p-2 font-bold">${f.operario}</td><td class="p-2">${f.tipo}</td><td class="p-2">${f.horaStr}</td></tr>
+    `).join('');
+};
 
-onSnapshot(colFichajes, (snap) => {
-    cacheFichajes = [];
-    snap.forEach(docSnap => {
-        cacheFichajes.push({ id: docSnap.id, ...docSnap.data() });
-    });
-    if (typeof window.renderizarFichajes === 'function') window.renderizarFichajes();
-    if (typeof window.verificarEstadoFichajeOperario === 'function') window.verificarEstadoFichajeOperario();
-});
+// ========================================================
+// 7. LISTENERS DE FIRESTORE
+// ========================================================
+onSnapshot(docConfigEmpresa, (snap) => { if(snap.exists()) datosEmpresaActual = snap.data(); });
+onSnapshot(colObras, (snap) => { cacheObras = snap.docs.map(d => ({id: d.id, ...d.data()})); renderizarObras(); actualizarDashboard(); });
+onSnapshot(colIncidencias, (snap) => { cacheIncidencias = snap.docs.map(d => ({id: d.id, ...d.data()})); renderizarIncidencias(); actualizarDashboard(); });
+onSnapshot(colOperarios, (snap) => { cacheOperarios = snap.docs.map(d => ({id: d.id, ...d.data()})); renderizarOperarios(); actualizarSelectoresFichaje(); });
+onSnapshot(colFichajes, (snap) => { cacheFichajes = snap.docs.map(d => ({id: d.id, ...d.data()})); window.renderizarFichajes(); window.verificarEstadoFichajeOperario(); });
+onSnapshot(colClientes, (snap) => { cacheClientes = snap.docs.map(d => ({id: d.id, ...d.data()})); });
 
-onSnapshot(colClientes, (snap) => {
-    cacheClientes = [];
-    snap.forEach(docSnap => {
-        cacheClientes.push({ id: docSnap.id, ...docSnap.data() });
-    });
-    if (typeof renderizarClientes === 'function') renderizarClientes();
-});
-
-onSnapshot(colHerramientas, (snap) => {
-    cacheHerramientas = [];
-    snap.forEach(docSnap => {
-        cacheHerramientas.push({ id: docSnap.id, ...docSnap.data() });
-    });
-    if (typeof renderizarHerramientas === 'function') renderizarHerramientas();
-});
-
-onSnapshot(colVehiculos, (snap) => {
-    cacheVehiculos = [];
-    snap.forEach(docSnap => {
-        cacheVehiculos.push({ id: docSnap.id, ...docSnap.data() });
-    });
-    if (typeof renderizarVehiculos === 'function') renderizarVehiculos();
-    window.actualizarDashboard();
-});
-
-// Inicialización de la sesión al arrancar la app
+// Inicializar
 aplicarSesionUsuario();
-
-// Funciones globales (renderizado y lógica de guardado), puedes migrar los bloques específicos 
-// (fichajes, obras, clientes, etc.) aquí, respetando exactamente la estructura de los scripts que te envié anteriormente.
