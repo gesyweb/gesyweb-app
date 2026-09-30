@@ -507,8 +507,95 @@
 
   <!-- MODALES EXISTENTES OMITIDOS AQUÍ POR BREVEDAD, DEBES PEGARLOS TODOS AQUÍ (OBRA, CLIENTE, INCIDENCIA, OPERARIO, HERRAMIENTA Y VEHICULO)
        MANTENIENDO SU ESTRUCTURA HTML TAL CUAL LA TIENES EN TU ARCHIVO ORIGINAL. -->
+  <!-- CONTENEDOR DE MODALES -->
   <div id="modales-container">
-    <!-- Aquí van los bloques HTML de los modales (id="modal-obra", id="modal-cliente", etc.) -->
+    
+    <!-- MODAL OBRA -->
+    <div id="modal-obra" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto">
+      <div class="bg-white rounded-2xl p-6 max-w-2xl w-full shadow-2xl my-8">
+        <div class="flex justify-between items-center pb-4 border-b border-slate-100">
+          <h3 class="text-lg font-bold text-slate-900">Nueva Obra / Presupuesto</h3>
+          <button type="button" onclick="document.getElementById('modal-obra').style.display='none'" class="text-2xl font-bold">&times;</button>
+        </div>
+        <div class="mt-4 space-y-4">
+          <input type="hidden" id="edit-obra-id" value="">
+          <div>
+            <label class="block text-xs font-semibold mb-1">Nombre de la Obra *</label>
+            <input id="input-nombre" type="text" class="w-full px-3 py-2 border rounded-lg text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1">Dirección</label>
+            <input id="input-direccion" type="text" class="w-full px-3 py-2 border rounded-lg text-sm">
+          </div>
+          <div class="flex justify-end gap-2 pt-4">
+            <button onclick="document.getElementById('modal-obra').style.display='none'" class="px-4 py-2 bg-slate-100 rounded-lg text-sm">Cancelar</button>
+            <button id="btn-submit-obra" class="px-4 py-2 bg-amber-500 font-bold rounded-lg text-sm text-slate-900">Guardar Obra</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL INCIDENCIA -->
+    <div id="modal-incidencia" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto">
+      <div class="bg-white rounded-2xl p-6 max-w-2xl w-full shadow-2xl my-8">
+        <div class="flex justify-between items-center pb-4 border-b border-slate-100">
+          <h3 class="text-lg font-bold text-slate-900">Parte de Incidencia</h3>
+          <button type="button" onclick="document.getElementById('modal-incidencia').style.display='none'" class="text-2xl font-bold">&times;</button>
+        </div>
+        <div class="mt-4 space-y-4">
+          <input type="hidden" id="edit-incidencia-id" value="">
+          <div>
+            <label class="block text-xs font-semibold mb-1">Título de la Avería *</label>
+            <input id="input-titulo-incidencia" type="text" class="w-full px-3 py-2 border rounded-lg text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1">Obra Afectada</label>
+            <select id="select-obra-incidencia" class="w-full px-3 py-2 border rounded-lg text-sm bg-white">
+              <option value="General">General / Sin obra asignada</option>
+            </select>
+          </div>
+          <div class="flex justify-end gap-2 pt-4">
+            <button onclick="document.getElementById('modal-incidencia').style.display='none'" class="px-4 py-2 bg-slate-100 rounded-lg text-sm">Cancelar</button>
+            <button id="btn-guardar-incidencia" class="px-4 py-2 bg-rose-500 text-white font-bold rounded-lg text-sm">Guardar Parte</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL OPERARIO -->
+    <div id="modal-operario" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto">
+      <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl my-8">
+        <div class="flex justify-between items-center pb-4 border-b border-slate-100">
+          <h3 class="text-lg font-bold text-slate-900">Alta de Operario</h3>
+          <button type="button" onclick="document.getElementById('modal-operario').style.display='none'" class="text-2xl font-bold">&times;</button>
+        </div>
+        <div class="mt-4 space-y-4">
+          <input type="hidden" id="edit-operario-id" value="">
+          <div>
+            <label class="block text-xs font-semibold mb-1">Nombre Completo *</label>
+            <input id="input-nombre-operario" type="text" class="w-full px-3 py-2 border rounded-lg text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1">DNI / NIE *</label>
+            <input id="input-dni-operario" type="text" class="w-full px-3 py-2 border rounded-lg text-sm uppercase">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1">Oficio</label>
+            <select id="input-oficio-operario" class="w-full px-3 py-2 border rounded-lg text-sm bg-white">
+              <option value="Albañil">Albañil</option>
+              <option value="Fontanero">Fontanero</option>
+              <option value="Electricista">Electricista</option>
+              <option value="Peón">Peón</option>
+            </select>
+          </div>
+          <div class="flex justify-end gap-2 pt-4">
+            <button onclick="document.getElementById('modal-operario').style.display='none'" class="px-4 py-2 bg-slate-100 rounded-lg text-sm">Cancelar</button>
+            <button id="btn-guardar-operario" class="px-4 py-2 bg-sky-600 text-white font-bold rounded-lg text-sm">Guardar Ficha</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <!-- ENLACE AL NUEVO ARCHIVO DE LÓGICA -->
