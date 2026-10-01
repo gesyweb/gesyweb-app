@@ -31,829 +31,559 @@
   </style>
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col md:flex-row">
-  <!-- ======================================================== -->
-  <!-- [PANTALLA DE ACCESO / LOGIN POR CREDENCIALES]            -->
-  <!-- ======================================================== -->
-  <div id="pantalla-login" class="fixed inset-0 bg-slate-950 flex items-center justify-center p-4 z-50">
-    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl text-white">
-      <div class="text-center mb-6">
-        <div class="w-14 h-14 rounded-2xl bg-amber-500 text-slate-950 font-black flex items-center justify-center text-3xl mx-auto shadow-lg mb-3">
-          G
-        </div>
-        <h2 class="text-2xl font-black tracking-wide">Gesyweb ERP</h2>
-        <p class="text-xs text-slate-400 mt-1">Control de Operaciones, Logística y Obras</p>
-      </div>
 
-      <!-- Selector de Modo de Acceso -->
-  <div class="flex rounded-xl bg-slate-950 p-1 mb-6 border border-slate-800">
-    <button id="tab-login-operario" onclick="window.seleccionarModoLogin('operario')" class="flex-1 py-2 text-xs font-bold rounded-lg bg-amber-500 text-slate-950 transition">
-      👷 Soy Operario
-    </button>
-    <button id="tab-login-oficina" onclick="window.seleccionarModoLogin('oficina')" class="flex-1 py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition">
-      💼 Oficina / Gerencia
-    </button>
-  </div>
-
-  <!-- Formulario Operario -->
-  <div id="form-login-operario" class="space-y-4">
-    <div>
-      <label class="block text-xs font-semibold text-slate-300 mb-1">Nombre Completo *</label>
-      <input id="login-nombre-operario" type="text" placeholder="Ej. Juan Pérez Gómez" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white outline-none focus:ring-2 focus:ring-amber-500">
-    </div>
-    <div>
-      <label class="block text-xs font-semibold text-slate-300 mb-1">Contraseña (Tu DNI / NIE con letra) *</label>
-      <input id="login-dni-operario" type="password" placeholder="Ej. 12345678Z" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white outline-none focus:ring-2 focus:ring-amber-500 font-mono">
-    </div>
-    <button onclick="window.iniciarSesionOperario()" class="w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl text-sm shadow-md transition">
-      Acceder al Sistema →
-    </button>
-  </div>
-
-  <!-- Formulario Oficina / Gerencia -->
-  <div id="form-login-oficina" class="space-y-4 hidden">
-    <div>
-      <label class="block text-xs font-semibold text-slate-300 mb-1">Usuario de Gestión *</label>
-      <input id="login-usuario-oficina" type="text" placeholder="admin" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white outline-none focus:ring-2 focus:ring-indigo-500">
-    </div>
-    <div>
-      <label class="block text-xs font-semibold text-slate-300 mb-1">Contraseña *</label>
-      <input id="login-clave-oficina" type="password" placeholder="••••••••" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white outline-none focus:ring-2 focus:ring-indigo-500">
-      <p class="text-[11px] text-slate-400 mt-1">Clave inicial por defecto: <strong>admin123</strong></p>
-    </div>
-    <button onclick="window.iniciarSesionOficina()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-sm shadow-md transition">
-      Acceso Administración →
-    </button>
-  </div>
-</div>
   <!-- ======================================================== -->
   <!-- [BLOQUE 1]: CABECERA Y MENÚ LATERAL                     -->
   <!-- ======================================================== -->
-  <nav class="mt-8 space-y-2">
-    <button id="nav-dashboard" onclick="window.cambiarVista('dashboard')" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg bg-slate-800 text-white font-medium transition">
-      <span>📊</span> Panel Principal
-    </button>
-    <button id="nav-obras" onclick="window.cambiarVista('obras')" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
-      <span>🏗️</span> Obras y Presupuestos
-    </button>
-    <button id="nav-clientes" onclick="window.cambiarVista('clientes')" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
-      <span>👥</span> Clientes
-    </button>
-    <button id="nav-incidencias" onclick="window.cambiarVista('incidencias')" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
-      <span>⚠️</span> Incidencias
-    </button>
-    <button id="nav-operarios" onclick="window.cambiarVista('operarios')" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
-      <span>👷</span> Operarios
-    </button>
-    <button id="nav-fichajes" onclick="window.cambiarVista('fichajes')" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
-      <span>⏱️</span> Control Horario (Fichajes)
-    </button>
-    <button id="nav-herramientas" onclick="window.cambiarVista('herramientas')" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
-      <span>🔨</span> Herramientas
-    </button>
-    <button id="nav-ajustes" onclick="window.cambiarVista('ajustes')" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
-      <span>⚙️</span> Mi Empresa (Marca Blanca)
-    </button>
-    <button id="nav-calendario" onclick="window.cambiarVista('calendario')" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
-      <span>📅</span> Calendario Operativo
-    </button>
-    <button id="nav-vehiculos" onclick="window.cambiarVista('vehiculos')" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
-      <span>🚐</span> Flota y Furgonetas
-    </button>
-  </nav>
-</div>
+  <aside class="w-full md:w-64 bg-slate-900 text-white p-6 flex flex-col justify-between shrink-0">
+    <div>
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-amber-500 flex items-center justify-center font-black text-slate-950">G</div>
+        <div>
+          <h1 class="text-xl font-bold tracking-tight text-white leading-tight">Gesyweb</h1>
+          <p class="text-xs text-slate-400">Control de Obras y Reformas</p>
+        </div>
+      </div>
+      
+      <nav class="mt-8 space-y-2">
+        <button id="nav-dashboard" onclick="window.cambiarVista('dashboard')" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg bg-slate-800 text-white font-medium transition">
+          <span>📊</span> Panel Principal
+        </button>
+        <button id="nav-obras" onclick="window.cambiarVista('obras')" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
+          <span>🏗️</span> Obras y Presupuestos
+        </button>
+        <button id="nav-clientes" onclick="window.cambiarVista('clientes')" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
+          <span>👥</span> Clientes
+        </button>
+        <button id="nav-incidencias" onclick="window.cambiarVista('incidencias')" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
+          <span>⚠️</span> Incidencias
+        </button>
+        <button id="nav-operarios" onclick="window.cambiarVista('operarios')" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
+          <span>👷</span> Operarios
+        </button>
+        <button id="nav-fichajes" onclick="window.cambiarVista('fichajes')" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
+          <span>⏱️</span> Control Horario (Fichajes)
+        </button>
+        <button id="nav-herramientas" onclick="window.cambiarVista('herramientas')" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
+          <span>🔨</span> Herramientas
+        </button>
+        <button id="nav-ajustes" onclick="window.cambiarVista('ajustes')" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
+          <span>⚙️</span> Mi Empresa (Marca Blanca)
+        </button>
+        <button id="nav-calendario" onclick="window.cambiarVista('calendario')" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
+          <span>📅</span> Calendario Operativo
+        </button>
+        <button id="nav-vehiculos" onclick="window.cambiarVista('vehiculos')" class="nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
+          <span>🚐</span> Flota y Furgonetas
+        </button>
+      </nav>
+    </div>
 
-<div class="mt-8 pt-4 border-t border-slate-800 space-y-2">
-  <div class="text-xs text-slate-400 flex items-center justify-between">
-    <span id="badge-usuario-sesion" class="font-bold text-amber-400 truncate">Sesión</span>
-    <button onclick="window.cerrarSesion()" class="text-rose-400 hover:text-rose-300 font-bold hover:underline">Salir</button>
-  </div>
-  <div class="text-[11px] text-slate-500 flex items-center gap-1.5">
-    <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
-    <span id="db-status">Conectado a Firestore</span>
-  </div>
-</div>
+    <div class="mt-8 pt-4 border-t border-slate-800 text-xs text-slate-400 flex items-center gap-2">
+      <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
+      <span id="db-status">Conectado a Firestore</span>
+    </div>
+  </aside>
+
   <!-- ======================================================== -->
   <!-- [BLOQUE 2]: VISTAS PRINCIPALES (HTML)                   -->
   <!-- ======================================================== -->
   <main class="flex-1 p-6 md:p-10 overflow-y-auto">
 
     <!-- 2.0: DASHBOARD / CUADRO DE MANDO -->
-<div id="vista-dashboard">
-  <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
-    <div>
-      <h2 class="text-2xl font-bold text-slate-900">Panel de Control General</h2>
-      <p class="text-sm text-slate-500">Resumen operativo, balance económico e incidencias activas en tiempo real.</p>
-    </div>
-    <div class="flex gap-2">
-      <button onclick="document.getElementById('btn-abrir-modal-obra').click()" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-3.5 py-2 rounded-lg text-xs shadow-sm transition">
-        + Obra
-      </button>
-      <button onclick="document.getElementById('btn-abrir-modal-incidencia').click()" class="bg-rose-500 hover:bg-rose-600 text-white font-bold px-3.5 py-2 rounded-lg text-xs shadow-sm transition">
-        + Incidencia
-      </button>
-    </div>
-  </header>
-
-  <!-- KPI Cards -->
-  <section class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
-      <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center text-xl shrink-0">💶</div>
-      <div>
-        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Presupuestado Total</span>
-        <p id="dash-total-presupuesto" class="text-xl font-black text-slate-900 mt-0.5">0,00 €</p>
-      </div>
-    </div>
-
-    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
-      <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center text-xl shrink-0">🏗️</div>
-      <div>
-        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Obras en Curso</span>
-        <p id="dash-obras-activas" class="text-xl font-black text-slate-900 mt-0.5">0</p>
-      </div>
-    </div>
-
-    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
-      <div class="w-12 h-12 rounded-xl bg-rose-100 text-rose-800 flex items-center justify-center text-xl shrink-0">⚠️</div>
-      <div>
-        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Incidencias Abiertas</span>
-        <p id="dash-incidencias-abiertas" class="text-xl font-black text-slate-900 mt-0.5">0</p>
-      </div>
-    </div>
-
-    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
-      <div class="w-12 h-12 rounded-xl bg-sky-100 text-sky-800 flex items-center justify-center text-xl shrink-0">👷</div>
-      <div>
-        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Equipo Activo</span>
-        <p id="dash-operarios-total" class="text-xl font-black text-slate-900 mt-0.5">0</p>
-      </div>
-    </div>
-
-    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4 cursor-pointer hover:shadow-md transition" onclick="window.cambiarVista('vehiculos')">
-      <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-800 flex items-center justify-center text-xl shrink-0">🚐</div>
-      <div>
-        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Furgonetas / Flota</span>
-        <p id="dash-vehiculos-total" class="text-xl font-black text-slate-900 mt-0.5">0</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Tableros de Actividad Urgente -->
-  <section class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
-    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-      <div class="flex justify-between items-center pb-3 border-b border-slate-100">
-        <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
-          <span>⚠️</span> Partes e Incidencias Pendientes
-        </h3>
-        <button onclick="window.cambiarVista('incidencias')" class="text-xs text-rose-600 font-bold hover:underline">Ver todas →</button>
-      </div>
-      <div id="dash-lista-incidencias" class="mt-4 space-y-2">
-        <p class="text-xs text-slate-400 italic">Cargando incidencias pendientes...</p>
-      </div>
-    </div>
-
-    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-      <div class="flex justify-between items-center pb-3 border-b border-slate-100">
-        <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
-          <span>🏗️</span> Obras en Ejecución
-        </h3>
-        <button onclick="window.cambiarVista('obras')" class="text-xs text-amber-600 font-bold hover:underline">Ver todas →</button>
-      </div>
-      <div id="dash-lista-obras" class="mt-4 space-y-2">
-        <p class="text-xs text-slate-400 italic">Cargando obras en curso...</p>
-      </div>
-    </div>
-  </section>
-</div>
-
-<!-- 2.1: OBRAS -->
-<div id="vista-obras" class="hidden">
-  <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
-    <div>
-      <h2 class="text-2xl font-bold text-slate-900">Obras y Presupuestos</h2>
-      <p class="text-sm text-slate-500">Cálculo dinámico de costes, partidas, IVA/IGIC y control de obra.</p>
-    </div>
-    <button id="btn-abrir-modal-obra" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-4 py-2.5 rounded-lg shadow-sm transition">
-      + Nueva Obra / Presupuesto
-    </button>
-  </header>
-
-  <div id="contenedor-filtros-obras" class="mt-4 flex gap-2 overflow-x-auto pb-2">
-    <button onclick="window.filtrarObras('todas', this)" class="btn-filtro px-3.5 py-1.5 rounded-full text-xs font-bold transition bg-slate-900 text-white shadow-sm">
-      Todas
-    </button>
-    <button onclick="window.filtrarObras('Presupuestada', this)" class="btn-filtro px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100">
-      🟡 Presupuestadas
-    </button>
-    <button onclick="window.filtrarObras('En curso', this)" class="btn-filtro px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100">
-      🟢 En curso
-    </button>
-    <button onclick="window.filtrarObras('Pausada', this)" class="btn-filtro px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-orange-50 text-orange-800 border border-orange-200 hover:bg-orange-100">
-      🟠 Pausadas
-    </button>
-    <button onclick="window.filtrarObras('Finalizada', this)" class="btn-filtro px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-sky-50 text-sky-800 border border-sky-200 hover:bg-sky-100">
-      🔵 Finalizadas
-    </button>
-  </div>
-
-  <section id="lista-proyectos" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    <p class="text-sm text-slate-400">Cargando proyectos...</p>
-  </section>
-</div>
-
-<!-- 2.2: DETALLE OBRA -->
-<div id="vista-detalle-obra" class="hidden">
-  <div class="flex flex-wrap items-center justify-between pb-6 border-b border-slate-200 gap-3 bg-slate-100 sticky top-0 z-10 no-print">
-    <button onclick="window.cambiarVista('obras')" id="btn-volver-obras" class="inline-flex items-center gap-2 text-sm font-bold text-slate-800 hover:text-amber-600 bg-white border border-slate-300 px-4 py-2 rounded-xl shadow-sm transition">
-      ← Volver al listado
-    </button>
-    
-    <div id="acciones-ficha" class="flex flex-wrap gap-2">
-      <button onclick="window.print()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-xl shadow-sm transition flex items-center gap-2">
-        <span>🖨️</span> Imprimir Presupuesto / PDF
-      </button>
-      <button id="btn-editar-obra-actual" class="bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold px-4 py-2 rounded-xl transition">
-        ✏️ Editar Partidas
-      </button>
-      <button id="btn-borrar-obra-actual" class="bg-rose-50 hover:bg-rose-100 text-rose-700 text-sm font-semibold px-4 py-2 rounded-xl border border-rose-200 transition">
-        Eliminar
-      </button>
-    </div>
-  </div>
-
-  <div id="contenedor-detalle-obra" class="mt-4"></div>
-
-  <div class="mt-6 pt-4 border-t border-slate-200 flex justify-start no-print">
-    <button onclick="window.cambiarVista('obras')" class="inline-flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-amber-600 bg-white border px-5 py-2 rounded-xl shadow-sm transition">
-      ← Volver al listado
-    </button>
-  </div>
-</div>
-
-<!-- 2.3: CLIENTES -->
-<div id="vista-clientes" class="hidden">
-  <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
-    <div>
-      <h2 class="text-2xl font-bold text-slate-900">Directorio de Clientes</h2>
-      <p class="text-sm text-slate-500">Historial, datos fiscales, llamadas y seguimiento de proyectos.</p>
-    </div>
-    <button id="btn-abrir-modal-cliente" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2.5 rounded-lg shadow-sm transition">
-      + Nuevo Cliente
-    </button>
-  </header>
-
-  <section id="lista-clientes" class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    <p class="text-sm text-slate-400">Cargando clientes...</p>
-  </section>
-</div>
-
-<!-- 2.4: DETALLE CLIENTE -->
-<div id="vista-detalle-cliente" class="hidden">
-  <div class="flex flex-wrap items-center justify-between pb-6 border-b border-slate-200 gap-3 bg-slate-100 sticky top-0 z-10 no-print">
-    <button onclick="window.cambiarVista('clientes')" id="btn-volver-clientes" class="inline-flex items-center gap-2 text-sm font-bold text-slate-800 hover:text-indigo-600 bg-white border border-slate-300 px-4 py-2 rounded-xl shadow-sm transition">
-      ← Volver a Clientes
-    </button>
-    
-    <div id="acciones-ficha-cliente" class="flex flex-wrap gap-2">
-      <button id="btn-editar-cliente-actual" class="bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold px-4 py-2 rounded-xl transition">
-        ✏️ Editar Cliente
-      </button>
-      <button id="btn-borrar-cliente-actual" class="bg-rose-50 hover:bg-rose-100 text-rose-700 text-sm font-semibold px-4 py-2 rounded-xl border border-rose-200 transition">
-        Eliminar
-      </button>
-    </div>
-  </div>
-
-  <div id="contenedor-detalle-cliente" class="mt-4"></div>
-
-  <div class="mt-6 pt-4 border-t border-slate-200 flex justify-start no-print">
-    <button onclick="window.cambiarVista('clientes')" class="inline-flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-indigo-600 bg-white border px-5 py-2 rounded-xl shadow-sm transition">
-      ← Volver a Clientes
-    </button>
-  </div>
-</div>
-
-<!-- 2.5: INCIDENCIAS -->
-<div id="vista-incidencias" class="hidden">
-  <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
-    <div>
-      <h2 class="text-2xl font-bold text-slate-900">Registro de Incidencias</h2>
-      <p class="text-sm text-slate-500">Partes de averías, citas programadas, firmas y fotografías.</p>
-    </div>
-    <button id="btn-abrir-modal-incidencia" class="bg-rose-500 hover:bg-rose-600 text-white font-bold px-4 py-2.5 rounded-lg shadow-sm transition">
-      + Reportar Incidencia
-    </button>
-  </header>
-
-  <div id="contenedor-filtros-incidencias" class="mt-4 flex gap-2 overflow-x-auto pb-2">
-    <button onclick="window.filtrarIncidencias('todas', this)" class="btn-filtro-inc px-3.5 py-1.5 rounded-full text-xs font-bold transition bg-slate-900 text-white shadow-sm">
-      Todas
-    </button>
-    <button onclick="window.filtrarIncidencias('Abierta', this)" class="btn-filtro-inc px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100">
-      🔴 Abiertas
-    </button>
-    <button onclick="window.filtrarIncidencias('En curso', this)" class="btn-filtro-inc px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100">
-      🟡 En curso
-    </button>
-    <button onclick="window.filtrarIncidencias('Resuelta', this)" class="btn-filtro-inc px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100">
-      🟢 Resueltas
-    </button>
-  </div>
-
-  <section id="lista-incidencias" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    <p class="text-sm text-slate-400">Cargando incidencias...</p>
-  </section>
-</div>
-
-<!-- 2.6: DETALLE INCIDENCIA -->
-<div id="vista-detalle-incidencia" class="hidden">
-  <div class="flex flex-wrap items-center justify-between pb-6 border-b border-slate-200 gap-3 bg-slate-100 sticky top-0 z-10 no-print">
-    <button onclick="window.cambiarVista('incidencias')" id="btn-volver-incidencias" class="inline-flex items-center gap-2 text-sm font-bold text-slate-800 hover:text-rose-600 bg-white border border-slate-300 px-4 py-2 rounded-xl shadow-sm transition">
-      ← Volver a Incidencias
-    </button>
-    
-    <div id="acciones-ficha-incidencia" class="flex flex-wrap gap-2">
-      <button onclick="window.print()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-xl shadow-sm transition flex items-center gap-2">
-        <span>🖨️</span> Imprimir Parte
-      </button>
-      <button id="btn-editar-incidencia-actual" class="bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold px-4 py-2 rounded-xl transition">
-        ✏️ Editar / Resolver Parte
-      </button>
-      <button id="btn-borrar-incidencia-actual" class="bg-rose-50 hover:bg-rose-100 text-rose-700 text-sm font-semibold px-4 py-2 rounded-xl border border-rose-200 transition">
-        Eliminar
-      </button>
-    </div>
-  </div>
-
-  <div id="contenedor-detalle-incidencia" class="mt-4"></div>
-
-  <div class="mt-6 pt-4 border-t border-slate-200 flex justify-start no-print">
-    <button onclick="window.cambiarVista('incidencias')" class="inline-flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-rose-600 bg-white border px-5 py-2 rounded-xl shadow-sm transition">
-      ← Volver a Incidencias
-    </button>
-  </div>
-</div>
-
-<!-- 2.7: OPERARIOS -->
-<div id="vista-operarios" class="hidden">
-  <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
-    <div>
-      <h2 class="text-2xl font-bold text-slate-900">Equipo y Operarios</h2>
-      <p class="text-sm text-slate-500">Personal propio y gremios externos.</p>
-    </div>
-    <button id="btn-abrir-modal-operario" class="bg-sky-500 hover:bg-sky-600 text-white font-semibold px-4 py-2.5 rounded-lg shadow-sm transition">
-      + Alta Operario
-    </button>
-  </header>
-  <section id="lista-operarios" class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    <p class="text-sm text-slate-400">Cargando operarios...</p>
-  </section>
-</div>
-
-<!-- 2.7.1: FICHA DETALLADA OPERARIO -->
-<div id="vista-detalle-operario" class="hidden">
-  <div class="flex flex-wrap items-center justify-between pb-6 border-b border-slate-200 gap-3 bg-slate-100 sticky top-0 z-10 no-print">
-    <button onclick="window.cambiarVista('operarios')" id="btn-volver-operarios" class="inline-flex items-center gap-2 text-sm font-bold text-slate-800 hover:text-sky-600 bg-white border border-slate-300 px-4 py-2 rounded-xl shadow-sm transition">
-      ← Volver a Operarios
-    </button>
-    
-    <div id="acciones-ficha-operario" class="flex flex-wrap gap-2">
-      <button onclick="window.print()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-xl shadow-sm transition flex items-center gap-2">
-        <span>🖨️</span> Imprimir Expediente / PDF
-      </button>
-      <button id="btn-editar-operario-actual" class="bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold px-4 py-2 rounded-xl transition">
-        ✏️ Editar Datos / EPIs / Cursos
-      </button>
-      <button id="btn-borrar-operario-actual" class="bg-rose-50 hover:bg-rose-100 text-rose-700 text-sm font-semibold px-4 py-2 rounded-xl border border-rose-200 transition">
-        Eliminar
-      </button>
-    </div>
-  </div>
-
-  <div id="contenedor-detalle-operario" class="mt-4"></div>
-
-  <div class="mt-6 pt-4 border-t border-slate-200 flex justify-start no-print">
-    <button onclick="window.cambiarVista('operarios')" class="inline-flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-sky-600 bg-white border px-5 py-2 rounded-xl shadow-sm transition">
-      ← Volver a Operarios
-    </button>
-  </div>
-</div>
-
-<!-- 2.7.2: CONTROL HORARIO Y FICHAJES (NORMATIVA LABORAL) -->
-<div id="vista-fichajes" class="hidden">
-  <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
-    <div>
-      <h2 class="text-2xl font-bold text-slate-900">Registro Diario de Jornada Laboral</h2>
-      <p class="text-sm text-slate-500">Conforme al Art. 34.9 ET: registro inalterable de entradas, pausas y salidas con custodia digital.</p>
-    </div>
-    <div class="flex gap-2">
-      <button onclick="window.imprimirInformeFichajes()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-3.5 py-2 rounded-lg text-xs shadow-sm transition flex items-center gap-1.5">
-        <span>🖨️</span> Informe Mensual Inspección
-      </button>
-    </div>
-  </header>
-
-  <!-- Terminal de Fichaje Rápido a pie de obra -->
-  <section class="mt-6 bg-gradient-to-br from-slate-900 to-slate-800 text-white p-6 sm:p-8 rounded-2xl shadow-lg border border-slate-700">
-    <div class="max-w-xl mx-auto text-center space-y-4">
-      <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-        🟢 Terminal de Fichaje en Obra
-      </span>
-      <h3 id="fichaje-reloj-digital" class="text-3xl sm:text-4xl font-mono font-black tracking-wider text-amber-400">00:00:00</h3>
-      <p id="fichaje-fecha-actual" class="text-xs text-slate-400 capitalize"></p>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-left">
+    <div id="vista-dashboard">
+      <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
-          <label class="block text-xs text-slate-300 font-semibold mb-1">Selecciona Operario *</label>
-          <select id="select-operario-fichaje" onchange="window.verificarEstadoFichajeOperario()" class="w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded-lg text-xs text-white outline-none focus:ring-2 focus:ring-amber-500">
-            <option value="">Selecciona trabajador...</option>
-          </select>
+          <h2 class="text-2xl font-bold text-slate-900">Panel de Control General</h2>
+          <p class="text-sm text-slate-500">Resumen operativo, balance económico e incidencias activas en tiempo real.</p>
         </div>
+        <div class="flex gap-2">
+          <button onclick="document.getElementById('btn-abrir-modal-obra').click()" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-3.5 py-2 rounded-lg text-xs shadow-sm transition">
+            + Obra
+          </button>
+          <button onclick="document.getElementById('btn-abrir-modal-incidencia').click()" class="bg-rose-500 hover:bg-rose-600 text-white font-bold px-3.5 py-2 rounded-lg text-xs shadow-sm transition">
+            + Incidencia
+          </button>
+        </div>
+      </header>
+
+      <!-- KPI Cards -->
+      <section class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center text-xl shrink-0">💶</div>
+          <div>
+            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Presupuestado Total</span>
+            <p id="dash-total-presupuesto" class="text-xl font-black text-slate-900 mt-0.5">0,00 €</p>
+          </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center text-xl shrink-0">🏗️</div>
+          <div>
+            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Obras en Curso</span>
+            <p id="dash-obras-activas" class="text-xl font-black text-slate-900 mt-0.5">0</p>
+          </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-rose-100 text-rose-800 flex items-center justify-center text-xl shrink-0">⚠️</div>
+          <div>
+            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Incidencias Abiertas</span>
+            <p id="dash-incidencias-abiertas" class="text-xl font-black text-slate-900 mt-0.5">0</p>
+          </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-sky-100 text-sky-800 flex items-center justify-center text-xl shrink-0">👷</div>
+          <div>
+            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Equipo Activo</span>
+            <p id="dash-operarios-total" class="text-xl font-black text-slate-900 mt-0.5">0</p>
+          </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4 cursor-pointer hover:shadow-md transition" onclick="window.cambiarVista('vehiculos')">
+          <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-800 flex items-center justify-center text-xl shrink-0">🚐</div>
+          <div>
+            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Furgonetas / Flota</span>
+            <p id="dash-vehiculos-total" class="text-xl font-black text-slate-900 mt-0.5">0</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tableros de Actividad Urgente -->
+      <section class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="flex justify-between items-center pb-3 border-b border-slate-100">
+            <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+              <span>⚠️</span> Partes e Incidencias Pendientes
+            </h3>
+            <button onclick="window.cambiarVista('incidencias')" class="text-xs text-rose-600 font-bold hover:underline">Ver todas →</button>
+          </div>
+          <div id="dash-lista-incidencias" class="mt-4 space-y-2">
+            <p class="text-xs text-slate-400 italic">Cargando incidencias pendientes...</p>
+          </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="flex justify-between items-center pb-3 border-b border-slate-100">
+            <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+              <span>🏗️</span> Obras en Ejecución
+            </h3>
+            <button onclick="window.cambiarVista('obras')" class="text-xs text-amber-600 font-bold hover:underline">Ver todas →</button>
+          </div>
+          <div id="dash-lista-obras" class="mt-4 space-y-2">
+            <p class="text-xs text-slate-400 italic">Cargando obras en curso...</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- 2.1: OBRAS -->
+    <div id="vista-obras" class="hidden">
+      <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
-          <label class="block text-xs text-slate-300 font-semibold mb-1">Ubicación / Obra</label>
-          <select id="select-obra-fichaje" class="w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded-lg text-xs text-white outline-none focus:ring-2 focus:ring-amber-500">
-            <option value="Sede / Almacén Central">📦 Sede / Almacén Central</option>
-          </select>
+          <h2 class="text-2xl font-bold text-slate-900">Obras y Presupuestos</h2>
+          <p class="text-sm text-slate-500">Cálculo dinámico de costes, partidas, IVA/IGIC y control de obra.</p>
+        </div>
+        <button id="btn-abrir-modal-obra" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-4 py-2.5 rounded-lg shadow-sm transition">
+          + Nueva Obra / Presupuesto
+        </button>
+      </header>
+
+      <div id="contenedor-filtros-obras" class="mt-4 flex gap-2 overflow-x-auto pb-2">
+        <button onclick="window.filtrarObras('todas', this)" class="btn-filtro px-3.5 py-1.5 rounded-full text-xs font-bold transition bg-slate-900 text-white shadow-sm">
+          Todas
+        </button>
+        <button onclick="window.filtrarObras('Presupuestada', this)" class="btn-filtro px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100">
+          🟡 Presupuestadas
+        </button>
+        <button onclick="window.filtrarObras('En curso', this)" class="btn-filtro px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100">
+          🟢 En curso
+        </button>
+        <button onclick="window.filtrarObras('Pausada', this)" class="btn-filtro px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-orange-50 text-orange-800 border border-orange-200 hover:bg-orange-100">
+          🟠 Pausadas
+        </button>
+        <button onclick="window.filtrarObras('Finalizada', this)" class="btn-filtro px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-sky-50 text-sky-800 border border-sky-200 hover:bg-sky-100">
+          🔵 Finalizadas
+        </button>
+      </div>
+
+      <section id="lista-proyectos" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <p class="text-sm text-slate-400">Cargando proyectos...</p>
+      </section>
+    </div>
+
+    <!-- 2.2: DETALLE OBRA -->
+    <div id="vista-detalle-obra" class="hidden">
+      <div class="flex flex-wrap items-center justify-between pb-6 border-b border-slate-200 gap-3 bg-slate-100 sticky top-0 z-10 no-print">
+        <button onclick="window.cambiarVista('obras')" id="btn-volver-obras" class="inline-flex items-center gap-2 text-sm font-bold text-slate-800 hover:text-amber-600 bg-white border border-slate-300 px-4 py-2 rounded-xl shadow-sm transition">
+          ← Volver al listado
+        </button>
+        
+        <div id="acciones-ficha" class="flex flex-wrap gap-2">
+          <button onclick="window.print()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-xl shadow-sm transition flex items-center gap-2">
+            <span>🖨️</span> Imprimir Presupuesto / PDF
+          </button>
+          <button id="btn-editar-obra-actual" class="bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold px-4 py-2 rounded-xl transition">
+            ✏️ Editar Partidas
+          </button>
+          <button id="btn-borrar-obra-actual" class="bg-rose-50 hover:bg-rose-100 text-rose-700 text-sm font-semibold px-4 py-2 rounded-xl border border-rose-200 transition">
+            Eliminar
+          </button>
         </div>
       </div>
 
-      <div id="fichaje-estado-actual-box" class="p-3 bg-slate-800/80 rounded-xl border border-slate-700 text-xs text-slate-300">
-        Selecciona un operario para registrar su jornada.
-      </div>
+      <div id="contenedor-detalle-obra" class="mt-4"></div>
 
-      <!-- Botones de Acción -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2">
-        <button id="btn-fichar-entrada" onclick="window.registrarFichaje('ENTRADA')" class="p-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-md transition disabled:opacity-40 disabled:cursor-not-allowed">
-          ▶️ ENTRADA
-        </button>
-        <button id="btn-fichar-pausa" onclick="window.registrarFichaje('INICIO_PAUSA')" class="p-3 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs shadow-md transition disabled:opacity-40 disabled:cursor-not-allowed">
-          ☕ PAUSA
-        </button>
-        <button id="btn-fichar-vuelta" onclick="window.registrarFichaje('FIN_PAUSA')" class="p-3 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs shadow-md transition disabled:opacity-40 disabled:cursor-not-allowed">
-          ↩️ RETORNO
-        </button>
-        <button id="btn-fichar-salida" onclick="window.registrarFichaje('SALIDA')" class="p-3 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs shadow-md transition disabled:opacity-40 disabled:cursor-not-allowed">
-          ⏹️ SALIDA
+      <div class="mt-6 pt-4 border-t border-slate-200 flex justify-start no-print">
+        <button onclick="window.cambiarVista('obras')" class="inline-flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-amber-600 bg-white border px-5 py-2 rounded-xl shadow-sm transition">
+          ← Volver al listado
         </button>
       </div>
     </div>
-  </section>
 
-  <!-- Filtro y Registro Histórico Legal -->
-  <section class="mt-8 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-4 border-b border-slate-100 gap-3">
-      <div>
-        <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider">Histórico de Jornadas (Últimos Registros)</h3>
-        <p class="text-xs text-slate-400">Datos auditables con trazabilidad horaria y marca inalterable.</p>
-      </div>
-      <div class="flex items-center gap-2">
-        <input type="month" id="filtro-mes-fichajes" onchange="window.renderizarFichajes()" class="px-3 py-1.5 border rounded-lg text-xs font-semibold text-slate-700 bg-slate-50 outline-none">
-      </div>
-    </div>
-
-    <div class="overflow-x-auto mt-4">
-      <table class="w-full text-left text-xs text-slate-600">
-        <thead class="bg-slate-50 text-[11px] font-bold text-slate-400 uppercase tracking-wider border-b">
-          <tr>
-            <th class="py-2.5 px-3">Fecha</th>
-            <th class="py-2.5 px-3">Operario</th>
-            <th class="py-2.5 px-3">Evento</th>
-            <th class="py-2.5 px-3">Hora Servidor</th>
-            <th class="py-2.5 px-3">Ubicación / Obra</th>
-            <th class="py-2.5 px-3 text-right">Geolocalización</th>
-          </tr>
-        </thead>
-        <tbody id="tabla-fichajes-body" class="divide-y divide-slate-100">
-          <tr><td colspan="6" class="py-4 text-center text-slate-400">Cargando registros...</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-</div>
-
-<!-- 2.8: HERRAMIENTAS Y MAQUINARIA -->
-<div id="vista-herramientas" class="hidden">
-  <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
-    <div>
-      <h2 class="text-2xl font-bold text-slate-900">Parque de Maquinaria y Herramientas</h2>
-      <p class="text-sm text-slate-500">Control de inventario, ubicación actual, averías y asignación a obras o personal.</p>
-    </div>
-    <button id="btn-abrir-modal-herramienta" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2.5 rounded-lg shadow-sm transition">
-      + Registrar Herramienta / Equipo
-    </button>
-  </header>
-
-  <div id="contenedor-filtros-herramientas" class="mt-4 flex gap-2 overflow-x-auto pb-2">
-    <button onclick="window.filtrarHerramientas('todas', this)" class="btn-filtro-her px-3.5 py-1.5 rounded-full text-xs font-bold transition bg-slate-900 text-white shadow-sm">
-      Todas
-    </button>
-    <button onclick="window.filtrarHerramientas('Operativa', this)" class="btn-filtro-her px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100">
-      🟢 Operativas
-    </button>
-    <button onclick="window.filtrarHerramientas('En taller', this)" class="btn-filtro-her px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100">
-      🟡 En taller / Mantenimiento
-    </button>
-    <button onclick="window.filtrarHerramientas('Averiada', this)" class="btn-filtro-her px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-rose-50 text-rose-800 border border-rose-200 hover:bg-rose-100">
-      🔴 Averiada / Baja
-    </button>
-  </div>
-
-  <section id="lista-herramientas" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    <p class="text-sm text-slate-400">Cargando inventario...</p>
-  </section>
-</div>
-
-<!-- 2.8.1: FLOTA Y FURGONETAS -->
-<div id="vista-vehiculos" class="hidden">
-  <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
-    <div>
-      <h2 class="text-2xl font-bold text-slate-900">Control de Flota y Vehículos</h2>
-      <p class="text-sm text-slate-500">Asignación de furgonetas a conductores, vencimientos de ITV y mantenimiento.</p>
-    </div>
-    <button onclick="window.abrirModalNuevoVehiculo()" id="btn-abrir-modal-vehiculo" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2.5 rounded-lg shadow-sm transition">
-      + Alta Vehículo / Furgoneta
-    </button>
-  </header>
-
-  <section id="lista-vehiculos" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    <p class="text-sm text-slate-400">Cargando flota...</p>
-  </section>
-</div>
-
-<!-- 2.9: AJUSTES / MARCA BLANCA -->
-<div id="vista-ajustes" class="hidden">
-  <header class="pb-6 border-b border-slate-200">
-    <h2 class="text-2xl font-bold text-slate-900">Personalización y Seguridad de la Empresa</h2>
-    <p class="text-sm text-slate-500">Configura el logotipo, datos fiscales y clave de acceso para administración.</p>
-  </header>
-
-  <div class="mt-8 max-w-2xl bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
-    <div>
-      <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Logotipo de la Empresa</label>
-      <div class="flex items-center gap-4">
-        <div id="preview-logo-empresa" class="w-24 h-24 rounded-xl border-2 border-dashed border-slate-300 flex items-center justify-center bg-slate-50 overflow-hidden text-slate-400 text-xs font-semibold text-center p-2">
-          Sin logo
-        </div>
-        <div class="flex-1">
-          <input type="file" id="input-logo-empresa" accept="image/*" class="block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-500 file:text-slate-950 hover:file:bg-amber-600 cursor-pointer">
-          <p class="text-[11px] text-slate-400 mt-1">PNG o JPG transparente o de fondo blanco (máx. 1.5 MB).</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <div>
-        <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre Comercial / Empresa *</label>
-        <input id="empresa-nombre" type="text" placeholder="Ej. Reformas Pro" class="w-full px-3.5 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-amber-500">
-      </div>
-      <div>
-        <label class="block text-xs font-semibold text-slate-600 mb-1">CIF / NIF *</label>
-        <input id="empresa-cif" type="text" placeholder="Ej. B-99887766" class="w-full px-3.5 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-amber-500 uppercase">
-      </div>
-    </div>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <div>
-        <label class="block text-xs font-semibold text-slate-600 mb-1">Teléfono Central</label>
-        <input id="empresa-tel" type="tel" placeholder="Ej. 912 345 678" class="w-full px-3.5 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-amber-500">
-      </div>
-      <div>
-        <label class="block text-xs font-semibold text-slate-600 mb-1">Clave de Acceso Oficina / Admin *</label>
-        <input id="empresa-clave-admin" type="password" placeholder="admin123" class="w-full px-3.5 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-amber-500 font-mono">
-      </div>
-    </div>
-
-    <div>
-      <label class="block text-xs font-semibold text-slate-600 mb-1">Email de Contacto</label>
-      <input id="empresa-email" type="email" placeholder="contacto@mireforma.com" class="w-full px-3.5 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-amber-500">
-    </div>
-
-    <div>
-      <label class="block text-xs font-semibold text-slate-600 mb-1">Dirección Fiscal / Sede</label>
-      <input id="empresa-direccion" type="text" placeholder="Calle Ejemplo 45, Planta 1, Ciudad" class="w-full px-3.5 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-amber-500">
-    </div>
-
-    <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
-      <span id="msg-guardado-empresa" class="text-xs text-emerald-600 font-bold hidden">✓ Configuración guardada con éxito</span>
-      <button type="button" id="btn-guardar-empresa" class="ml-auto px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-lg text-xs shadow-sm transition">
-        Guardar Configuración
-      </button>
-    </div>
-  </div>
-
-  <!-- SECCIÓN BACKUP Y EXPORTACIÓN EXCEL/CSV -->
-  <div class="mt-8 max-w-2xl bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-    <div>
-      <h3 class="text-base font-bold text-slate-900">Copia de Seguridad y Exportación (Excel / CSV)</h3>
-      <p class="text-xs text-slate-500">Descarga los registros completos de tu operativa en archivos compatibles con hojas de cálculo.</p>
-    </div>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-      <button type="button" onclick="window.exportarCSV('obras')" class="flex items-center justify-between p-3.5 bg-slate-50 hover:bg-amber-50 border rounded-xl text-xs font-bold text-slate-700 hover:text-amber-900 transition">
-        <span>🏗️ Descargar Obras / Proyectos</span>
-        <span>⬇️</span>
-      </button>
-      <button type="button" onclick="window.exportarCSV('clientes')" class="flex items-center justify-between p-3.5 bg-slate-50 hover:bg-indigo-50 border rounded-xl text-xs font-bold text-slate-700 hover:text-indigo-900 transition">
-        <span>👥 Descargar Directorio Clientes</span>
-        <span>⬇️</span>
-      </button>
-      <button type="button" onclick="window.exportarCSV('incidencias')" class="flex items-center justify-between p-3.5 bg-slate-50 hover:bg-rose-50 border rounded-xl text-xs font-bold text-slate-700 hover:text-rose-900 transition">
-        <span>⚠️ Descargar Partes / Incidencias</span>
-        <span>⬇️</span>
-      </button>
-      <button type="button" onclick="window.exportarCSV('operarios')" class="flex items-center justify-between p-3.5 bg-slate-50 hover:bg-sky-50 border rounded-xl text-xs font-bold text-slate-700 hover:text-sky-900 transition">
-        <span>👷 Descargar Personal y PRL</span>
-        <span>⬇️</span>
-      </button>
-      <button type="button" onclick="window.exportarCSV('herramientas')" class="flex items-center justify-between p-3.5 bg-slate-50 hover:bg-emerald-50 border rounded-xl text-xs font-bold text-slate-700 hover:text-emerald-900 transition">
-        <span>🔨 Descargar Inventario Herramientas</span>
-        <span>⬇️</span>
-      </button>
-      <button type="button" onclick="window.exportarCSV('vehiculos')" class="flex items-center justify-between p-3.5 bg-slate-50 hover:bg-purple-50 border rounded-xl text-xs font-bold text-slate-700 hover:text-purple-900 transition">
-        <span>🚐 Descargar Flota y Furgonetas</span>
-        <span>⬇️</span>
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- 2.10: CALENDARIO OPERATIVO Y LOGÍSTICA -->
-<div id="vista-calendario" class="hidden">
-  <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
-    <div>
-      <h2 class="text-2xl font-bold text-slate-900">Calendario Operativo y Planificación</h2>
-      <p class="text-sm text-slate-500">Cronograma de reformas, visitas técnicas de averías y control de plazos.</p>
-    </div>
-    <div class="flex items-center gap-2 bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-sm">
-      <button onclick="window.cambiarMesCalendario(-1)" class="p-1.5 rounded-lg hover:bg-slate-100 text-slate-700 font-bold">◀</button>
-      <span id="cal-mes-anio" class="text-sm font-bold text-slate-900 min-w-[130px] text-center capitalize"></span>
-      <button onclick="window.cambiarMesCalendario(1)" class="p-1.5 rounded-lg hover:bg-slate-100 text-slate-700 font-bold">▶</button>
-      <button onclick="window.irMesActualCalendario()" class="ml-2 text-xs font-semibold px-2.5 py-1 bg-slate-100 hover:bg-slate-200 rounded-lg text-slate-700">Hoy</button>
-    </div>
-  </header>
-
-  <!-- Leyenda de colores -->
-  <div class="mt-4 flex flex-wrap gap-4 text-xs">
-    <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-amber-500"></span> 🏗️ Inicio / Fin de Obra</span>
-    <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-rose-500"></span> ⚠️ Citas de Incidencias</span>
-    <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-sky-500"></span> 🩺 Reconocimiento Médico Operarios</span>
-    <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-purple-500"></span> 🚐 Vencimiento ITV Furgonetas</span>
-  </div>
-
-  <!-- Cuadrícula del Calendario -->
-  <div class="mt-4 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-    <div class="grid grid-cols-7 bg-slate-50 border-b border-slate-200 text-center text-xs font-bold text-slate-600 py-2.5">
-      <span>Lun</span>
-      <span>Mar</span>
-      <span>Mié</span>
-      <span>Jue</span>
-      <span>Vie</span>
-      <span class="text-amber-700">Sáb</span>
-      <span class="text-rose-700">Dom</span>
-    </div>
-    <div id="cal-rejilla-dias" class="grid grid-cols-7 auto-rows-fr divide-x divide-y divide-slate-100 min-h-[500px]"></div>
-  </div>
-</div>
-<div class="mt-6 space-y-6">
-    <input type="hidden" id="edit-obra-id" value="">
-
-    <div class="space-y-4">
-      <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Información General</h4>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <!-- 2.3: CLIENTES -->
+    <div id="vista-clientes" class="hidden">
+      <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre del Proyecto / Obra *</label>
-          <input id="input-nombre" type="text" placeholder="Ej. Reforma Vivienda C/ Mayor 12" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+          <h2 class="text-2xl font-bold text-slate-900">Directorio de Clientes</h2>
+          <p class="text-sm text-slate-500">Historial, datos fiscales, llamadas y seguimiento de proyectos.</p>
         </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Cliente Vinculado</label>
-          <select id="select-cliente-obra" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none bg-white">
-            <option value="Particular / Sin asignar">Particular / Sin asignar</option>
-          </select>
+        <button id="btn-abrir-modal-cliente" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2.5 rounded-lg shadow-sm transition">
+          + Nuevo Cliente
+        </button>
+      </header>
+
+      <section id="lista-clientes" class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <p class="text-sm text-slate-400">Cargando clientes...</p>
+      </section>
+    </div>
+
+    <!-- 2.4: DETALLE CLIENTE -->
+    <div id="vista-detalle-cliente" class="hidden">
+      <div class="flex flex-wrap items-center justify-between pb-6 border-b border-slate-200 gap-3 bg-slate-100 sticky top-0 z-10 no-print">
+        <button onclick="window.cambiarVista('clientes')" id="btn-volver-clientes" class="inline-flex items-center gap-2 text-sm font-bold text-slate-800 hover:text-indigo-600 bg-white border border-slate-300 px-4 py-2 rounded-xl shadow-sm transition">
+          ← Volver a Clientes
+        </button>
+        
+        <div id="acciones-ficha-cliente" class="flex flex-wrap gap-2">
+          <button id="btn-editar-cliente-actual" class="bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold px-4 py-2 rounded-xl transition">
+            ✏️ Editar Cliente
+          </button>
+          <button id="btn-borrar-cliente-actual" class="bg-rose-50 hover:bg-rose-100 text-rose-700 text-sm font-semibold px-4 py-2 rounded-xl border border-rose-200 transition">
+            Eliminar
+          </button>
         </div>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Dirección de la obra *</label>
-          <input id="input-direccion" type="text" placeholder="Calle, número, piso y ciudad" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Estado</label>
-          <select id="input-estado" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none bg-white">
-            <option value="Presupuestada">🟡 Presupuestada</option>
-            <option value="En curso">🟢 En curso</option>
-            <option value="Pausada">🟠 Pausada</option>
-            <option value="Finalizada">🔵 Finalizada</option>
-          </select>
-        </div>
-      </div>
+      <div id="contenedor-detalle-cliente" class="mt-4"></div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Fecha Inicio Prevista</label>
-          <input id="input-fecha-inicio" type="date" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none bg-white">
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Fin Estimado</label>
-          <input id="input-fecha-fin" type="date" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none bg-white">
-        </div>
-      </div>
-
-      <div>
-        <label class="block text-xs font-semibold text-slate-600 mb-1">Descripción del Alcance</label>
-        <textarea id="input-descripcion" rows="2" placeholder="Resumen o condiciones particulares..." class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none"></textarea>
+      <div class="mt-6 pt-4 border-t border-slate-200 flex justify-start no-print">
+        <button onclick="window.cambiarVista('clientes')" class="inline-flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-indigo-600 bg-white border px-5 py-2 rounded-xl shadow-sm transition">
+          ← Volver a Clientes
+        </button>
       </div>
     </div>
 
-    <div class="pt-4 border-t border-slate-100 space-y-4">
-      <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Teléfonos de Contacto (Hasta 3)</h4>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <!-- 2.5: INCIDENCIAS -->
+    <div id="vista-incidencias" class="hidden">
+      <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Teléfono 1</label>
-          <input id="input-tel1" type="tel" placeholder="611000000" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+          <h2 class="text-2xl font-bold text-slate-900">Registro de Incidencias</h2>
+          <p class="text-sm text-slate-500">Partes de averías, citas programadas, firmas y fotografías.</p>
         </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Teléfono 2</label>
-          <input id="input-tel2" type="tel" placeholder="622000000" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+        <button id="btn-abrir-modal-incidencia" class="bg-rose-500 hover:bg-rose-600 text-white font-bold px-4 py-2.5 rounded-lg shadow-sm transition">
+          + Reportar Incidencia
+        </button>
+      </header>
+
+      <div id="contenedor-filtros-incidencias" class="mt-4 flex gap-2 overflow-x-auto pb-2">
+        <button onclick="window.filtrarIncidencias('todas', this)" class="btn-filtro-inc px-3.5 py-1.5 rounded-full text-xs font-bold transition bg-slate-900 text-white shadow-sm">
+          Todas
+        </button>
+        <button onclick="window.filtrarIncidencias('Abierta', this)" class="btn-filtro-inc px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100">
+          🔴 Abiertas
+        </button>
+        <button onclick="window.filtrarIncidencias('En curso', this)" class="btn-filtro-inc px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100">
+          🟡 En curso
+        </button>
+        <button onclick="window.filtrarIncidencias('Resuelta', this)" class="btn-filtro-inc px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100">
+          🟢 Resueltas
+        </button>
+      </div>
+
+      <section id="lista-incidencias" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <p class="text-sm text-slate-400">Cargando incidencias...</p>
+      </section>
+    </div>
+
+    <!-- 2.6: DETALLE INCIDENCIA -->
+    <div id="vista-detalle-incidencia" class="hidden">
+      <div class="flex flex-wrap items-center justify-between pb-6 border-b border-slate-200 gap-3 bg-slate-100 sticky top-0 z-10 no-print">
+        <button onclick="window.cambiarVista('incidencias')" id="btn-volver-incidencias" class="inline-flex items-center gap-2 text-sm font-bold text-slate-800 hover:text-rose-600 bg-white border border-slate-300 px-4 py-2 rounded-xl shadow-sm transition">
+          ← Volver a Incidencias
+        </button>
+        
+        <div id="acciones-ficha-incidencia" class="flex flex-wrap gap-2">
+          <button onclick="window.print()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-xl shadow-sm transition flex items-center gap-2">
+            <span>🖨️</span> Imprimir Parte
+          </button>
+          <button id="btn-editar-incidencia-actual" class="bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold px-4 py-2 rounded-xl transition">
+            ✏️ Editar / Resolver Parte
+          </button>
+          <button id="btn-borrar-incidencia-actual" class="bg-rose-50 hover:bg-rose-100 text-rose-700 text-sm font-semibold px-4 py-2 rounded-xl border border-rose-200 transition">
+            Eliminar
+          </button>
         </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Teléfono 3</label>
-          <input id="input-tel3" type="tel" placeholder="633000000" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
-        </div>
+      </div>
+
+      <div id="contenedor-detalle-incidencia" class="mt-4"></div>
+
+      <div class="mt-6 pt-4 border-t border-slate-200 flex justify-start no-print">
+        <button onclick="window.cambiarVista('incidencias')" class="inline-flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-rose-600 bg-white border px-5 py-2 rounded-xl shadow-sm transition">
+          ← Volver a Incidencias
+        </button>
       </div>
     </div>
 
-    <div class="pt-4 border-t border-slate-100 space-y-2">
-      <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Operarios y Gremios</h4>
-      <div id="contenedor-checkbox-operarios" class="grid grid-cols-2 sm:grid-cols-3 gap-2 p-3 bg-slate-50 border rounded-lg max-h-36 overflow-y-auto">
-        <span class="text-xs text-slate-400 col-span-full">Cargando operarios...</span>
-      </div>
-    </div>
-
-    <div class="pt-4 border-t border-slate-100 space-y-3">
-      <div class="flex justify-between items-center">
+    <!-- 2.7: OPERARIOS -->
+    <div id="vista-operarios" class="hidden">
+      <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
-          <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Partidas de Trabajo / Mano de Obra</h4>
-          <p class="text-[11px] text-slate-400">Describe el trabajo e introduce su precio en euros.</p>
+          <h2 class="text-2xl font-bold text-slate-900">Equipo y Operarios</h2>
+          <p class="text-sm text-slate-500">Personal propio y gremios externos.</p>
         </div>
-        <button type="button" id="btn-add-trabajo" class="text-xs bg-amber-100 text-amber-900 font-semibold px-2.5 py-1 rounded hover:bg-amber-200">+ Añadir Partida</button>
-      </div>
-      <div id="contenedor-trabajos" class="space-y-2"></div>
+        <button id="btn-abrir-modal-operario" class="bg-sky-500 hover:bg-sky-600 text-white font-semibold px-4 py-2.5 rounded-lg shadow-sm transition">
+          + Alta Operario
+        </button>
+      </header>
+      <section id="lista-operarios" class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <p class="text-sm text-slate-400">Cargando operarios...</p>
+      </section>
     </div>
 
-    <div class="pt-4 border-t border-slate-100 space-y-3">
-      <div class="flex justify-between items-center">
+    <!-- 2.7.1: FICHA DETALLADA OPERARIO -->
+    <div id="vista-detalle-operario" class="hidden">
+      <div class="flex flex-wrap items-center justify-between pb-6 border-b border-slate-200 gap-3 bg-slate-100 sticky top-0 z-10 no-print">
+        <button onclick="window.cambiarVista('operarios')" id="btn-volver-operarios" class="inline-flex items-center gap-2 text-sm font-bold text-slate-800 hover:text-sky-600 bg-white border border-slate-300 px-4 py-2 rounded-xl shadow-sm transition">
+          ← Volver a Operarios
+        </button>
+        
+        <div id="acciones-ficha-operario" class="flex flex-wrap gap-2">
+          <button onclick="window.print()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-xl shadow-sm transition flex items-center gap-2">
+            <span>🖨️</span> Imprimir Expediente / PDF
+          </button>
+          <button id="btn-editar-operario-actual" class="bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold px-4 py-2 rounded-xl transition">
+            ✏️ Editar Datos / EPIs / Cursos
+          </button>
+          <button id="btn-borrar-operario-actual" class="bg-rose-50 hover:bg-rose-100 text-rose-700 text-sm font-semibold px-4 py-2 rounded-xl border border-rose-200 transition">
+            Eliminar
+          </button>
+        </div>
+      </div>
+
+      <div id="contenedor-detalle-operario" class="mt-4"></div>
+
+      <div class="mt-6 pt-4 border-t border-slate-200 flex justify-start no-print">
+        <button onclick="window.cambiarVista('operarios')" class="inline-flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-sky-600 bg-white border px-5 py-2 rounded-xl shadow-sm transition">
+          ← Volver a Operarios
+        </button>
+      </div>
+    </div>
+    <!-- 2.7.2: CONTROL HORARIO Y FICHAJES (NORMATIVA LABORAL) -->
+    <div id="vista-fichajes" class="hidden">
+      <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
-          <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Partidas de Materiales</h4>
-          <p class="text-[11px] text-slate-400">Material, cantidad, unidad y precio unitario (€).</p>
+          <h2 class="text-2xl font-bold text-slate-900">Registro Diario de Jornada Laboral</h2>
+          <p class="text-sm text-slate-500">Conforme al Art. 34.9 ET: registro inalterable de entradas, pausas y salidas con custodia digital.</p>
         </div>
-        <button type="button" id="btn-add-material" class="text-xs bg-slate-200 text-slate-800 font-semibold px-2.5 py-1 rounded hover:bg-slate-300">+ Añadir Material</button>
-      </div>
-      <div id="contenedor-materiales" class="space-y-2"></div>
-    </div>
+        <div class="flex gap-2">
+          <button onclick="window.imprimirInformeFichajes()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-3.5 py-2 rounded-lg text-xs shadow-sm transition flex items-center gap-1.5">
+            <span>🖨️</span> Informe Mensual Inspección
+          </button>
+        </div>
+      </header>
 
-    <div class="pt-4 border-t-2 border-slate-200 bg-amber-50/50 p-4 rounded-2xl border border-amber-200 space-y-3">
-      <h4 class="text-xs font-black text-amber-950 uppercase tracking-wider">Liquidación Económica del Presupuesto</h4>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
+      <!-- Terminal de Fichaje Rápido a pie de obra -->
+      <section class="mt-6 bg-gradient-to-br from-slate-900 to-slate-800 text-white p-6 sm:p-8 rounded-2xl shadow-lg border border-slate-700">
+        <div class="max-w-xl mx-auto text-center space-y-4">
+          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+            🟢 Terminal de Fichaje en Obra
+          </span>
+          <h3 id="fichaje-reloj-digital" class="text-3xl sm:text-4xl font-mono font-black tracking-wider text-amber-400">00:00:00</h3>
+          <p id="fichaje-fecha-actual" class="text-xs text-slate-400 capitalize"></p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-left">
+            <div>
+              <label class="block text-xs text-slate-300 font-semibold mb-1">Selecciona Operario *</label>
+              <select id="select-operario-fichaje" onchange="window.verificarEstadoFichajeOperario()" class="w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded-lg text-xs text-white outline-none focus:ring-2 focus:ring-amber-500">
+                <option value="">Selecciona trabajador...</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs text-slate-300 font-semibold mb-1">Ubicación / Obra</label>
+              <select id="select-obra-fichaje" class="w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded-lg text-xs text-white outline-none focus:ring-2 focus:ring-amber-500">
+                <option value="Sede / Almacén Central">📦 Sede / Almacén Central</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="fichaje-estado-actual-box" class="p-3 bg-slate-800/80 rounded-xl border border-slate-700 text-xs text-slate-300">
+            Selecciona un operario para registrar su jornada.
+          </div>
+
+          <!-- Botones de Acción Obligatorios -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2">
+            <button id="btn-fichar-entrada" onclick="window.registrarFichaje('ENTRADA')" class="p-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-md transition disabled:opacity-40 disabled:cursor-not-allowed">
+              ▶️ ENTRADA
+            </button>
+            <button id="btn-fichar-pausa" onclick="window.registrarFichaje('INICIO_PAUSA')" class="p-3 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs shadow-md transition disabled:opacity-40 disabled:cursor-not-allowed">
+              ☕ PAUSA
+            </button>
+            <button id="btn-fichar-vuelta" onclick="window.registrarFichaje('FIN_PAUSA')" class="p-3 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs shadow-md transition disabled:opacity-40 disabled:cursor-not-allowed">
+              ↩️ RETORNO
+            </button>
+            <button id="btn-fichar-salida" onclick="window.registrarFichaje('SALIDA')" class="p-3 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs shadow-md transition disabled:opacity-40 disabled:cursor-not-allowed">
+              ⏹️ SALIDA
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Filtro y Registro Histórico Legal -->
+      <section class="mt-8 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-4 border-b border-slate-100 gap-3">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider">Histórico de Jornadas (Últimos Registros)</h3>
+            <p class="text-xs text-slate-400">Datos auditables con trazabilidad horaria y marca inalterable.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <input type="month" id="filtro-mes-fichajes" onchange="window.renderizarFichajes()" class="px-3 py-1.5 border rounded-lg text-xs font-semibold text-slate-700 bg-slate-50 outline-none">
+          </div>
+        </div>
+
+        <div class="overflow-x-auto mt-4">
+          <table class="w-full text-left text-xs text-slate-600">
+            <thead class="bg-slate-50 text-[11px] font-bold text-slate-400 uppercase tracking-wider border-b">
+              <tr>
+                <th class="py-2.5 px-3">Fecha</th>
+                <th class="py-2.5 px-3">Operario</th>
+                <th class="py-2.5 px-3">Evento</th>
+                <th class="py-2.5 px-3">Hora Servidor</th>
+                <th class="py-2.5 px-3">Ubicación / Obra</th>
+                <th class="py-2.5 px-3 text-right">Geolocalización</th>
+              </tr>
+            </thead>
+            <tbody id="tabla-fichajes-body" class="divide-y divide-slate-100">
+              <tr><td colspan="6" class="py-4 text-center text-slate-400">Cargando registros...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+    <!-- 2.8: HERRAMIENTAS Y MAQUINARIA -->
+    <div id="vista-herramientas" class="hidden">
+      <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
-          <span class="text-xs font-semibold text-slate-600">Base Imponible (Neto):</span>
-          <p id="calc-base-imponible" class="text-lg font-black text-slate-900">0,00 €</p>
+          <h2 class="text-2xl font-bold text-slate-900">Parque de Maquinaria y Herramientas</h2>
+          <p class="text-sm text-slate-500">Control de inventario, ubicación actual, averías y asignación a obras o personal.</p>
         </div>
+        <button id="btn-abrir-modal-herramienta" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2.5 rounded-lg shadow-sm transition">
+          + Registrar Herramienta / Equipo
+        </button>
+      </header>
+
+      <div id="contenedor-filtros-herramientas" class="mt-4 flex gap-2 overflow-x-auto pb-2">
+        <button onclick="window.filtrarHerramientas('todas', this)" class="btn-filtro-her px-3.5 py-1.5 rounded-full text-xs font-bold transition bg-slate-900 text-white shadow-sm">
+          Todas
+        </button>
+        <button onclick="window.filtrarHerramientas('Operativa', this)" class="btn-filtro-her px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100">
+          🟢 Operativas
+        </button>
+        <button onclick="window.filtrarHerramientas('En taller', this)" class="btn-filtro-her px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100">
+          🟡 En taller / Mantenimiento
+        </button>
+        <button onclick="window.filtrarHerramientas('Averiada', this)" class="btn-filtro-her px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-rose-50 text-rose-800 border border-rose-200 hover:bg-rose-100">
+          🔴 Averiada / Baja
+        </button>
+      </div>
+
+      <section id="lista-herramientas" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <p class="text-sm text-slate-400">Cargando inventario...</p>
+      </section>
+    </div>
+    <!-- 2.8.1: FLOTA Y FURGONETAS -->
+    <div id="vista-vehiculos" class="hidden">
+      <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
         <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Impuesto aplicable:</label>
-          <select id="select-tipo-impuesto" onchange="window.calcularPresupuestoTotal()" class="w-full px-3 py-1.5 border rounded-lg text-xs outline-none bg-white font-semibold">
-            <option value="0">Sin Impuesto / Exento (0%)</option>
-            <option value="10" selected>IVA Reformas Vivienda (10%)</option>
-            <option value="21">IVA General (21%)</option>
-            <option value="7">IGIC Canarias General (7%)</option>
-            <option value="3">IGIC Canarias Reducido (3%)</option>
-          </select>
+          <h2 class="text-2xl font-bold text-slate-900">Control de Flota y Vehículos</h2>
+          <p class="text-sm text-slate-500">Asignación de furgonetas a conductores, vencimientos de ITV y mantenimiento.</p>
         </div>
-        <div class="text-left sm:text-right">
-          <span class="text-xs font-semibold text-slate-600">Total Presupuesto (con Impuestos):</span>
-          <p id="calc-total-presupuesto" class="text-2xl font-black text-amber-700">0,00 €</p>
-        </div>
-      </div>
+        <button onclick="window.abrirModalNuevoVehiculo()" id="btn-abrir-modal-vehiculo" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2.5 rounded-lg shadow-sm transition">
+          + Alta Vehículo / Furgoneta
+        </button>
+      </header>
+
+      <section id="lista-vehiculos" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <p class="text-sm text-slate-400">Cargando flota...</p>
+      </section>
     </div>
 
-    <div class="pt-4 border-t border-slate-100 space-y-3">
-      <div>
-        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Documentos y Fotografías Cruciales</h4>
-        <p class="text-[11px] text-slate-400">Licencia de obra, actas, planos o fotos clave (PDF, JPG, PNG máx. 2MB).</p>
-      </div>
-      <div class="p-4 bg-slate-50 rounded-xl border border-dashed border-slate-300">
-        <input type="file" id="input-archivo-obra" accept="image/*,application/pdf" class="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-500 file:text-slate-950 hover:file:bg-amber-600 cursor-pointer">
-        <div id="preview-archivo-seleccionado" class="mt-2 text-xs font-medium text-slate-700 hidden"></div>
-      </div>
-    </div>
+    <!-- 2.9: AJUSTES / MARCA BLANCA -->
+    <div id="vista-ajustes" class="hidden">
+      <header class="pb-6 border-b border-slate-200">
+        <h2 class="text-2xl font-bold text-slate-900">Personalización y Marca Blanca</h2>
+        <p class="text-sm text-slate-500">Configura el logotipo y datos fiscales para que figuren en todos tus presupuestos y partes técnicos oficiales.</p>
+      </header>
 
-    <div class="mt-8 flex justify-end gap-3 pt-4 border-t border-slate-100">
-      <button type="button" onclick="document.getElementById('modal-obra').style.display='none'" class="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg">Cancelar</button>
-      <button type="button" id="btn-submit-obra" class="px-6 py-2.5 text-sm bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg shadow-sm transition">
-        Guardar Obra y Presupuesto
-      </button>
-    </div>
-  </div>
-</div>
+      <div class="mt-8 max-w-2xl bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Logotipo de la Empresa</label>
+          <div class="flex items-center gap-4">
+            <div id="preview-logo-empresa" class="w-24 h-24 rounded-xl border-2 border-dashed border-slate-300 flex items-center justify-center bg-slate-50 overflow-hidden text-slate-400 text-xs font-semibold text-center p-2">
+              Sin logo
+            </div>
+            <div class="flex-1">
+              <input type="file" id="input-logo-empresa" accept="image/*" class="block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-500 file:text-slate-950 hover:file:bg-amber-600 cursor-pointer">
+              <p class="text-[11px] text-slate-400 mt-1">PNG o JPG transparente o de fondo blanco (máx. 1.5 MB).</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre Comercial / Empresa *</label>
+            <input id="empresa-nombre" type="text" placeholder="Ej. Reformas y Construcciones Pro" class="w-full px-3.5 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-amber-500">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">CIF / NIF *</label>
+            <input id="empresa-cif" type="text" placeholder="Ej. B-99887766" class="w-full px-3.5 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-amber-500">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Teléfono Central</label>
+            <input id="empresa-tel" type="tel" placeholder="Ej. 912 345 678" class="w-full px-3.5 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-amber-500">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Email de Contacto</label>
+            <input id="empresa-email" type="email" placeholder="contacto@mireforma.com" class="w-full px-3.5 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-amber-500">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Dirección Fiscal / Sede</label>
+          <input id="empresa-direccion" type="text" placeholder="Calle Ejemplo 45, Planta 1, Ciudad" class="w-full px-3.5 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-amber-500">
+        </div>
+
+        <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+          <span id="msg-guardado-empresa" class="text-xs text-emerald-600 font-bold hidden">✓ Datos guardados con éxito</span>
+          <button type="button" id="btn-guardar-empresa" class="ml-auto px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-lg text-xs shadow-sm transition">
+            Guardar Configuración
+          </button>
+        </div>
+      </div>
       <!-- SECCIÓN BACKUP Y EXPORTACIÓN EXCEL/CSV -->
       <div class="mt-8 max-w-2xl bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4">
         <div>
@@ -1599,124 +1329,7 @@
       direccion: "",
       logo: ""
     };
-    // ========================================================
-    // GESTIÓN DE ROLES Y SESIÓN (OPERARIO VS OFICINA)
-    // ========================================================
-    let sesionActual = {
-      rol: null, // 'operario' | 'oficina'
-      operario: null // objeto con datos del operario si procede
-    };
 
-    window.seleccionarModoLogin = (modo) => {
-      const fOp = document.getElementById("form-login-operario");
-      const fOf = document.getElementById("form-login-oficina");
-      const tOp = document.getElementById("tab-login-operario");
-      const tOf = document.getElementById("tab-login-oficina");
-
-      if (modo === "operario") {
-        fOp.classList.remove("hidden");
-        fOf.classList.add("hidden");
-        tOp.className = "flex-1 py-2 text-xs font-bold rounded-lg bg-amber-500 text-slate-950 transition";
-        tOf.className = "flex-1 py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition";
-      } else {
-        fOp.classList.add("hidden");
-        fOf.classList.remove("hidden");
-        tOf.className = "flex-1 py-2 text-xs font-bold rounded-lg bg-indigo-600 text-white transition";
-        tOp.className = "flex-1 py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition";
-      }
-    };
-
-    window.iniciarSesionOperario = () => {
-      const nomInput = (document.getElementById("login-nombre-operario").value || "").trim().toLowerCase();
-      const dniInput = (document.getElementById("login-dni-operario").value || "").trim().toLowerCase();
-
-      if (!nomInput || !dniInput) {
-        alert("Introduce tu nombre completo y tu DNI/NIE.");
-        return;
-      }
-
-      // Buscar al operario en la caché ignorando mayúsculas/minúsculas
-      const op = cacheOperarios.find(o => 
-        o.nombre && o.nombre.trim().toLowerCase() === nomInput &&
-        o.dni && o.dni.trim().toLowerCase() === dniInput
-      );
-
-      if (!op) {
-        alert("Datos incorrectos. Verifica que tu nombre y DNI coincidan con tu ficha de la empresa.");
-        return;
-      }
-
-      sesionActual = { rol: "operario", operario: op };
-      sessionStorage.setItem("gesyweb_sesion", JSON.stringify(sesionActual));
-      aplicarPermisosVisuales();
-      document.getElementById("pantalla-login").classList.add("hidden");
-      window.cambiarVista('fichajes');
-    };
-
-    window.iniciarSesionOficina = () => {
-      const usrInput = (document.getElementById("login-usuario-oficina").value || "").trim().toLowerCase();
-      const pwdInput = (document.getElementById("login-clave-oficina").value || "").trim();
-
-      const claveMaestra = datosEmpresaActual.claveAdmin || "admin123";
-
-      if ((usrInput === "admin" || usrInput === "oficina") && pwdInput === claveMaestra) {
-        sesionActual = { rol: "oficina", operario: null };
-        sessionStorage.setItem("gesyweb_sesion", JSON.stringify(sesionActual));
-        aplicarPermisosVisuales();
-        document.getElementById("pantalla-login").classList.add("hidden");
-        window.cambiarVista('dashboard');
-      } else {
-        alert("Usuario o contraseña de oficina incorrectos.");
-      }
-    };
-
-    window.cerrarSesion = () => {
-      sessionStorage.removeItem("gesyweb_sesion");
-      sesionActual = { rol: null, operario: null };
-      document.getElementById("login-nombre-operario").value = "";
-      document.getElementById("login-dni-operario").value = "";
-      document.getElementById("pantalla-login").classList.remove("hidden");
-    };
-
-    function aplicarPermisosVisuales() {
-      const bUsuario = document.getElementById("badge-usuario-sesion");
-      const navClientes = document.getElementById("nav-clientes");
-      const navOperarios = document.getElementById("nav-operarios");
-      const navAjustes = document.getElementById("nav-ajustes");
-      const navDashboard = document.getElementById("nav-dashboard");
-
-      if (sesionActual.rol === "operario") {
-        if (bUsuario) bUsuario.textContent = "👷 " + sesionActual.operario.nombre.split(" ")[0];
-        // Ocultar del menú lateral módulos que no competen al operario
-        if (navClientes) navClientes.classList.add("hidden");
-        if (navOperarios) navOperarios.classList.add("hidden");
-        if (navAjustes) navAjustes.classList.add("hidden");
-        if (navDashboard) navDashboard.classList.add("hidden");
-      } else {
-        if (bUsuario) bUsuario.textContent = "💼 Oficina / Admin";
-        if (navClientes) navClientes.classList.remove("hidden");
-        if (navOperarios) navOperarios.classList.remove("hidden");
-        if (navAjustes) navAjustes.classList.remove("hidden");
-        if (navDashboard) navDashboard.classList.remove("hidden");
-      }
-
-      // Refrescar listados para que filtren según el usuario
-      renderizarObras();
-      renderizarIncidencias();
-      renderizarHerramientas();
-    }
-
-    // Comprobar si ya había una sesión guardada al abrir la web
-    const sesionGuardada = sessionStorage.getItem("gesyweb_sesion");
-    if (sesionGuardada) {
-      try {
-        sesionActual = JSON.parse(sesionGuardada);
-        document.getElementById("pantalla-login").classList.add("hidden");
-        aplicarPermisosVisuales();
-      } catch (e) {
-        sessionStorage.removeItem("gesyweb_sesion");
-      }
-    }
     const vistas = {
       dashboard: document.getElementById("vista-dashboard"),
       calendario: document.getElementById("vista-calendario"),
@@ -2050,13 +1663,7 @@
       const listaObrasEl = document.getElementById("lista-proyectos");
       if (!listaObrasEl) return;
       listaObrasEl.innerHTML = "";
-      let filtradas = filtroEstadoActual === 'todas' ? cacheObras : cacheObras.filter(o => o.estado === filtroEstadoActual);
-
-// Si es operario, solo mostramos las obras donde está asignado
-    if (sesionActual.rol === "operario" && sesionActual.operario) {
-  const miNombre = sesionActual.operario.nombre.trim().toLowerCase();
-  filtradas = filtradas.filter(o => o.operarios && o.operarios.some(op => op.trim().toLowerCase() === miNombre));
-  }
+      const filtradas = filtroEstadoActual === 'todas' ? cacheObras : cacheObras.filter(o => o.estado === filtroEstadoActual);
 
       if (filtradas.length === 0) {
         listaObrasEl.innerHTML = '<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay obras registradas bajo este filtro.</p></div>';
@@ -2105,11 +1712,10 @@
       if (obra.trabajos && obra.trabajos.length > 0) {
         trabajosLi = obra.trabajos.map((t, idx) => {
           const nom = typeof t === 'object' ? t.nombre : t;
-          const precio = typeof t === 'object' && t.precio ? Number(t.precio).toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €' : '-';// Si es operario, ocultamos el precio de la partida
-const precio = (sesionActual.rol === "operario") ? "" : (typeof t === 'object' && t.precio ? Number(t.precio).toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €' : '-');
+          const precio = typeof t === 'object' && t.precio ? Number(t.precio).toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €' : '-';
           return '<li class="print-item flex items-center justify-between py-1.5 border-b border-slate-100 last:border-0">' +
             '<div class="flex items-start gap-1.5"><span class="w-4 h-4 rounded-full bg-amber-100 text-amber-900 text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">' + (idx + 1) + '</span><span class="text-xs sm:text-sm text-slate-800 leading-tight">' + nom + '</span></div>' +
-            '<span class="text-xs font-bold text-slate-900 shrink-0 ml-2">' + precio + '</span></li>';      
+            '<span class="text-xs font-bold text-slate-900 shrink-0 ml-2">' + precio + '</span></li>';
         }).join('');
       }
 
@@ -2117,10 +1723,8 @@ const precio = (sesionActual.rol === "operario") ? "" : (typeof t === 'object' &
       if (obra.materiales && obra.materiales.length > 0) {
         materialesLi = obra.materiales.map(m => {
           const displayCant = (m.cantidad ? m.cantidad : '1') + ' ' + (m.unidad ? m.unidad : 'ud');
-          const subtotal = (parseFloat(m.cantidad || 0) * parseFloat(m.precioUnitario || 0));// Si es operario, ocultamos el precio de la partida
-const precio = (sesionActual.rol === "operario") ? "" : (typeof t === 'object' && t.precio ? Number(t.precio).toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €' : '-');
-          const subtotalTxt = subtotal > 0 ? subtotal.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €' : (m.precioUnitario ? Number(m.precioUnitario).toLocaleString('es-ES') + ' €' : '-');// Si es operario, ocultamos el precio de la partida
-const precio = (sesionActual.rol === "operario") ? "" : (typeof t === 'object' && t.precio ? Number(t.precio).toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €' : '-');
+          const subtotal = (parseFloat(m.cantidad || 0) * parseFloat(m.precioUnitario || 0));
+          const subtotalTxt = subtotal > 0 ? subtotal.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €' : (m.precioUnitario ? Number(m.precioUnitario).toLocaleString('es-ES') + ' €' : '-');
           return '<li class="print-item flex items-center justify-between py-1.5 text-xs sm:text-sm text-slate-700 border-b border-slate-100 last:border-0">' +
             '<div class="truncate mr-2"><span class="font-medium text-slate-800">' + (m.nombre || 'Material') + '</span><span class="text-[11px] text-slate-400 ml-1">(' + displayCant + (m.precioUnitario ? ' a ' + m.precioUnitario + '€' : '') + ')</span></div>' +
             '<span class="text-xs font-bold text-slate-900 shrink-0">' + subtotalTxt + '</span></li>';
@@ -2176,8 +1780,7 @@ const precio = (sesionActual.rol === "operario") ? "" : (typeof t === 'object' &
 
       const base = Number(obra.baseImponible) || Number(obra.presupuesto) || 0;
       const pct = Number(obra.tipoImpuesto) || 10;
-      const totalFinal = Number(obra.totalPresupuesto) || (base * (1 + pct / 100));// Si es operario, ocultamos el precio de la partida
-const precio = (sesionActual.rol === "operario") ? "" : (typeof t === 'object' && t.precio ? Number(t.precio).toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €' : '-');
+      const totalFinal = Number(obra.totalPresupuesto) || (base * (1 + pct / 100));
       const cuotaImpuesto = totalFinal - base;
 
       cont.innerHTML = '<div class="card-print bg-white rounded-2xl p-5 sm:p-7 border border-slate-200 shadow-sm space-y-4">' +
