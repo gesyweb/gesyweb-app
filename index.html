@@ -1856,36 +1856,55 @@
       obraSeleccionadaActual = obra;
 
       const cont = document.getElementById("contenedor-detalle-obra");
+      
+      // 1. DETERMINAMOS SI ES OPERARIO AL PRINCIPIO
+      const esOperario = sesionActual && sesionActual.rol === 'operario';
+
+      // 2. OCULTAMOS LOS BOTONES DE EDICIÓN PARA OPERARIOS
+      const divAcciones = document.getElementById("acciones-ficha");
+      if (divAcciones) {
+        divAcciones.style.display = esOperario ? 'none' : 'flex';
+      }
+
       let badge = obra.estado === "Finalizada" ? "bg-sky-100 text-sky-800" : obra.estado === "Presupuestada" ? "bg-amber-100 text-amber-800" : obra.estado === "Pausada" ? "bg-orange-100 text-orange-800" : "bg-emerald-100 text-emerald-800";
       const urlMaps = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(obra.direccion || '');
 
+      // 3. CENSURAMOS LOS PRECIOS EN LAS PARTIDAS DE MANO DE OBRA
       let trabajosLi = '<p class="text-xs text-slate-400 italic">No hay partidas de mano de obra definidas.</p>';
       if (obra.trabajos && obra.trabajos.length > 0) {
         trabajosLi = obra.trabajos.map((t, idx) => {
           const nom = typeof t === 'object' ? t.nombre : t;
           const precio = typeof t === 'object' && t.precio ? Number(t.precio).toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €' : '-';
+          const precioHtml = esOperario ? '' : '<span class="text-xs font-bold text-slate-900 shrink-0 ml-2">' + precio + '</span>';
           return '<li class="print-item flex items-center justify-between py-1.5 border-b border-slate-100 last:border-0">' +
             '<div class="flex items-start gap-1.5"><span class="w-4 h-4 rounded-full bg-amber-100 text-amber-900 text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">' + (idx + 1) + '</span><span class="text-xs sm:text-sm text-slate-800 leading-tight">' + nom + '</span></div>' +
-            '<span class="text-xs font-bold text-slate-900 shrink-0 ml-2">' + precio + '</span></li>';
+            precioHtml + '</li>';
         }).join('');
       }
 
+      // 4. CENSURAMOS LOS PRECIOS UNITARIOS Y SUBTOTALES EN MATERIALES
       let materialesLi = '<p class="text-xs text-slate-400 italic">No hay partidas de materiales registradas.</p>';
       if (obra.materiales && obra.materiales.length > 0) {
         materialesLi = obra.materiales.map(m => {
           const displayCant = (m.cantidad ? m.cantidad : '1') + ' ' + (m.unidad ? m.unidad : 'ud');
           const subtotal = (parseFloat(m.cantidad || 0) * parseFloat(m.precioUnitario || 0));
           const subtotalTxt = subtotal > 0 ? subtotal.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €' : (m.precioUnitario ? Number(m.precioUnitario).toLocaleString('es-ES') + ' €' : '-');
+          
+          const detallePrecioUnidad = (m.precioUnitario && !esOperario) ? ' a ' + m.precioUnitario + '€' : '';
+          const subtotalHtml = esOperario ? '' : '<span class="text-xs font-bold text-slate-900 shrink-0">' + subtotalTxt + '</span>';
+          
           return '<li class="print-item flex items-center justify-between py-1.5 text-xs sm:text-sm text-slate-700 border-b border-slate-100 last:border-0">' +
-            '<div class="truncate mr-2"><span class="font-medium text-slate-800">' + (m.nombre || 'Material') + '</span><span class="text-[11px] text-slate-400 ml-1">(' + displayCant + (m.precioUnitario ? ' a ' + m.precioUnitario + '€' : '') + ')</span></div>' +
-            '<span class="text-xs font-bold text-slate-900 shrink-0">' + subtotalTxt + '</span></li>';
+            '<div class="truncate mr-2"><span class="font-medium text-slate-800">' + (m.nombre || 'Material') + '</span><span class="text-[11px] text-slate-400 ml-1">(' + displayCant + detallePrecioUnidad + ')</span></div>' +
+            subtotalHtml + '</li>';
         }).join('');
       }
 
+      // 5. CENSURAMOS LA LISTA DE OPERARIOS ASIGNADOS
       let operariosBadges = '<p class="text-xs text-slate-400 italic">Sin operarios asignados.</p>';
       if (obra.operarios && obra.operarios.length > 0) {
         operariosBadges = obra.operarios.map(op => '<span class="bg-white border px-2 py-1 rounded text-xs font-semibold text-slate-700 shadow-sm">👷 ' + op + '</span>').join('');
       }
+      const bloqueEquipoHtml = esOperario ? '' : '<div class="print-section"><h3 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Equipo de Trabajo Asignado</h3><div class="flex flex-wrap gap-1.5">' + operariosBadges + '</div></div>';
 
       const incidenciasDeEstaObra = cacheIncidencias.filter(inc => inc.obra === obra.nombre);
       let incidenciasHtml = '<p class="text-xs text-slate-400 italic bg-slate-50 p-3 rounded-lg border">No se han registrado incidencias en esta obra.</p>';
@@ -1914,7 +1933,7 @@
         if (esImg) {
           adjuntoHtml = '<div class="space-y-1">' +
             '<img src="' + obra.archivoAdjunto + '" alt="Documento" class="max-h-48 rounded-lg border shadow-sm object-cover">' +
-            '<a href="' + obra.archivoAdjunto + '" download="' + (obra.nombreArchivo || 'documento-obra') + '" class="no-print inline-block text-xs font-bold text-amber-600 hover:underline">⬇️ Descargar fotografía</a>' +
+            '<a href="' + obra.archivoAdjunto + '" download="' + (obra.nombreArchivo || 'documento-obra') + '" class="no-print inline-block text-xs font-bold text-amber-600 hover:underline">⬇️️ Descargar fotografía</a>' +
             '</div>';
         } else {
           adjuntoHtml = '<div class="flex items-center gap-2 p-2.5 bg-slate-50 border rounded-lg max-w-md">' +
@@ -1933,12 +1952,11 @@
       const pct = Number(obra.tipoImpuesto) || 10;
       const totalFinal = Number(obra.totalPresupuesto) || (base * (1 + pct / 100));
       const cuotaImpuesto = totalFinal - base;
-      // CENSURA DE PRECIOS PARA OPERARIOS
-      const esOperario = sesionActual && sesionActual.rol === 'operario';
       
       const bloquePrecioHeader = esOperario ? '' : '<div class="sm:text-right"><span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Total Presupuesto</span><p class="print-subtitle text-xl sm:text-2xl font-black text-amber-700">' + totalFinal.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €</p></div>';
       
       const bloqueLiquidacionEcon = esOperario ? '' : '<div class="print-section bg-slate-50 p-4 rounded-xl border border-slate-200 flex justify-end"><div class="w-full sm:w-72 space-y-1.5 text-xs"><div class="flex justify-between text-slate-600"><span>Base Imponible (Neto):</span><span class="font-bold text-slate-800">' + base.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €</span></div><div class="flex justify-between text-slate-600 pb-1.5 border-b border-slate-200"><span>Impuesto (' + pct + '%):</span><span class="font-bold text-slate-800">' + cuotaImpuesto.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €</span></div><div class="flex justify-between text-sm font-black text-amber-800 pt-1"><span>TOTAL PRESUPUESTO:</span><span>' + totalFinal.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €</span></div></div></div>';
+
       cont.innerHTML = '<div class="card-print bg-white rounded-2xl p-5 sm:p-7 border border-slate-200 shadow-sm space-y-4">' +
         window.generarCabeceraMarcaBlanca() +
         '<div class="flex flex-col sm:flex-row justify-between items-start gap-2 pb-3 border-b border-slate-200">' +
@@ -1950,10 +1968,7 @@
             '<h1 class="print-title text-xl sm:text-2xl font-extrabold text-slate-900 mt-1">' + obra.nombre + '</h1>' +
             '<p class="text-xs sm:text-sm text-slate-500 mt-0.5 flex items-center gap-1.5">📍 ' + obra.direccion + ' <a href="' + urlMaps + '" target="_blank" class="no-print text-[11px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 hover:bg-amber-100">🗺️ Google Maps</a></p>' +
           '</div>' +
-          '<div class="sm:text-right">' +
-            '<span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Total Presupuesto (IVA/IGIC inc.)</span>' +
-            '<p class="print-subtitle text-xl sm:text-2xl font-black text-amber-700">' + totalFinal.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €</p>' +
-          '</div>' +
+          bloquePrecioHeader +
         '</div>' +
         '<div class="print-grid-4col grid grid-cols-2 lg:grid-cols-4 gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs">' +
           '<div><span class="text-[10px] font-bold text-slate-400 uppercase">Cliente</span><p class="font-semibold text-indigo-700 mt-0.5 truncate cursor-pointer hover:underline" onclick="window.abrirDetalleClientePorNombre(\'' + (obra.cliente || '') + '\')">👤 ' + (obra.cliente || 'Particular') + '</p></div>' +
@@ -1966,13 +1981,7 @@
           '<div class="p-3.5 rounded-xl border border-slate-200 bg-white"><h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2 flex items-center justify-between pb-1.5 border-b"><span>📋 Partidas y Mano de Obra</span><span class="text-[10px] bg-amber-100 text-amber-900 px-1.5 py-0.2 rounded font-semibold">' + (obra.trabajos ? obra.trabajos.length : 0) + '</span></h3><ul class="space-y-0.5">' + trabajosLi + '</ul></div>' +
           '<div class="p-3.5 rounded-xl border border-slate-200 bg-white"><h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2 flex items-center justify-between pb-1.5 border-b"><span>📦 Materiales Presupuestados</span><span class="text-[10px] bg-slate-200 text-slate-800 px-1.5 py-0.2 rounded font-semibold">' + (obra.materiales ? obra.materiales.length : 0) + '</span></h3><ul class="space-y-0.5">' + materialesLi + '</ul></div>' +
         '</div>' +
-        '<div class="print-section bg-slate-50 p-4 rounded-xl border border-slate-200 flex justify-end">' +
-          '<div class="w-full sm:w-72 space-y-1.5 text-xs">' +
-            '<div class="flex justify-between text-slate-600"><span>Base Imponible (Neto):</span><span class="font-bold text-slate-800">' + base.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €</span></div>' +
-            '<div class="flex justify-between text-slate-600 pb-1.5 border-b border-slate-200"><span>Impuesto (' + pct + '% IVA/IGIC):</span><span class="font-bold text-slate-800">' + cuotaImpuesto.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €</span></div>' +
-            '<div class="flex justify-between text-sm font-black text-amber-800 pt-1"><span>TOTAL PRESUPUESTO:</span><span>' + totalFinal.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €</span></div>' +
-          '</div>' +
-        '</div>' +
+        bloqueLiquidacionEcon +
         '<div class="print-section">' +
           '<div class="flex justify-between items-center mb-2">' +
             '<h3 class="text-[11px] font-bold text-slate-900 uppercase tracking-wider">⚠️ Incidencias y Partes de Intervención en esta Obra (' + incidenciasDeEstaObra.length + ')</h3>' +
@@ -1980,7 +1989,7 @@
           '</div>' +
           incidenciasHtml +
         '</div>' +
-        '<div class="print-section"><h3 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Equipo de Trabajo Asignado</h3><div class="flex flex-wrap gap-1.5">' + operariosBadges + '</div></div>' +
+        bloqueEquipoHtml +
         '<div class="print-section pt-3 border-t border-slate-200"><h3 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Documentación / Licencia</h3>' + adjuntoHtml + '</div>' +
       '</div>';
 
