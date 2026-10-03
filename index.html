@@ -31,7 +31,51 @@
   </style>
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col md:flex-row">
+  <!-- ======================================================== -->
+  <!-- [BLOQUE 0]: PANTALLA DE ACCESO (LOGIN)                  -->
+  <!-- ======================================================== -->
+  <div id="pantalla-login" class="fixed inset-0 bg-slate-900 z-[100] flex items-center justify-center p-4">
+    <div class="bg-white p-8 rounded-2xl w-full max-w-md shadow-2xl">
+      <div class="text-center mb-8">
+        <div class="w-16 h-16 rounded-xl bg-amber-500 flex items-center justify-center font-black text-slate-950 text-3xl mx-auto mb-4">G</div>
+        <h1 class="text-2xl font-bold text-slate-900">Acceso Gesyweb</h1>
+        <p class="text-sm text-slate-500">Identifícate para entrar al sistema operativo</p>
+      </div>
 
+      <div class="flex bg-slate-100 p-1 rounded-lg mb-6">
+        <button id="tab-login-operario" onclick="window.cambiarTabLogin('operario')" class="flex-1 py-2 text-sm font-bold rounded-md bg-white shadow-sm text-slate-900 transition">Soy Operario</button>
+        <button id="tab-login-oficina" onclick="window.cambiarTabLogin('oficina')" class="flex-1 py-2 text-sm font-bold rounded-md text-slate-500 hover:text-slate-700 transition">Soy Administración</button>
+      </div>
+
+      <!-- Formulario Operario -->
+      <div id="form-login-operario" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre Completo (Igual que en tu ficha)</label>
+          <input id="login-nombre" type="text" placeholder="Ej. Juan Pérez" class="w-full px-4 py-2.5 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-amber-500">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">DNI / NIE</label>
+          <input id="login-dni" type="text" placeholder="Ej. 12345678Z" class="w-full px-4 py-2.5 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-amber-500 uppercase font-mono">
+        </div>
+        <button onclick="window.intentarLoginOperario()" class="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-lg shadow-sm transition mt-2">
+          Entrar a mi zona
+        </button>
+      </div>
+
+      <!-- Formulario Oficina -->
+      <div id="form-login-oficina" class="space-y-4 hidden">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Clave Maestra de Acceso</label>
+          <input id="login-clave" type="password" placeholder="••••••••" class="w-full px-4 py-2.5 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-amber-500">
+        </div>
+        <button onclick="window.intentarLoginOficina()" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg shadow-sm transition mt-2">
+          Acceder al ERP
+        </button>
+      </div>
+
+      <p id="login-error" class="text-rose-500 text-xs font-bold text-center mt-4 hidden">Credenciales incorrectas.</p>
+    </div>
+  </div>
   <!-- ======================================================== -->
   <!-- [BLOQUE 1]: CABECERA Y MENÚ LATERAL                     -->
   <!-- ======================================================== -->
@@ -1329,7 +1373,109 @@
       direccion: "",
       logo: ""
     };
+  // --- GESTIÓN DE SESIÓN Y LOGIN ---
+    let sesionActual = JSON.parse(localStorage.getItem('gesyweb_sesion')) || null;
 
+    window.cambiarTabLogin = (tab) => {
+      document.getElementById('login-error').classList.add('hidden');
+      if (tab === 'operario') {
+        document.getElementById('form-login-operario').classList.remove('hidden');
+        document.getElementById('form-login-oficina').classList.add('hidden');
+        document.getElementById('tab-login-operario').className = "flex-1 py-2 text-sm font-bold rounded-md bg-white shadow-sm text-slate-900";
+        document.getElementById('tab-login-oficina').className = "flex-1 py-2 text-sm font-bold rounded-md text-slate-500 hover:text-slate-700";
+      } else {
+        document.getElementById('form-login-oficina').classList.remove('hidden');
+        document.getElementById('form-login-operario').classList.add('hidden');
+        document.getElementById('tab-login-oficina').className = "flex-1 py-2 text-sm font-bold rounded-md bg-white shadow-sm text-slate-900";
+        document.getElementById('tab-login-operario').className = "flex-1 py-2 text-sm font-bold rounded-md text-slate-500 hover:text-slate-700";
+      }
+    };
+
+    window.intentarLoginOperario = () => {
+      const nom = document.getElementById('login-nombre').value.trim().toLowerCase();
+      const dni = document.getElementById('login-dni').value.trim().toLowerCase();
+      
+      if(!nom || !dni) return;
+
+      const operario = cacheOperarios.find(op => 
+        (op.nombre || '').trim().toLowerCase() === nom && 
+        (op.dni || '').trim().toLowerCase() === dni
+      );
+
+      if (operario) {
+        sesionActual = { rol: 'operario', nombre: operario.nombre, id: operario.id };
+        localStorage.setItem('gesyweb_sesion', JSON.stringify(sesionActual));
+        window.iniciarApp();
+      } else {
+        document.getElementById('login-error').textContent = "Operario no encontrado o DNI incorrecto. Espera unos segundos si acabas de abrir la app.";
+        document.getElementById('login-error').classList.remove('hidden');
+      }
+    };
+
+    window.intentarLoginOficina = () => {
+      const clave = document.getElementById('login-clave').value.trim();
+      const claveMaestra = datosEmpresaActual.claveAdmin || "admin123"; // En el futuro lo sacaremos de Ajustes
+
+      if (clave === claveMaestra) {
+        sesionActual = { rol: 'admin', nombre: 'Administración' };
+        localStorage.setItem('gesyweb_sesion', JSON.stringify(sesionActual));
+        window.iniciarApp();
+      } else {
+        document.getElementById('login-error').textContent = "Clave maestra incorrecta.";
+        document.getElementById('login-error').classList.remove('hidden');
+      }
+    };
+
+    window.cerrarSesion = () => {
+      localStorage.removeItem('gesyweb_sesion');
+      location.reload(); // Recarga la página para volver a bajar el telón
+    };
+
+    window.iniciarApp = () => {
+      if (!sesionActual) return;
+      
+      document.getElementById('pantalla-login').style.display = 'none';
+      
+      if (sesionActual.rol === 'operario') {
+        // Censura visual: ocultamos botones prohibidos para operarios
+        document.getElementById('nav-dashboard').classList.add('hidden');
+        document.getElementById('nav-clientes').classList.add('hidden');
+        document.getElementById('nav-operarios').classList.add('hidden');
+        document.getElementById('nav-ajustes').classList.add('hidden');
+        
+        const btnAltaObra = document.getElementById('btn-abrir-modal-obra');
+        if(btnAltaObra) btnAltaObra.classList.add('hidden');
+        
+        window.cambiarVista('fichajes'); // Vista por defecto para ellos
+      } else {
+        window.cambiarVista('dashboard');
+      }
+
+      // Añadimos el botón de cerrar sesión si no existe
+      if (!document.getElementById('nav-cerrar-sesion')) {
+        const navContainer = document.querySelector('nav');
+        const btnSalir = document.createElement('button');
+        btnSalir.id = 'nav-cerrar-sesion';
+        btnSalir.onclick = window.cerrarSesion;
+        btnSalir.className = "nav-btn w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-rose-400 hover:bg-slate-800 hover:text-rose-300 transition mt-6 border border-slate-700/50";
+        btnSalir.innerHTML = "<span>🚪</span> Cerrar Sesión";
+        navContainer.appendChild(btnSalir);
+      }
+
+      // Refrescamos las vistas para que apliquen los filtros de asignación
+      if (typeof renderizarObras === 'function') renderizarObras();
+      if (typeof renderizarIncidencias === 'function') renderizarIncidencias();
+      if (typeof actualizarSelectoresFichaje === 'function') actualizarSelectoresFichaje();
+    };
+
+    // Auto-arranque si ya hay sesión guardada
+    window.addEventListener('DOMContentLoaded', () => {
+      if (sesionActual) {
+        // Esperamos 500ms para asegurar que Firebase ha traído la caché inicial
+        setTimeout(window.iniciarApp, 500);
+      }
+    });
+    // --- FIN GESTIÓN DE SESIÓN ---
     const vistas = {
       dashboard: document.getElementById("vista-dashboard"),
       calendario: document.getElementById("vista-calendario"),
@@ -1663,7 +1809,12 @@
       const listaObrasEl = document.getElementById("lista-proyectos");
       if (!listaObrasEl) return;
       listaObrasEl.innerHTML = "";
-      const filtradas = filtroEstadoActual === 'todas' ? cacheObras : cacheObras.filter(o => o.estado === filtroEstadoActual);
+      let obrasPermitidas = cacheObras;
+      // Si es operario, solo ve las obras donde su nombre aparece en el array de asignados
+      if (sesionActual && sesionActual.rol === 'operario') {
+        obrasPermitidas = cacheObras.filter(o => o.operarios && o.operarios.includes(sesionActual.nombre));
+      }
+      const filtradas = filtroEstadoActual === 'todas' ? obrasPermitidas : obrasPermitidas.filter(o => o.estado === filtroEstadoActual);
 
       if (filtradas.length === 0) {
         listaObrasEl.innerHTML = '<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay obras registradas bajo este filtro.</p></div>';
@@ -1782,7 +1933,12 @@
       const pct = Number(obra.tipoImpuesto) || 10;
       const totalFinal = Number(obra.totalPresupuesto) || (base * (1 + pct / 100));
       const cuotaImpuesto = totalFinal - base;
-
+      // CENSURA DE PRECIOS PARA OPERARIOS
+      const esOperario = sesionActual && sesionActual.rol === 'operario';
+      
+      const bloquePrecioHeader = esOperario ? '' : '<div class="sm:text-right"><span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Total Presupuesto</span><p class="print-subtitle text-xl sm:text-2xl font-black text-amber-700">' + totalFinal.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €</p></div>';
+      
+      const bloqueLiquidacionEcon = esOperario ? '' : '<div class="print-section bg-slate-50 p-4 rounded-xl border border-slate-200 flex justify-end"><div class="w-full sm:w-72 space-y-1.5 text-xs"><div class="flex justify-between text-slate-600"><span>Base Imponible (Neto):</span><span class="font-bold text-slate-800">' + base.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €</span></div><div class="flex justify-between text-slate-600 pb-1.5 border-b border-slate-200"><span>Impuesto (' + pct + '%):</span><span class="font-bold text-slate-800">' + cuotaImpuesto.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €</span></div><div class="flex justify-between text-sm font-black text-amber-800 pt-1"><span>TOTAL PRESUPUESTO:</span><span>' + totalFinal.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €</span></div></div></div>';
       cont.innerHTML = '<div class="card-print bg-white rounded-2xl p-5 sm:p-7 border border-slate-200 shadow-sm space-y-4">' +
         window.generarCabeceraMarcaBlanca() +
         '<div class="flex flex-col sm:flex-row justify-between items-start gap-2 pb-3 border-b border-slate-200">' +
@@ -2400,7 +2556,11 @@
       const listaIncidenciasEl = document.getElementById("lista-incidencias");
       if (!listaIncidenciasEl) return;
       listaIncidenciasEl.innerHTML = "";
-      const filtradas = filtroIncidenciasActual === 'todas' ? cacheIncidencias : cacheIncidencias.filter(i => i.estado === filtroIncidenciasActual);
+      let incPermitidas = cacheIncidencias;
+      if (sesionActual && sesionActual.rol === 'operario') {
+        incPermitidas = cacheIncidencias.filter(i => i.operario === sesionActual.nombre);
+      }
+      const filtradas = filtroIncidenciasActual === 'todas' ? incPermitidas : incPermitidas.filter(i => i.estado === filtroIncidenciasActual);
 
       if (filtradas.length === 0) {
         listaIncidenciasEl.innerHTML = '<div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center"><p class="text-slate-500">No hay incidencias bajo este filtro.</p></div>';
@@ -3727,29 +3887,41 @@
     function actualizarSelectoresFichaje() {
       const selOp = document.getElementById("select-operario-fichaje");
       const selObra = document.getElementById("select-obra-fichaje");
+      
       if (selOp) {
-        const valActual = selOp.value;
-        selOp.innerHTML = '<option value="">Selecciona trabajador...</option>';
-        cacheOperarios.forEach(op => {
-          const opt = document.createElement("option");
-          opt.value = op.nombre; // Guardar únicamente el nombre para que la comparación no falle
-          opt.textContent = `${op.nombre} (${op.oficio || 'Operario'})`;
-          selOp.appendChild(opt);
-        });
-        selOp.value = valActual;
+        if (sesionActual && sesionActual.rol === 'operario') {
+          // Bloquea el selector con su propio nombre
+          selOp.innerHTML = '<option value="' + sesionActual.nombre + '">👤 ' + sesionActual.nombre + '</option>';
+          selOp.disabled = true;
+          selOp.className = "w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-xs text-slate-400 cursor-not-allowed";
+        } else {
+          // Lógica normal para administración
+          const valActual = selOp.value;
+          selOp.disabled = false;
+          selOp.innerHTML = '<option value="">Selecciona trabajador...</option>';
+          cacheOperarios.forEach(op => {
+            const opt = document.createElement("option");
+            opt.value = op.nombre;
+            opt.textContent = `${op.nombre} (${op.oficio || 'Operario'})`;
+            selOp.appendChild(opt);
+          });
+          selOp.value = valActual;
+        }
       }
+      
+      // Lógica de obras que se había borrado
       if (selObra) {
-        const valActual = selObra.value;
+        const valObraActual = selObra.value;
         selObra.innerHTML = '<option value="Sede / Almacén Central">📦 Sede / Almacén Central</option>';
-        cacheObras.forEach(o => {
+        cacheObras.filter(o => o.estado === 'En curso' || o.estado === 'Presupuestada').forEach(o => {
           const opt = document.createElement("option");
           opt.value = o.nombre;
           opt.textContent = `🏗️ ${o.nombre}`;
           selObra.appendChild(opt);
         });
-        selObra.value = valActual;
+        if (valObraActual) selObra.value = valObraActual;
       }
-    }
+    } // <--- ¡ESTA ES LA LLAVE QUE FALTABA!
 
     // 6. Listener en tiempo real de Fichajes
     onSnapshot(colFichajes, (snap) => {
