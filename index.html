@@ -1437,10 +1437,13 @@
       document.getElementById('pantalla-login').style.display = 'none';
       
       if (sesionActual.rol === 'operario') {
-        // Censura visual: ocultamos botones prohibidos para operarios
+        // Censura visual: ocultamos TODOS los botones prohibidos para operarios
         document.getElementById('nav-dashboard').classList.add('hidden');
         document.getElementById('nav-clientes').classList.add('hidden');
         document.getElementById('nav-operarios').classList.add('hidden');
+        document.getElementById('nav-herramientas').classList.add('hidden');
+        document.getElementById('nav-vehiculos').classList.add('hidden');
+        document.getElementById('nav-calendario').classList.add('hidden');
         document.getElementById('nav-ajustes').classList.add('hidden');
         
         const btnAltaObra = document.getElementById('btn-abrir-modal-obra');
@@ -3950,6 +3953,16 @@
         window.verificarEstadoFichajeOperario();
       }
     }
+
+    // 6. Listener en tiempo real de Fichajes (RECUPERADO)
+    onSnapshot(colFichajes, (snap) => {
+      cacheFichajes = [];
+      snap.forEach(docSnap => {
+        cacheFichajes.push({ id: docSnap.id, ...docSnap.data() });
+      });
+      window.renderizarFichajes();
+      window.verificarEstadoFichajeOperario();
+    });
 
     // 7. Impresión de informe oficial mensual (para Inspección)
     window.imprimirInformeFichajes = () => {
