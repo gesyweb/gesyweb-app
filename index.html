@@ -3838,15 +3838,29 @@
       }
     };
 
+
     // 4. Renderizar la tabla histórica de fichajes
     window.renderizarFichajes = () => {
       const tbody = document.getElementById("tabla-fichajes-body");
       if (!tbody) return;
       tbody.innerHTML = "";
 
+      // 🔒 CENSURA DE BOTÓN OFICIAL Y FILTRO POR ROL
+      const btnImprimir = document.querySelector('button[onclick="window.imprimirInformeFichajes()"]');
+      let fichajesPermitidos = cacheFichajes;
+      
+      if (sesionActual && sesionActual.rol === 'operario') {
+        // Operario: solo ve sus fichajes y no puede imprimir el informe de inspección
+        fichajesPermitidos = cacheFichajes.filter(f => f.operario === sesionActual.nombre);
+        if (btnImprimir) btnImprimir.style.display = 'none';
+      } else {
+        // Administración: ve todo y puede imprimir
+        if (btnImprimir) btnImprimir.style.display = 'flex';
+      }
+
       const mesFiltro = document.getElementById("filtro-mes-fichajes") ? document.getElementById("filtro-mes-fichajes").value : "";
 
-      const filtrados = cacheFichajes
+      const filtrados = fichajesPermitidos
         .filter(f => !mesFiltro || (f.fechaStr && f.fechaStr.startsWith(mesFiltro)))
         .sort((a, b) => (b.timestampMs || 0) - (a.timestampMs || 0));
 
@@ -3854,6 +3868,8 @@
         tbody.innerHTML = '<tr><td colspan="6" class="py-6 text-center text-slate-400 italic">No hay registros de fichajes en el periodo seleccionado.</td></tr>';
         return;
       }
+      
+      // ... (el resto del código con el filtrados.slice(0, 50).forEach... se queda exactamente igual)
 
       filtrados.slice(0, 50).forEach(f => {
         let badgeTipo = "";
@@ -3918,7 +3934,7 @@
         }
       }
       
-      // Lógica de obras que se había borrado
+      // Lógica de obras
       if (selObra) {
         const valObraActual = selObra.value;
         selObra.innerHTML = '<option value="Sede / Almacén Central">📦 Sede / Almacén Central</option>';
@@ -3930,17 +3946,12 @@
         });
         if (valObraActual) selObra.value = valObraActual;
       }
-    } // <--- ¡ESTA ES LA LLAVE QUE FALTABA!
 
-    // 6. Listener en tiempo real de Fichajes
-    onSnapshot(colFichajes, (snap) => {
-      cacheFichajes = [];
-      snap.forEach(docSnap => {
-        cacheFichajes.push({ id: docSnap.id, ...docSnap.data() });
-      });
-      window.renderizarFichajes();
-      window.verificarEstadoFichajeOperario();
-    });
+      // ¡SOLUCIÓN! Forzamos la verificación del estado de los botones tras cargar el nombre del operario
+      if (typeof window.verificarEstadoFichajeOperario === 'function') {
+        window.verificarEstadoFichajeOperario();
+      }
+    }
 
     // 7. Impresión de informe oficial mensual (para Inspección)
     window.imprimirInformeFichajes = () => {
