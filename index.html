@@ -292,7 +292,7 @@
           <h2 class="text-2xl font-bold text-slate-900">Registro de Incidencias</h2>
           <p class="text-sm text-slate-500">Partes de averías, citas programadas, firmas y fotografías.</p>
         </div>
-        <button id="btn-abrir-modal-incidencia" class="bg-rose-500 hover:bg-rose-600 text-white font-bold px-4 py-2.5 rounded-lg shadow-sm transition">
+        <button onclick="window.nuevaIncidenciaDesdeObra('')" id="btn-abrir-modal-incidencia" class="bg-rose-500 hover:bg-rose-600 text-white font-bold px-4 py-2.5 rounded-lg shadow-sm transition">
           + Reportar Incidencia
         </button>
       </header>
@@ -1820,7 +1820,7 @@
         '<div class="print-section">' +
           '<div class="flex justify-between items-center mb-2">' +
             '<h3 class="text-[11px] font-bold text-slate-900 uppercase tracking-wider">⚠️ Incidencias y Partes de Intervención en esta Obra (' + incidenciasDeEstaObra.length + ')</h3>' +
-            '<button onclick="document.getElementById(\'btn-abrir-modal-incidencia\').click(); document.getElementById(\'select-obra-incidencia\').value=\'' + obra.nombre + '\'; window.autocompletarDireccionObra();" class="text-xs font-bold text-rose-600 hover:underline">+ Reportar incidencia aquí</button>' +
+            '<button onclick="window.nuevaIncidenciaDesdeObra(\'' + obra.nombre + '\')" class="text-xs font-bold text-rose-600 hover:underline">+ Reportar incidencia aquí</button>' +
           '</div>' +
           incidenciasHtml +
         '</div>' +
@@ -2338,7 +2338,53 @@
         if (telEl && !telEl.value) telEl.value = obra.tel1 || "";
       }
     };
+    window.nuevaIncidenciaDesdeObra = (nombreObra) => {
+      // 1. Limpiamos y preparamos el modal como si fuera una nueva incidencia normal
+      document.getElementById("edit-incidencia-id").value = "";
+      document.getElementById("titulo-modal-incidencia").textContent = "Parte de Intervención / Incidencia";
+      document.getElementById("btn-guardar-incidencia").textContent = "Guardar Parte de Intervención";
+      
+      document.getElementById("input-fecha-hora-incidencia").value = "";
+      document.getElementById("input-titulo-incidencia").value = "";
+      document.getElementById("input-desc-incidencia").value = "";
+      document.getElementById("input-dir-incidencia").value = "";
+      document.getElementById("input-tel1-incidencia").value = "";
+      document.getElementById("input-tel2-incidencia").value = "";
+      document.getElementById("input-prioridad-incidencia").value = "Normal";
+      document.getElementById("input-estado-incidencia").value = "Abierta";
+      document.getElementById("select-operario-incidencia").value = "Sin asignar";
+      document.getElementById("input-notas-operario-incidencia").value = "";
+      document.getElementById("input-firmante-nombre").value = "";
+      document.getElementById("input-firmante-dni").value = "";
+      
+      const cTrabajos = document.getElementById("contenedor-trabajos-incidencia");
+      if (cTrabajos) cTrabajos.innerHTML = "";
+      agregarFilaTrabajoIncidencia("");
 
+      fotoAntesBase64 = null;
+      fotoDespuesBase64 = null;
+      
+      const prevAntes = document.getElementById("preview-foto-antes");
+      if(prevAntes) prevAntes.classList.add("hidden");
+      
+      const prevDespues = document.getElementById("preview-foto-despues");
+      if(prevDespues) prevDespues.classList.add("hidden");
+
+      window.limpiarCanvasFirma();
+
+      // 2. Preseleccionamos la obra y autocompletamos
+      const selectObra = document.getElementById("select-obra-incidencia");
+      if (selectObra) {
+        selectObra.value = nombreObra;
+        window.autocompletarDireccionObra();
+      }
+
+      // 3. Mostramos el modal
+      const modal = document.getElementById("modal-incidencia");
+      if (modal) {
+        modal.style.display = "flex";
+      }
+    };
     window.filtrarIncidencias = (estado, btnElement) => {
       filtroIncidenciasActual = estado;
       if (btnElement) {
