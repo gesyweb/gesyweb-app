@@ -1432,43 +1432,50 @@
     };
 
     window.iniciarApp = () => {
-      // Obligamos a leer la sesión más reciente para evitar fallos de memoria
+      // Obligamos a leer la sesión más reciente
       sesionActual = JSON.parse(localStorage.getItem('gesyweb_sesion')) || null;
       if (!sesionActual) return;
       
       document.getElementById('pantalla-login').style.display = 'none';
       
       if (sesionActual.rol === 'operario') {
-        // Añadimos la clase hidden nativa de Tailwind
-        document.getElementById('nav-dashboard').classList.add('hidden');
-        document.getElementById('nav-clientes').classList.add('hidden');
-        document.getElementById('nav-operarios').classList.add('hidden');
-        document.getElementById('nav-herramientas').classList.add('hidden');
-        document.getElementById('nav-vehiculos').classList.add('hidden');
-        document.getElementById('nav-calendario').classList.add('hidden');
-        document.getElementById('nav-ajustes').classList.add('hidden');
+        // Censura total con display: none para que la función cambiarVista no lo sobreescriba
+        document.getElementById('nav-dashboard').style.display = 'none';
+        document.getElementById('nav-clientes').style.display = 'none';
+        document.getElementById('nav-operarios').style.display = 'none';
+        document.getElementById('nav-herramientas').style.display = 'none';
+        document.getElementById('nav-vehiculos').style.display = 'none';
+        document.getElementById('nav-calendario').style.display = 'none';
+        document.getElementById('nav-ajustes').style.display = 'none';
         
         const btnAltaObra = document.getElementById('btn-abrir-modal-obra');
-        if(btnAltaObra) btnAltaObra.classList.add('hidden');
+        if(btnAltaObra) btnAltaObra.style.display = 'none';
+
+        // 🔒 BLOQUEO DEL BOTÓN PRINCIPAL DE INCIDENCIAS
+        const btnAltaInc = document.getElementById('btn-abrir-modal-incidencia');
+        if(btnAltaInc) btnAltaInc.style.display = 'none';
         
-        window.cambiarVista('fichajes'); // Vista por defecto
+        window.cambiarVista('fichajes'); // Vista por defecto para ellos
       } else {
-        // Si es administración, limpiamos la restricción
-        document.getElementById('nav-dashboard').classList.remove('hidden');
-        document.getElementById('nav-clientes').classList.remove('hidden');
-        document.getElementById('nav-operarios').classList.remove('hidden');
-        document.getElementById('nav-herramientas').classList.remove('hidden');
-        document.getElementById('nav-vehiculos').classList.remove('hidden');
-        document.getElementById('nav-calendario').classList.remove('hidden');
-        document.getElementById('nav-ajustes').classList.remove('hidden');
+        // Si entra Administración, aseguramos que todo vuelva a ser visible
+        document.getElementById('nav-dashboard').style.display = 'flex';
+        document.getElementById('nav-clientes').style.display = 'flex';
+        document.getElementById('nav-operarios').style.display = 'flex';
+        document.getElementById('nav-herramientas').style.display = 'flex';
+        document.getElementById('nav-vehiculos').style.display = 'flex';
+        document.getElementById('nav-calendario').style.display = 'flex';
+        document.getElementById('nav-ajustes').style.display = 'flex';
         
         const btnAltaObra = document.getElementById('btn-abrir-modal-obra');
-        if(btnAltaObra) btnAltaObra.classList.remove('hidden');
+        if(btnAltaObra) btnAltaObra.style.display = 'block';
+
+        const btnAltaInc = document.getElementById('btn-abrir-modal-incidencia');
+        if(btnAltaInc) btnAltaInc.style.display = 'block';
 
         window.cambiarVista('dashboard');
       }
 
-      // Botón de salir
+      // Añadimos el botón de cerrar sesión si no existe
       if (!document.getElementById('nav-cerrar-sesion')) {
         const navContainer = document.querySelector('nav');
         const btnSalir = document.createElement('button');
@@ -2512,18 +2519,29 @@
     const btnLimpiar = document.getElementById("btn-limpiar-firma");
     if (btnLimpiar) btnLimpiar.onclick = window.limpiarCanvasFirma;
 
-    function agregarFilaTrabajoIncidencia(valor = "") {
+    function agregarFilaTrabajoIncidencia(valor = "", soloLectura = false) {
       const c = document.getElementById("contenedor-trabajos-incidencia");
       if (!c) return;
       const f = document.createElement("div");
       f.className = "flex gap-2 items-center item-trabajo-incidencia bg-slate-50 p-2 rounded-lg border border-slate-200";
-      f.innerHTML = '<input type="text" value="' + valor + '" placeholder="Tarea / trabajo técnico..." class="flex-1 px-3 py-1.5 border rounded-lg text-sm outline-none bg-white focus:ring-1 focus:ring-rose-500">' +
-        '<button type="button" class="btn-eliminar-fila text-rose-500 hover:text-rose-700 px-2 font-bold text-lg">&times;</button>';
-      f.querySelector(".btn-eliminar-fila").onclick = () => f.remove();
+      
+      // Estilos condicionales según el rol
+      const inputClases = soloLectura 
+        ? 'flex-1 px-3 py-1.5 border rounded-lg text-sm bg-slate-100 text-slate-500 cursor-not-allowed'
+        : 'flex-1 px-3 py-1.5 border rounded-lg text-sm outline-none bg-white focus:ring-1 focus:ring-rose-500';
+      
+      const disabledAttr = soloLectura ? 'disabled' : '';
+      const btnEliminar = soloLectura ? '' : '<button type="button" class="btn-eliminar-fila text-rose-500 hover:text-rose-700 px-2 font-bold text-lg">&times;</button>';
+
+      f.innerHTML = '<input type="text" value="' + valor + '" placeholder="Tarea / trabajo técnico..." class="' + inputClases + '" ' + disabledAttr + '>' + btnEliminar;
+      
+      if (!soloLectura) {
+        f.querySelector(".btn-eliminar-fila").onclick = () => f.remove();
+      }
       c.appendChild(f);
     }
     const btnAddTrabajoInc = document.getElementById("btn-add-trabajo-incidencia");
-    if (btnAddTrabajoInc) btnAddTrabajoInc.onclick = () => agregarFilaTrabajoIncidencia("");
+    if (btnAddTrabajoInc) btnAddTrabajoInc.onclick = () => agregarFilaTrabajoIncidencia("", false);
 
     window.autocompletarDireccionObra = () => {
       const nomObra = document.getElementById("select-obra-incidencia").value;
@@ -2748,9 +2766,12 @@
         if (!incidenciaSeleccionadaActual) return;
         const d = incidenciaSeleccionadaActual;
 
+        // Comprobamos el rol del usuario activo
+        const esOperario = sesionActual && sesionActual.rol === 'operario';
+
         document.getElementById("edit-incidencia-id").value = d.id;
-        document.getElementById("titulo-modal-incidencia").textContent = "Editar / Resolver Incidencia";
-        document.getElementById("btn-guardar-incidencia").textContent = "Actualizar Parte Técnico";
+        document.getElementById("titulo-modal-incidencia").textContent = esOperario ? "Resolución de Incidencia" : "Editar / Resolver Incidencia";
+        document.getElementById("btn-guardar-incidencia").textContent = esOperario ? "Guardar Resolución y Firma" : "Actualizar Parte Técnico";
 
         document.getElementById("select-obra-incidencia").value = d.obra || "";
         document.getElementById("input-fecha-hora-incidencia").value = d.fechaHora || "";
@@ -2766,12 +2787,39 @@
         document.getElementById("input-firmante-nombre").value = d.firmanteNombre || "";
         document.getElementById("input-firmante-dni").value = d.firmanteDni || "";
 
+        // 🔒 BLOQUEO DINÁMICO DE CAMPOS PARA OPERARIOS
+        const camposBloqueados = [
+          "select-obra-incidencia", "input-fecha-hora-incidencia", "input-titulo-incidencia",
+          "input-desc-incidencia", "input-dir-incidencia", "input-tel1-incidencia",
+          "input-tel2-incidencia", "input-prioridad-incidencia", "select-operario-incidencia",
+          "input-foto-antes-incidencia" // Bloqueamos también la subida de foto inicial
+        ];
+        
+        camposBloqueados.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) {
+            el.disabled = esOperario;
+            if (esOperario) {
+              el.classList.add("bg-slate-100", "text-slate-500", "cursor-not-allowed");
+              el.classList.remove("bg-white", "focus:ring-2", "focus:ring-rose-500");
+            } else {
+              el.classList.remove("bg-slate-100", "text-slate-500", "cursor-not-allowed");
+              el.classList.add("bg-white", "focus:ring-2", "focus:ring-rose-500");
+            }
+          }
+        });
+
+        // Ocultamos el botón general de añadir tareas
+        const btnAddTarea = document.getElementById("btn-add-trabajo-incidencia");
+        if (btnAddTarea) btnAddTarea.style.display = esOperario ? 'none' : 'block';
+
         const cTrabajos = document.getElementById("contenedor-trabajos-incidencia");
         cTrabajos.innerHTML = "";
         if (d.trabajos && d.trabajos.length > 0) {
-          d.trabajos.forEach(t => agregarFilaTrabajoIncidencia(t));
+          d.trabajos.forEach(t => agregarFilaTrabajoIncidencia(t, esOperario));
         } else {
-          agregarFilaTrabajoIncidencia("");
+          // Solo ponemos fila vacía por defecto si es Administración
+          if (!esOperario) agregarFilaTrabajoIncidencia("", false);
         }
 
         fotoAntesBase64 = d.fotoAntes || null;
@@ -2806,7 +2854,6 @@
         document.getElementById("modal-incidencia").style.display = "flex";
       };
     }
-
     const btnBorrarIncAct = document.getElementById("btn-borrar-incidencia-actual");
     if (btnBorrarIncAct) {
       btnBorrarIncAct.onclick = async () => {
