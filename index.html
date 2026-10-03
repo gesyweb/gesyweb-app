@@ -621,12 +621,20 @@
           <input id="empresa-direccion" type="text" placeholder="Calle Ejemplo 45, Planta 1, Ciudad" class="w-full px-3.5 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-amber-500">
         </div>
 
+        <div class="pt-4 border-t border-slate-100">
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Seguridad y Acceso</label>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Clave Maestra de Administración (Oficina)</label>
+          <input id="empresa-clave" type="text" placeholder="admin123" class="w-full px-3.5 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-amber-500 font-mono text-slate-900 bg-amber-50">
+          <p class="text-[11px] text-slate-400 mt-1">Esta contraseña te será requerida en la pantalla de inicio para entrar con control total.</p>
+        </div>
+
         <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
           <span id="msg-guardado-empresa" class="text-xs text-emerald-600 font-bold hidden">✓ Datos guardados con éxito</span>
           <button type="button" id="btn-guardar-empresa" class="ml-auto px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-lg text-xs shadow-sm transition">
             Guardar Configuración
           </button>
         </div>
+      </div>
       </div>
       <!-- SECCIÓN BACKUP Y EXPORTACIÓN EXCEL/CSV -->
       <div class="mt-8 max-w-2xl bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4">
@@ -3358,6 +3366,7 @@
         const inpTel = document.getElementById("empresa-tel");
         const inpEml = document.getElementById("empresa-email");
         const inpDir = document.getElementById("empresa-direccion");
+        const inpClave = document.getElementById("empresa-clave");
         const pLogo = document.getElementById("preview-logo-empresa");
 
         if (inpNom) inpNom.value = datosEmpresaActual.nombre || "";
@@ -3365,6 +3374,8 @@
         if (inpTel) inpTel.value = datosEmpresaActual.telefono || "";
         if (inpEml) inpEml.value = datosEmpresaActual.email || "";
         if (inpDir) inpDir.value = datosEmpresaActual.direccion || "";
+        if (inpClave) inpClave.value = datosEmpresaActual.claveAdmin || "admin123";
+        
         if (pLogo && datosEmpresaActual.logo) {
           pLogo.innerHTML = '<img src="' + datosEmpresaActual.logo + '" class="w-full h-full object-contain">';
         }
@@ -3379,6 +3390,7 @@
         const tel = document.getElementById("empresa-tel").value.trim() || "";
         const eml = document.getElementById("empresa-email").value.trim() || "";
         const dir = document.getElementById("empresa-direccion").value.trim() || "";
+        const clave = document.getElementById("empresa-clave").value.trim() || "admin123";
 
         const dataToSave = {
           nombre: nom,
@@ -3386,6 +3398,7 @@
           telefono: tel,
           email: eml,
           direccion: dir,
+          claveAdmin: clave,
           logo: logoTempBase64 || datosEmpresaActual.logo || ""
         };
 
@@ -3396,7 +3409,7 @@
           });
 
           datosEmpresaActual = dataToSave;
-          alert("✓ Datos de empresa y logotipo guardados correctamente.");
+          alert("✓ Configuración y Clave de acceso guardadas correctamente.");
           window.cambiarVista('dashboard');
         } catch (error) {
           console.error("Error guardando empresa:", error);
@@ -3404,12 +3417,6 @@
         }
       };
     }
-
-    window.borrarRegistro = async (coleccion, id) => {
-      if (confirm("¿Estás seguro de que deseas eliminar este registro?")) {
-        await deleteDoc(doc(db, coleccion, id));
-      }
-    };
 
     // ========================================================
     // CALENDARIO OPERATIVO (MOTOR LOGÍSTICO)
