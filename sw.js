@@ -1,7 +1,8 @@
-const CACHE_NAME = 'gesyweb-cache-v1';
+const CACHE_NAME = 'gesyweb-cache-v2'; // Cambia v1 a v2 para forzar la actualización
 const ASSETS_TO_CACHE = [
   './',
-  './index.html',
+  './app.html',
+  './styles.css',
   './manifest.json',
   'https://cdn.tailwindcss.com'
 ];
