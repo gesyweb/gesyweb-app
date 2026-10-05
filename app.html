@@ -1382,7 +1382,21 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
     import { getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
-
+    // ========================================================
+    // MOTOR DE BORRADO GENÉRICO (PARA TARJETAS DE LISTADOS)
+    // ========================================================
+    window.borrarRegistro = async (nombreColeccion, idDocumento) => {
+      if (confirm("¿Estás seguro de que deseas eliminar este registro definitivamente?")) {
+        try {
+          await deleteDoc(doc(db, nombreColeccion, idDocumento));
+          // No es necesario llamar a renderizarHerramientas() porque 
+          // el onSnapshot de Firebase actualizará la vista automáticamente al detectar el borrado.
+        } catch (error) {
+          console.error("Error al eliminar el documento:", error);
+          alert("No se pudo eliminar el registro. Comprueba tu conexión.");
+        }
+      }
+    };
     const firebaseConfig = {
       apiKey: "AIzaSyDerRNJAbwBr8G7sjp7guj3HmKBBh0S6UE",
       authDomain: "gesyweb-2d8f6.firebaseapp.com",
@@ -2469,7 +2483,27 @@
         cambiarVista('clientes');
       }
     };
+    // ABRIR MODAL NUEVO CLIENTE
+    const btnAbrirCli = document.getElementById("btn-abrir-modal-cliente");
+    if (btnAbrirCli) {
+      btnAbrirCli.onclick = () => {
+        // Reiniciar el ID y los textos del modal para creación nueva
+        document.getElementById("edit-cliente-id").value = "";
+        document.getElementById("titulo-modal-cliente").textContent = "Alta de Cliente";
+        document.getElementById("btn-guardar-cliente").textContent = "Guardar Cliente";
 
+        // Limpiar todos los campos del formulario
+        document.getElementById("input-nombre-cliente").value = "";
+        document.getElementById("input-cif-cliente").value = "";
+        document.getElementById("input-tel-cliente").value = "";
+        document.getElementById("input-email-cliente").value = "";
+        document.getElementById("input-dir-cliente").value = "";
+        document.getElementById("input-notas-cliente").value = "";
+
+        // Mostrar el modal
+        document.getElementById("modal-cliente").style.display = "flex";
+      };
+    }
     const btnEditCliAct = document.getElementById("btn-editar-cliente-actual");
     if (btnEditCliAct) {
       btnEditCliAct.onclick = () => {
