@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Gesyweb - Control de Almacén</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/html5-qrcode"></script>
+
+  <style>
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    #lector-escaner { width: 100%; border-radius: 12px; overflow: hidden; border: 2px solid #3b82f6; display: none; }
+    #lector-escaner video { object-fit: cover; }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col">
+
+  <header class="bg-slate-900 text-white px-5 py-4 flex justify-between items-center sticky top-0 z-40 shadow-md">
+    <h1 class="text-xl font-bold tracking-tight flex items-center gap-2"><span>📦</span> Almacén Gesyweb</h1>
+    <div class="text-xs text-slate-400 flex items-center gap-1.5 bg-slate-800 px-2 py-1 rounded-md">
+      <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block" id="status-db"></span> En línea
+    </div>
+  </header>
+
+  <!-- PESTAÑAS -->
+  <div class="bg-white border-b border-slate-200 sticky top-[60px] z-30 shadow-sm overflow-x-auto">
+    <div class="flex max-w-4xl mx-auto min-w-[500px]">
+      <button onclick="cambiarVista('movimientos')" id="tab-mov" class="flex-1 py-3 text-xs sm:text-sm font-bold border-b-2 border-indigo-600 text-indigo-700 transition">📝 Mover</button>
+      <button onclick="cambiarVista('inventario')" id="tab-inv" class="flex-1 py-3 text-xs sm:text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-700 transition">📊 Stock</button>
+      <button onclick="cambiarVista('operarios')" id="tab-ope" class="flex-1 py-3 text-xs sm:text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-700 transition">👷 Personal</button>
+      <button onclick="cambiarVista('obras')" id="tab-obr" class="flex-1 py-3 text-xs sm:text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-700 transition">🏗️ Obras</button>
+      <button onclick="cambiarVista('historial')" id="tab-his" class="flex-1 py-3 text-xs sm:text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-700 transition">🕒 Historial</button>
+    </div>
+  </div>
+
+  <main class="flex-1 p-4 overflow-y-auto max-w-4xl mx-auto w-full">
+
+    <!-- ================== VISTA 1: REGISTRAR MOVIMIENTO ================== -->
+    <div id="vista-movimientos" class="space-y-4 pb-20 block">
+      <div id="lector-escaner" class="bg-slate-900 mb-4 shadow-lg"></div>
+
+      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        <div class="flex bg-slate-100 p-1 rounded-lg">
+          <button id="btn-tipo-entrada" onclick="seleccionarTipo('Entrada')" class="flex-1 py-2.5 text-sm font-bold rounded-md text-slate-500 transition">📥 ENTRADA</button>
+          <button id="btn-tipo-salida" onclick="seleccionarTipo('Salida')" class="flex-1 py-2.5 text-sm font-bold rounded-md bg-white shadow-sm text-rose-600 border border-slate-200">📤 SALIDA</button>
+        </div>
+        <input type="hidden" id="tipo-movimiento" value="Salida">
+
+        <div>
+          <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Código de Barras</label>
+          <div class="flex gap-2">
+            <input id="input-codigo" type="text" placeholder="Escanea o escribe..." onblur="buscarProductoPorCodigo()" class="flex-1 px-4 py-3 border rounded-xl text-base outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 font-mono">
+            <button onclick="iniciarEscaner()" class="px-4 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-md transition">📷</button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Nombre del Material *</label>
+          <input id="input-producto" type="text" class="w-full px-4 py-3 border rounded-xl text-base outline-none focus:ring-2 focus:ring-indigo-500 bg-white" placeholder="Ej. Cemento Portland">
+        </div>
+        
+        <div class="pt-2 grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Cantidad *</label>
+            <input id="input-cantidad" type="number" value="1" min="0.01" step="any" class="w-full px-4 py-3 border rounded-xl text-center text-xl font-black outline-none focus:ring-2 focus:ring-indigo-500 shadow-inner">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Unidad</label>
+            <select id="input-unidad-vista" class="w-full px-4 py-3 border rounded-xl text-center text-slate-700 bg-white font-bold outline-none focus:ring-2 focus:ring-indigo-500 shadow-inner">
+              <option value="Uds.">Uds.</option>
+              <option value="Cajas">Cajas</option>
+              <option value="Sacos">Sacos</option>
+              <option value="Litros">Litros (L)</option>
+              <option value="Kg">Kilos (Kg)</option>
+              <option value="Metros">Metros (m)</option>
+              <option value="m2">m2</option>
+              <option value="m3">m3</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Operario</label>
+            <select id="select-operario" class="w-full px-4 py-3 border rounded-xl text-sm outline-none bg-white focus:ring-2 focus:ring-indigo-500"><option value="Almacenista">Almacén Central</option></select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Obra</label>
+            <select id="select-obra" class="w-full px-4 py-3 border rounded-xl text-sm outline-none bg-white focus:ring-2 focus:ring-indigo-500"><option value="Sin asignar">Ninguna (Stock interno)</option></select>
+          </div>
+        </div>
+      </div>
+
+      <button id="btn-guardar-movimiento" onclick="guardarMovimiento()" class="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white text-lg font-black rounded-2xl shadow-lg transition flex items-center justify-center gap-2">
+        <span>💾</span> REGISTRAR
+      </button>
+      <div id="mensaje-estado" class="text-center font-bold text-sm hidden py-2 rounded-xl mt-2"></div>
+    </div>
+
+
+    <!-- ================== VISTA 2: INVENTARIO ================== -->
+    <div id="vista-inventario" class="hidden pb-20">
+      
+      <!-- FORMULARIO DE ALTA -->
+      <div class="bg-emerald-50 p-5 rounded-xl border border-emerald-200 shadow-sm mb-6">
+        <h3 class="font-bold text-emerald-800 mb-3 flex items-center gap-2"><span>➕</span> Crear Artículo en Catálogo</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="sm:col-span-1">
+            <label class="block text-xs font-bold text-emerald-700 uppercase mb-1">Código</label>
+            <input id="nuevo-codigo" type="text" placeholder="Opcional" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-emerald-500 font-mono">
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-xs font-bold text-emerald-700 uppercase mb-1">Nombre *</label>
+            <input id="nuevo-nombre" type="text" placeholder="Ej. Cable 2.5mm" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-emerald-500">
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3 items-end">
+          <div>
+            <label class="block text-xs font-bold text-emerald-700 uppercase mb-1">Unidad</label>
+            <select id="nuevo-unidad" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
+              <option value="Uds.">Unidades (Uds.)</option>
+              <option value="Cajas">Cajas</option>
+              <option value="Sacos">Sacos</option>
+              <option value="Litros">Litros (L)</option>
+              <option value="Kg">Kilogramos (Kg)</option>
+              <option value="Metros">Metros (m)</option>
+              <option value="m2">m2</option>
+              <option value="m3">m3</option>
+            </select>
+          </div>
+          <button onclick="crearProductoCatalogo()" class="w-full py-2 bg-emerald-600 text-white font-bold rounded-lg hover:bg-emerald-700 transition">
+            Guardar Producto
+          </button>
+        </div>
+      </div>
+
+      <div class="bg-white p-3 rounded-xl shadow-sm mb-4">
+        <input id="buscador-inv" type="text" placeholder="🔍 Buscar producto en el stock..." onkeyup="filtrarTabla('tabla-inventario-body', 'buscador-inv')" class="w-full px-3 py-2 border rounded-lg text-sm outline-none bg-slate-50 focus:ring-2 focus:ring-indigo-500">
+      </div>
+      
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mb-6">
+        <table class="w-full text-left text-sm whitespace-nowrap">
+          <thead class="bg-slate-50 text-[11px] font-bold text-slate-500 uppercase border-b">
+            <tr><th class="p-3">Producto</th><th class="p-3 text-right">Stock Total</th><th class="p-3 text-center">Borrar</th></tr>
+          </thead>
+          <tbody id="tabla-inventario-body" class="divide-y divide-slate-100"></tbody>
+        </table>
+      </div>
+      
+      <div class="mt-8 p-6 bg-rose-50 border-2 border-rose-200 rounded-xl text-center shadow-inner">
+        <h3 class="text-rose-800 font-bold mb-2">Zona de Peligro</h3>
+        <p class="text-rose-600 text-xs mb-4">Esto eliminará TODOS los productos y TODOS los movimientos de la base de datos.</p>
+        <button onclick="vaciarBaseDeDatos()" class="px-6 py-3 bg-rose-600 text-white rounded-lg text-sm font-bold shadow hover:bg-rose-700 transition">
+          ⚠️ VACIAR TODO EL ALMACÉN
+        </button>
+      </div>
+    </div>
+
+    <!-- ================== VISTA 3: OPERARIOS ================== -->
+    <div id="vista-operarios" class="hidden pb-20">
+      <!-- NUEVO BUSCADOR PARA OPERARIOS -->
+      <div class="bg-white p-3 rounded-xl shadow-sm mb-4">
+        <input id="buscador-ope" type="text" placeholder="🔍 Buscar operario o material..." onkeyup="filtrarTabla('tabla-operarios-body', 'buscador-ope')" class="w-full px-3 py-2 border rounded-lg text-sm outline-none bg-slate-50 focus:ring-2 focus:ring-indigo-500">
+      </div>
+
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <table class="w-full text-left text-sm whitespace-nowrap">
+          <thead class="bg-slate-50 text-[11px] font-bold text-slate-500 uppercase border-b">
+            <tr><th class="p-3">Operario</th><th class="p-3">Producto</th><th class="p-3 text-right">En Posesión</th></tr>
+          </thead>
+          <tbody id="tabla-operarios-body" class="divide-y divide-slate-100"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ================== VISTA 4: OBRAS ================== -->
+    <div id="vista-obras" class="hidden pb-20">
+      <!-- NUEVO BUSCADOR PARA OBRAS -->
+      <div class="bg-white p-3 rounded-xl shadow-sm mb-4">
+        <input id="buscador-obr" type="text" placeholder="🔍 Buscar obra o material..." onkeyup="filtrarTabla('tabla-obras-body', 'buscador-obr')" class="w-full px-3 py-2 border rounded-lg text-sm outline-none bg-slate-50 focus:ring-2 focus:ring-indigo-500">
+      </div>
+
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <table class="w-full text-left text-sm whitespace-nowrap">
+          <thead class="bg-slate-50 text-[11px] font-bold text-slate-500 uppercase border-b">
+            <tr><th class="p-3">Obra</th><th class="p-3">Producto</th><th class="p-3 text-right">Enviado</th></tr>
+          </thead>
+          <tbody id="tabla-obras-body" class="divide-y divide-slate-100"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ================== VISTA 5: HISTORIAL ================== -->
+    <div id="vista-historial" class="hidden pb-20">
+      <!-- BUSCADOR PARA EL HISTORIAL (Extra ya que estamos) -->
+      <div class="bg-white p-3 rounded-xl shadow-sm mb-4">
+        <input id="buscador-his" type="text" placeholder="🔍 Buscar movimiento..." onkeyup="filtrarTabla('tabla-historial-body', 'buscador-his')" class="w-full px-3 py-2 border rounded-lg text-sm outline-none bg-slate-50 focus:ring-2 focus:ring-indigo-500">
+      </div>
+
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mb-6">
+        <table class="w-full text-left text-sm whitespace-nowrap">
+          <thead class="bg-slate-50 text-[11px] font-bold text-slate-500 uppercase border-b">
+            <tr><th class="p-3">Fecha</th><th class="p-3">Tipo</th><th class="p-3">Detalle</th><th class="p-3 text-center">Borrar</th></tr>
+          </thead>
+          <tbody id="tabla-historial-body" class="divide-y divide-slate-100"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ================== SCRIPTS (FIREBASE) ================== -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp, doc, updateDoc, deleteDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDerRNJAbwBr8G7sjp7guj3HmKBBh0S6UE",
+      authDomain: "gesyweb-2d8f6.firebaseapp.com",
+      projectId: "gesyweb-2d8f6"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const colOperarios = collection(db, "operarios");
+    const colObras = collection(db, "proyectos");
+    const colInventario = collection(db, "inventario");
+    const colMovimientos = collection(db, "movimientos_almacen");
+
+    let cacheInventario = [];
+    let html5QrcodeScanner = null;
+
+    window.cambiarVista = (vActiva) => {
+      ['movimientos', 'inventario', 'operarios', 'obras', 'historial'].forEach(v => {
+        document.getElementById(`vista-${v}`).classList.toggle('hidden', v !== vActiva);
+        document.getElementById(`vista-${v}`).classList.toggle('block', v === vActiva);
+        document.getElementById(`tab-${v.substring(0,3)}`).className = v === vActiva ? "flex-1 py-3 text-xs sm:text-sm font-bold border-b-2 border-indigo-600 text-indigo-700 transition" : "flex-1 py-3 text-xs sm:text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-700 transition";
+      });
+    };
+
+    window.seleccionarTipo = (t) => {
+      document.getElementById('tipo-movimiento').value = t;
+      document.getElementById('btn-tipo-entrada').className = t==='Entrada' ? "flex-1 py-2.5 text-sm font-bold rounded-md bg-white shadow-sm text-emerald-600 border border-slate-200" : "flex-1 py-2.5 text-sm font-bold rounded-md text-slate-500 transition";
+      document.getElementById('btn-tipo-salida').className = t==='Salida' ? "flex-1 py-2.5 text-sm font-bold rounded-md bg-white shadow-sm text-rose-600 border border-slate-200" : "flex-1 py-2.5 text-sm font-bold rounded-md text-slate-500 transition";
+    };
+
+    window.mostrarMensaje = (txt, err = false) => { const msj = document.getElementById('mensaje-estado'); msj.textContent = txt; msj.className = `text-center font-bold text-sm block py-2 rounded-xl mt-2 ${err ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-700'}`; setTimeout(() => msj.classList.add('hidden'), 4000); };
+    
+    // Función de filtrado que usan todos los buscadores
+    window.filtrarTabla = (idCuerpo, idBuscador) => { 
+      const inp = document.getElementById(idBuscador).value.toLowerCase(); 
+      const filas = document.getElementById(idCuerpo).getElementsByTagName("tr"); 
+      for (let i = 0; i < filas.length; i++) filas[i].style.display = (filas[i].innerText.toLowerCase().indexOf(inp) > -1) ? "" : "none"; 
+    };
+
+    window.iniciarEscaner = () => {
+      const c = document.getElementById("lector-escaner"); c.style.display = "block";
+      if (html5QrcodeScanner) html5QrcodeScanner.stop().catch(()=>{});
+      html5QrcodeScanner = new Html5Qrcode("lector-escaner");
+      html5QrcodeScanner.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 150 } },
+        (cod) => {
+          document.getElementById('input-codigo').value = cod;
+          html5QrcodeScanner.stop().then(() => { c.style.display = "none"; window.buscarProductoPorCodigo(); });
+        }, () => {}).catch(() => { alert("Error cámara"); c.style.display = "none"; });
+    };
+
+    window.buscarProductoPorCodigo = () => {
+      const cod = document.getElementById('input-codigo').value.trim().toLowerCase();
+      const nom = document.getElementById('input-producto').value.trim().toLowerCase();
+      
+      const p = cacheInventario.find(x => (cod && x.codigo?.toLowerCase() === cod) || (nom && x.nombre?.toLowerCase() === nom));
+      if (p) {
+        document.getElementById('input-producto').value = p.nombre;
+        document.getElementById('input-unidad-vista').value = p.unidad || "Uds.";
+      }
+    };
+    document.getElementById('input-producto').addEventListener('blur', window.buscarProductoPorCodigo);
+
+    // --- CARGAR DATOS ---
+    onSnapshot(colOperarios, (s) => { const el = document.getElementById("select-operario"); el.innerHTML = '<option value="Almacenista">Almacén Central</option>'; s.forEach(d => { if (d.data().nombre) el.innerHTML += `<option value="${d.data().nombre}">${d.data().nombre}</option>`; }); });
+    onSnapshot(colObras, (s) => { const el = document.getElementById("select-obra"); el.innerHTML = '<option value="Sin asignar">Ninguna (Stock interno)</option>'; s.forEach(d => { if (d.data().estado !== "Finalizada") el.innerHTML += `<option value="${d.data().nombre}">${d.data().nombre}</option>`; }); });
+
+    onSnapshot(colInventario, (s) => {
+      cacheInventario = [];
+      const tb = document.getElementById("tabla-inventario-body"); tb.innerHTML = "";
+      s.forEach(docSnap => {
+        const d = { id: docSnap.id, ...docSnap.data() }; cacheInventario.push(d);
+        const st = (parseFloat(d.entradas)||0) - (parseFloat(d.salidas)||0);
+        tb.innerHTML += `<tr class="border-b"><td class="p-3"><span class="font-bold">${d.nombre}</span><br><span class="text-[10px] text-slate-400 font-mono">${d.codigo||''}</span></td><td class="p-3 text-right text-base font-bold ${st<=0?'text-rose-600':'text-emerald-700'}">${st} <span class="text-xs text-slate-400 font-normal">${d.unidad||'Uds.'}</span></td><td class="p-3 text-center"><button onclick="borrarProducto('${d.id}', '${d.nombre}')" class="text-rose-500 hover:bg-rose-100 rounded p-1">🗑️</button></td></tr>`;
+      });
+    });
+
+    onSnapshot(colMovimientos, (s) => {
+      const resOp = {}, resOb = {};
+      const tbHist = document.getElementById("tabla-historial-body"); tbHist.innerHTML = "";
+      const movs = []; s.forEach(d => movs.push({ id: d.id, ...d.data() })); movs.reverse();
+
+      movs.forEach(m => {
+        const c = parseFloat(m.cantidad)||0;
+        const fac = m.tipo === "Salida" ? 1 : -1;
+        const uni = m.unidad || 'Uds.';
+        
+        if (m.operario && m.operario !== "Almacenista") { resOp[m.operario] = resOp[m.operario] || {}; resOp[m.operario][m.producto] = { cant: (resOp[m.operario][m.producto]?.cant||0) + (c*fac), uni: uni }; }
+        if (m.obra && m.obra !== "Sin asignar") { resOb[m.obra] = resOb[m.obra] || {}; resOb[m.obra][m.producto] = { cant: (resOb[m.obra][m.producto]?.cant||0) + (c*fac), uni: uni }; }
+
+        tbHist.innerHTML += `<tr class="border-b"><td class="p-3 text-xs text-slate-500">${m.fechaStr||''}</td><td class="p-3"><span class="px-2 py-1 rounded text-[10px] font-bold ${m.tipo==='Entrada'?'text-emerald-600 bg-emerald-50':'text-rose-600 bg-rose-50'}">${m.tipo}</span></td><td class="p-3 text-sm"><b>${c} ${uni}</b> ${m.producto}<br><span class="text-[10px] text-slate-400">${m.operario} | ${m.obra}</span></td><td class="p-3 text-center"><button onclick="borrarMovimiento('${m.id}', '${m.producto}', '${m.tipo}', ${c})" class="text-slate-400 hover:text-rose-500 transition">🗑️</button></td></tr>`;
+      });
+
+      const tbOp = document.getElementById('tabla-operarios-body'); tbOp.innerHTML = "";
+      for (const op in resOp) for (const pr in resOp[op]) if (resOp[op][pr].cant > 0) tbOp.innerHTML += `<tr class="border-b"><td class="p-3 font-bold">${op}</td><td class="p-3 text-sm">${pr}</td><td class="p-3 text-right font-bold text-indigo-600">${resOp[op][pr].cant} <span class="text-xs text-slate-400 font-normal">${resOp[op][pr].uni}</span></td></tr>`;
+      
+      const tbOb = document.getElementById('tabla-obras-body'); tbOb.innerHTML = "";
+      for (const ob in resOb) for (const pr in resOb[ob]) if (resOb[ob][pr].cant > 0) tbOb.innerHTML += `<tr class="border-b"><td class="p-3 font-bold">${ob}</td><td class="p-3 text-sm">${pr}</td><td class="p-3 text-right font-bold text-indigo-600">${resOb[ob][pr].cant} <span class="text-xs text-slate-400 font-normal">${resOb[ob][pr].uni}</span></td></tr>`;
+    });
+
+    // --- ACCIONES CRUD ---
+    window.crearProductoCatalogo = async () => {
+      const nom = document.getElementById('nuevo-nombre').value.trim();
+      const cod = document.getElementById('nuevo-codigo').value.trim();
+      const uni = document.getElementById('nuevo-unidad').value;
+      if(!nom) return alert("El nombre es obligatorio");
+      
+      if(cacheInventario.some(p => p.nombre.toLowerCase() === nom.toLowerCase())) return alert("Ese producto ya existe en el inventario.");
+      
+      await addDoc(colInventario, { nombre: nom, codigo: cod, unidad: uni, entradas: 0, salidas: 0 });
+      alert("✅ Producto añadido al catálogo correctamente");
+      document.getElementById('nuevo-nombre').value = ''; document.getElementById('nuevo-codigo').value = '';
+    };
+
+    window.guardarMovimiento = async () => {
+      const tipo = document.getElementById("tipo-movimiento").value;
+      const cod = document.getElementById("input-codigo").value.trim();
+      const nom = document.getElementById("input-producto").value.trim();
+      const cant = parseFloat(document.getElementById("input-cantidad").value) || 0;
+      const uniSelect = document.getElementById("input-unidad-vista").value;
+      
+      if (!nom || cant <= 0) return window.mostrarMensaje("⚠️ Nombre y cantidad obligatorios.", true);
+
+      let prod = cacheInventario.find(x => (cod && x.codigo?.toLowerCase() === cod.toLowerCase()) || (x.nombre?.toLowerCase() === nom.toLowerCase()));
+      const unidadUsada = prod ? (prod.unidad || uniSelect) : uniSelect;
+
+      const btn = document.getElementById("btn-guardar-movimiento"); btn.disabled = true; btn.innerHTML = "⏳ REGISTRANDO...";
+      try {
+        await addDoc(colMovimientos, { tipo: tipo, codigo: cod, producto: nom, cantidad: cant, unidad: unidadUsada, operario: document.getElementById("select-operario").value, obra: document.getElementById("select-obra").value, fechaStr: new Date().toLocaleDateString('es-ES') });
+        
+        if (prod) {
+          await updateDoc(doc(db, "inventario", prod.id), { entradas: (parseFloat(prod.entradas)||0) + (tipo === "Entrada" ? cant : 0), salidas: (parseFloat(prod.salidas)||0) + (tipo === "Salida" ? cant : 0) });
+        } else {
+          await addDoc(colInventario, { nombre: nom, codigo: cod, unidad: unidadUsada, entradas: tipo === "Entrada" ? cant : 0, salidas: tipo === "Salida" ? cant : 0 });
+        }
+        window.mostrarMensaje(`✅ Registrado con éxito.`);
+        document.getElementById("input-codigo").value = ""; document.getElementById("input-producto").value = ""; document.getElementById("input-cantidad").value = "1"; document.getElementById("input-unidad-vista").value = "Uds.";
+      } catch (err) { window.mostrarMensaje("❌ Error.", true); } finally { btn.disabled = false; btn.innerHTML = "<span>💾</span> REGISTRAR"; }
+    };
+
+    window.borrarMovimiento = async (id, nom, tipo, cant) => { if(confirm(`¿Borrar movimiento de ${nom}?`)) { await deleteDoc(doc(db, "movimientos_almacen", id)); let p = cacheInventario.find(x => x.nombre === nom); if(p) { let e = parseFloat(p.entradas)||0, s = parseFloat(p.salidas)||0; if(tipo==='Entrada') e-=cant; else s-=cant; await updateDoc(doc(db, "inventario", p.id), {entradas: Math.max(0,e), salidas: Math.max(0,s)}); } } };
+    window.borrarProducto = async (id, nom) => { if(confirm(`¿Borrar definitivamente "${nom}" del inventario?`)) await deleteDoc(doc(db, "inventario", id)); };
+    
+    window.vaciarBaseDeDatos = async () => { 
+      if(confirm("⚠️ PELIGRO: Vas a borrar TODOS los productos y movimientos.\n\n¿Estás seguro?")) { 
+        if(confirm("Último aviso: ¿Borrar la base de datos completa?")) {
+          const si = await getDocs(colInventario); si.forEach(d => deleteDoc(doc(db, "inventario", d.id))); 
+          const sm = await getDocs(colMovimientos); sm.forEach(d => deleteDoc(doc(db, "movimientos_almacen", d.id))); 
+          alert("✅ Almacén reseteado por completo."); 
+        }
+      } 
+    };
+  </script>
+</body>
+</html>
