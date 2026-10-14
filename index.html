@@ -4,512 +4,507 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <!-- SEO Básico -->
-  <title>Gesyweb | El ERP definitivo para Construcción y Reformas</title>
-  <meta name="description" content="Control total de obras, presupuestos, partes de trabajo y gestión de flota desde tu bolsillo. App offline para constructoras.">
-  <meta name="keywords" content="erp construcción, software reformas, control horario obra, presupuestos construcción, app partes de trabajo">
-  <meta name="author" content="Gesyweb">
-  <meta name="theme-color" content="#f59e0b"> <!-- Color Amber-500 para el navegador móvil -->
-
-  <!-- Open Graph / Facebook / WhatsApp -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://gesyweb.com/">
-  <meta property="og:title" content="Gesyweb | Software para Reformas y Construcción">
-  <meta property="og:description" content="Controla tus obras en tiempo real. Presupuestos, control horario y logística en una única App PWA.">
-  <meta property="og:image" content="https://gesyweb.com/logos-imagenes/logo-cuadrado-azul.png">
-
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://gesyweb.com/">
-  <meta property="twitter:title" content="Gesyweb | Software para Reformas y Construcción">
-  <meta property="twitter:description" content="Controla tus obras en tiempo real. Presupuestos, control horario y logística en una única App PWA.">
+  <title>Reformas y Construcciones PRO | Tu hogar ideal</title>
+  <meta name="description" content="Especialistas en reformas integrales, baños y cocinas. Presupuesto sin compromiso y cumplimiento estricto de plazos.">
+  <meta name="theme-color" content="#1e3a8a"> 
   
-  <link rel="stylesheet" href="styles.css">
+  <!-- Reutilizamos tu hoja de estilos para animaciones -->
+  <link rel="stylesheet" href="landing-styles.css">
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-patron text-slate-800 min-h-screen flex flex-col">
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans">
 
-  <!-- Navegación Pública (Con Logo Oficial) -->
-  <nav class="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50 transition-all">
+  <!-- NAVEGACIÓN -->
+  <nav class="bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50 transition-all shadow-sm">
     <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
       
-      <!-- Logotipo Gesyweb -->
+      <!-- Logotipo del Cliente (Ejemplo) -->
       <a href="#" class="flex items-center gap-3 group">
-        <!-- Aumentamos a h-16 (64px) y corregimos la ruta -->
-        <img src="logos-imagenes/logo-transparente (1).png" alt="Gesyweb Logo" class="h-16 w-auto drop-shadow-sm group-hover:scale-105 transition-transform duration-300">
-        <!-- Aumentamos el texto a text-3xl para compensar -->
-        <span class="text-3xl font-black tracking-tight text-slate-900 hidden sm:block">Gesyweb</span>
+        <div class="w-10 h-10 rounded-lg bg-blue-900 flex items-center justify-center font-black text-white text-xl shadow-md">R</div>
+        <div>
+          <span class="text-xl font-black tracking-tight text-slate-900 block leading-none">Reformas PRO</span>
+          <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Construcción</span>
+        </div>
       </a>
 
-      <!-- Enlaces Desktop -->
+      <!-- Enlaces Públicos -->
       <div class="hidden md:flex gap-8 items-center">
-        <a href="#caracteristicas" class="text-sm font-semibold text-slate-600 hover:text-cyan-600 transition-colors">Soluciones</a>
-        <a href="#precios" class="text-sm font-semibold text-slate-600 hover:text-cyan-600 transition-colors">Precios</a>
-        <!-- CTA que conecta directo con el #pantalla-login de tu app.html -->
-        <a href="app.html" class="bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold px-6 py-2.5 rounded-lg shadow-md hover:shadow-lg transition-all flex items-center gap-2 transform hover:-translate-y-0.5">
-          <span>Área Privada</span> <span aria-hidden="true">&rarr;</span>
+        <a href="#servicios" class="text-sm font-semibold text-slate-600 hover:text-blue-700 transition-colors">Servicios</a>
+        <a href="#proyectos" class="text-sm font-semibold text-slate-600 hover:text-blue-700 transition-colors">Proyectos</a>
+        <a href="#contacto" class="text-sm font-semibold text-slate-600 hover:text-blue-700 transition-colors">Contacto</a>
+        
+        <div class="w-px h-6 bg-slate-200 mx-2"></div>
+        
+        <!-- Botón de captación -->
+        <a href="#contacto" class="bg-amber-500 hover:bg-amber-600 text-slate-900 text-sm font-bold px-6 py-2.5 rounded-lg shadow-sm hover:shadow transition-all">
+          Pedir Presupuesto
         </a>
-      </div>
-
-      <!-- Botón Menú Móvil -->
-      <button id="btn-menu" class="md:hidden flex items-center justify-center p-2 text-slate-600 hover:text-slate-900 focus:outline-none transition-colors" onclick="document.getElementById('menu-movil').classList.toggle('hidden')">
-        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-        </svg>
-      </button>
-    </div>
-
-    <!-- Menú Desplegable Móvil -->
-    <div id="menu-movil" class="hidden md:hidden bg-white border-t border-slate-100 absolute w-full shadow-2xl">
-      <div class="flex flex-col px-6 py-6 space-y-6">
-        <a href="#caracteristicas" class="text-lg font-bold text-slate-800 hover:text-cyan-600 flex items-center gap-3">
-          <span class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-xl">🚀</span> Soluciones
-        </a>
-        <a href="app.html" class="w-full text-center bg-cyan-500 hover:bg-cyan-400 text-white text-base font-black px-6 py-4 rounded-xl shadow-md transition-all block">
-          Entrar al Área Privada
+        
+        <!-- Acceso al ERP (Gesyweb) para los trabajadores de esta empresa -->
+        <a href="app.html" class="text-xs font-bold text-slate-400 hover:text-slate-700 flex items-center gap-1 transition-colors" title="Acceso Empleados">
+          🔒 Área Privada
         </a>
       </div>
     </div>
   </nav>
-  <!-- Hero Section (Split Layout) -->
+
+  <!-- HERO SECTION -->
   <main class="flex-1">
-    <section class="max-w-7xl mx-auto px-6 pt-20 pb-16 md:pt-32 md:pb-24 flex flex-col lg:flex-row items-center gap-16">
+    <section class="relative bg-slate-900 text-white overflow-hidden">
+      <!-- Imagen de fondo (Placeholder de Unsplash) -->
+      <div class="absolute inset-0 z-0 opacity-40 mix-blend-overlay bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=2070&auto=format&fit=crop');"></div>
       
-      <!-- Copy Persuasivo (Izquierda) -->
-      <div class="lg:w-1/2 text-left z-10">
-        <div class="fade-in-up inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200 mb-6">
-          <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
-          Versión 2.0 ya disponible
-        </div>
-        
-        <h1 class="fade-in-up text-5xl md:text-6xl lg:text-7xl font-black text-slate-900 leading-tight mb-6 tracking-tight">
-          Deja de perder dinero en <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-amber-600">hojas de cálculo.</span>
-        </h1>
-        
-        <p class="fade-in-up delay-100 text-lg sm:text-xl text-slate-600 mb-8 leading-relaxed max-w-xl">
-          El ERP diseñado exclusivamente para constructoras y empresas de reformas. Controla los fichajes de tus operarios, aprueba presupuestos en obra y gestiona tu flota desde tu bolsillo. Sin caos, sin papeleo.
-        </p>
-        
-        <div class="fade-in-up delay-200 flex flex-col sm:flex-row gap-4">
-           <a href="app.html" class="btn-glow bg-amber-500 hover:bg-amber-400 text-slate-950 text-base font-bold px-8 py-4 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2">
-            Prueba Gesyweb Gratis
-          </a>
-          <a href="#caracteristicas" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-base font-bold px-8 py-4 rounded-xl shadow-sm transition-all flex items-center justify-center gap-2">
-            Ver cómo funciona
-          </a>
-        </div>
-      </div>
-
-      <!-- Mockup Visual (Derecha) - Interfaz abstracta con Tailwind -->
-      <div class="lg:w-1/2 fade-in-up delay-300 w-full relative">
-        <!-- Elemento de fondo para dar profundidad -->
-        <div class="absolute inset-0 bg-gradient-to-tr from-amber-200 to-emerald-100 rounded-[2.5rem] transform rotate-3 scale-105 opacity-50 blur-lg"></div>
-        
-        <!-- Tarjeta principal simulando la App -->
-        <div class="relative bg-white/60 backdrop-blur-xl border border-white p-6 rounded-[2rem] shadow-2xl">
+      <div class="max-w-7xl mx-auto px-6 pt-24 pb-32 md:pt-32 md:pb-40 relative z-10">
+        <div class="max-w-3xl fade-in-up">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-blue-500/20 text-blue-200 border border-blue-500/30 mb-6 backdrop-blur-sm">
+            ✓ Más de 15 años de experiencia
+          </div>
           
-          <div class="flex justify-between items-center mb-6 border-b border-slate-100 pb-4">
-            <div class="flex items-center gap-3">
-              <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-xl">👷‍♂️</div>
+          <h1 class="text-5xl md:text-6xl lg:text-7xl font-black leading-tight mb-6 tracking-tight">
+            Convertimos tu casa en el <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-500">hogar de tus sueños.</span>
+          </h1>
+          
+          <p class="text-lg md:text-xl text-slate-300 mb-10 leading-relaxed max-w-2xl">
+            Reformas integrales, baños y cocinas con acabados de primera calidad. Cumplimos los plazos por contrato, sin sorpresas ni sobrecostes de última hora.
+          </p>
+          
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a href="#contacto" class="btn-glow bg-amber-500 hover:bg-amber-400 text-slate-900 text-lg font-black px-8 py-4 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 text-center">
+              Presupuesto Gratuito
+            </a>
+            <a href="tel:+34600000000" class="bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white text-lg font-bold px-8 py-4 rounded-xl transition-all flex items-center justify-center gap-2 text-center">
+              📞 Llamar ahora
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROPUESTA DE VALOR (3 Columnas) -->
+    <section class="py-16 bg-white border-b border-slate-200 relative z-20 -mt-10 mx-4 md:mx-12 rounded-3xl shadow-xl">
+      <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 text-center divide-y md:divide-y-0 md:divide-x divide-slate-100">
+        <div class="p-4 fade-in-up delay-100">
+          <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center text-2xl mx-auto mb-4">📐</div>
+          <h3 class="text-lg font-bold text-slate-900 mb-2">Presupuesto Cerrado</h3>
+          <p class="text-sm text-slate-500">Estudiamos tu proyecto al milímetro para ofrecerte un precio final garantizado, sin sorpresas durante la obra.</p>
+        </div>
+        <div class="p-4 pt-8 md:pt-4 fade-in-up delay-200">
+          <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center text-2xl mx-auto mb-4">⏱️</div>
+          <h3 class="text-lg font-bold text-slate-900 mb-2">Plazos Garantizados</h3>
+          <p class="text-sm text-slate-500">Sabemos lo incómoda que es una reforma. Nos comprometemos por contrato a finalizar en la fecha acordada.</p>
+        </div>
+        <div class="p-4 pt-8 md:pt-4 fade-in-up delay-300">
+          <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-full flex items-center justify-center text-2xl mx-auto mb-4">🏆</div>
+          <h3 class="text-lg font-bold text-slate-900 mb-2">Calidad Premium</h3>
+          <p class="text-sm text-slate-500">Trabajamos solo con los mejores materiales del mercado y un equipo de profesionales altamente cualificados.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICIOS -->
+    <section id="servicios" class="py-24 bg-slate-50">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center max-w-3xl mx-auto mb-16 fade-in-up">
+          <h2 class="text-3xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight">Nuestros Servicios</h2>
+          <p class="text-lg text-slate-600">Desde un pequeño aseo hasta la rehabilitación completa de un edificio.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Servicio 1 -->
+          <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:shadow-lg transition-all fade-in-up delay-100 group">
+            <div class="h-48 bg-slate-200 overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?q=80&w=2074&auto=format&fit=crop" alt="Cocina moderna" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold text-slate-900 mb-2">Reformas de Cocinas</h3>
+              <p class="text-sm text-slate-600 mb-4">Diseño 3D, fontanería, electricidad, alicatado y montaje de mobiliario. Cocinas funcionales y modernas.</p>
+            </div>
+          </div>
+
+          <!-- Servicio 2 -->
+          <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:shadow-lg transition-all fade-in-up delay-200 group">
+            <div class="h-48 bg-slate-200 overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=2070&auto=format&fit=crop" alt="Baño elegante" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold text-slate-900 mb-2">Reformas de Baños</h3>
+              <p class="text-sm text-slate-600 mb-4">Cambio de bañera por plato de ducha, impermeabilizaciones, sanitarios suspendidos y grifería de diseño.</p>
+            </div>
+          </div>
+
+          <!-- Servicio 3 -->
+          <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:shadow-lg transition-all fade-in-up delay-300 group">
+            <div class="h-48 bg-slate-200 overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?q=80&w=2070&auto=format&fit=crop" alt="Salón reformado" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold text-slate-900 mb-2">Reformas Integrales</h3>
+              <p class="text-sm text-slate-600 mb-4">Rehabilitación completa de viviendas y locales. Pladur, pintura, suelos laminados, ventanas y climatización.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ======================================================== -->
+    <!-- GALERÍA DE PROYECTOS (PORTFOLIO)                         -->
+    <!-- ======================================================== -->
+    <section id="proyectos" class="py-24 bg-white relative z-10 border-t border-slate-100">
+      <div class="max-w-7xl mx-auto px-6">
+        
+        <!-- Cabecera de la sección -->
+        <div class="text-center max-w-3xl mx-auto mb-16 fade-in-up">
+          <span class="text-[var(--color-primary)] font-bold tracking-widest uppercase text-xs mb-3 block">Nuestro Portfolio</span>
+          <h2 class="text-3xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight">El "Antes y Después" que tu casa merece</h2>
+          <p class="text-lg text-slate-600 leading-relaxed">
+            No te lo contamos, te lo demostramos con hechos. Explora nuestros últimos proyectos entregados con acabados premium, <strong class="text-slate-900 font-bold">cumpliendo rigurosamente el presupuesto y los plazos pactados</strong>.
+          </p>
+        </div>
+
+        <!-- Grid de Proyectos -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          
+          <!-- Proyecto 1 -->
+          <div class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 fade-in-up delay-100 aspect-square cursor-pointer">
+            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop" alt="Reforma integral de salón moderno" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+            <!-- Overlay oscuro dinámico (Usa el color secundario) -->
+            <div class="absolute inset-0 bg-gradient-to-t from-[var(--color-secondary)]/95 via-[var(--color-secondary)]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-8">
+              <span class="inline-block px-3 py-1 bg-[var(--color-primary)] text-white text-xs font-black rounded-full mb-3 w-max tracking-wide uppercase">Reforma Integral</span>
+              <h3 class="text-2xl font-bold text-white mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">Ático Luminoso</h3>
+              <p class="text-sm text-slate-200 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75">Concepto abierto • Entregado en 45 días</p>
+            </div>
+          </div>
+
+          <!-- Proyecto 2 -->
+          <div class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 fade-in-up delay-200 aspect-square cursor-pointer">
+            <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?q=80&w=2070&auto=format&fit=crop" alt="Reforma de cocina con isla" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+            <div class="absolute inset-0 bg-gradient-to-t from-[var(--color-secondary)]/95 via-[var(--color-secondary)]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-8">
+              <span class="inline-block px-3 py-1 bg-[var(--color-primary)] text-white text-xs font-black rounded-full mb-3 w-max tracking-wide uppercase">Cocina Premium</span>
+              <h3 class="text-2xl font-bold text-white mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">Diseño y Funcionalidad</h3>
+              <p class="text-sm text-slate-200 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75">Isla central y electrodomésticos integrados</p>
+            </div>
+          </div>
+
+          <!-- Proyecto 3 -->
+          <div class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 fade-in-up delay-300 aspect-square cursor-pointer">
+            <img src="https://images.unsplash.com/photo-1620626011761-996317b8d101?q=80&w=2069&auto=format&fit=crop" alt="Reforma de baño spa" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+            <div class="absolute inset-0 bg-gradient-to-t from-[var(--color-secondary)]/95 via-[var(--color-secondary)]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-8">
+              <span class="inline-block px-3 py-1 bg-[var(--color-primary)] text-white text-xs font-black rounded-full mb-3 w-max tracking-wide uppercase">Baño Suite</span>
+              <h3 class="text-2xl font-bold text-white mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">Oasis Privado</h3>
+              <p class="text-sm text-slate-200 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75">Plato de ducha invisible y grifería negra</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Botón para ver más (Enfocado a conversión) -->
+        <div class="mt-12 text-center fade-in-up delay-300">
+          <a href="#contacto" class="inline-flex items-center gap-2 font-bold text-[var(--color-secondary)] hover:text-[var(--color-primary)] transition-colors group">
+            Quiero un resultado así en mi casa 
+            <span class="group-hover:translate-x-1 transition-transform">→</span>
+          </a>
+        </div>
+
+      </div>
+    </section>
+    <!-- ======================================================== -->
+    <!-- SECCIÓN DE TESTIMONIOS (PRUEBA SOCIAL)                   -->
+    <!-- ======================================================== -->
+    <section id="testimonios" class="py-24 bg-slate-50 relative z-10 border-t border-slate-200">
+      <div class="max-w-7xl mx-auto px-6">
+        
+        <!-- Cabecera de la sección -->
+        <div class="text-center max-w-3xl mx-auto mb-16 fade-in-up">
+          <span class="text-[var(--color-primary)] font-bold tracking-widest uppercase text-xs mb-3 block">Lo que dicen de nosotros</span>
+          <h2 class="text-3xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight">Clientes 100% Satisfechos</h2>
+          <p class="text-lg text-slate-600 leading-relaxed">
+            La confianza no se pide, se gana. Lee las experiencias reales de familias que ya disfrutan de su nuevo hogar gracias a nuestro equipo.
+          </p>
+        </div>
+
+        <!-- Grid de Testimonios -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          
+          <!-- Testimonio 1 -->
+          <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-lg transition-all fade-in-up delay-100 relative">
+            <!-- Icono de Comillas -->
+            <div class="absolute -top-5 right-8 text-[var(--color-primary)] opacity-20 text-6xl font-serif">"</div>
+            <!-- Estrellas -->
+            <div class="flex gap-1 text-[var(--color-primary)] mb-4 text-lg">
+              ★★★★★
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 mb-3">"Cumplieron los plazos al milímetro"</h3>
+            <p class="text-sm text-slate-600 mb-6 leading-relaxed">
+              Teníamos mucho miedo a las típicas obras que nunca terminan. Ellos nos dieron un calendario y lo cumplieron a rajatabla. Los acabados del baño y la cocina son espectaculares. Muy limpios trabajando.
+            </p>
+            <div class="flex items-center gap-3 border-t border-slate-100 pt-4">
+              <div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-500 font-bold">CM</div>
               <div>
-                <p class="text-sm font-bold text-slate-900">Carlos Martínez</p>
-                <p class="text-xs text-emerald-600 font-semibold flex items-center gap-1">
-                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Fichado en obra
-                </p>
+                <p class="text-sm font-bold text-slate-900">Carlos y María</p>
+                <p class="text-[10px] text-slate-400 uppercase tracking-wider">Reforma Integral</p>
               </div>
-            </div>
-            <div class="text-right">
-              <p class="text-xs text-slate-500">Reforma C/ Goya</p>
-              <p class="text-sm font-bold text-slate-900">08:00 - Activo</p>
             </div>
           </div>
 
+          <!-- Testimonio 2 -->
+          <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-lg transition-all fade-in-up delay-200 relative transform md:-translate-y-4">
+            <div class="absolute -top-5 right-8 text-[var(--color-primary)] opacity-20 text-6xl font-serif">"</div>
+            <div class="flex gap-1 text-[var(--color-primary)] mb-4 text-lg">
+              ★★★★★
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 mb-3">"Presupuesto cerrado, sin sorpresas"</h3>
+            <p class="text-sm text-slate-600 mb-6 leading-relaxed">
+              Lo que más me gustó fue su transparencia. El presupuesto inicial fue exactamente lo que pagamos al final. Te asesoran en todo momento sobre los mejores materiales para que no gastes de más. Un 10.
+            </p>
+            <div class="flex items-center gap-3 border-t border-slate-100 pt-4">
+              <div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-500 font-bold">JP</div>
+              <div>
+                <p class="text-sm font-bold text-slate-900">Javier Peña</p>
+                <p class="text-[10px] text-slate-400 uppercase tracking-wider">Reforma de Cocina</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Testimonio 3 -->
+          <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-lg transition-all fade-in-up delay-300 relative">
+            <div class="absolute -top-5 right-8 text-[var(--color-primary)] opacity-20 text-6xl font-serif">"</div>
+            <div class="flex gap-1 text-[var(--color-primary)] mb-4 text-lg">
+              ★★★★★
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 mb-3">"Profesionales de principio a fin"</h3>
+            <p class="text-sm text-slate-600 mb-6 leading-relaxed">
+              Cambiaron la bañera por plato de ducha en tiempo récord. El jefe de obra estuvo pendiente todos los días. Da mucha tranquilidad ver que todo el equipo (fontaneros, albañiles) está tan coordinado.
+            </p>
+            <div class="flex items-center gap-3 border-t border-slate-100 pt-4">
+              <div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-500 font-bold">LR</div>
+              <div>
+                <p class="text-sm font-bold text-slate-900">Laura Ruiz</p>
+                <p class="text-[10px] text-slate-400 uppercase tracking-wider">Reforma de Baño</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        
+        <!-- Trust badge -->
+        <div class="mt-12 flex items-center justify-center gap-2 text-slate-500 fade-in-up delay-300">
+          <span class="text-2xl">🛡️</span>
+          <span class="text-sm font-semibold">Empresa verificada con garantía por escrito en todos nuestros trabajos.</span>
+        </div>
+
+      </div>
+    </section>
+    <!-- ======================================================== -->
+    <!-- SECCIÓN METODOLOGÍA (CÓMO TRABAJAMOS)                    -->
+    <!-- ======================================================== -->
+    <section id="metodologia" class="py-24 bg-white relative z-10 border-t border-slate-100">
+      <div class="max-w-7xl mx-auto px-6">
+        
+        <!-- Cabecera de la sección -->
+        <div class="text-center max-w-3xl mx-auto mb-20 fade-in-up">
+          <span class="text-[var(--color-primary)] font-bold tracking-widest uppercase text-xs mb-3 block">Nuestro Método</span>
+          <h2 class="text-3xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight">Tu reforma en 4 pasos, sin estrés</h2>
+          <p class="text-lg text-slate-600 leading-relaxed">
+            Hemos diseñado un proceso de trabajo transparente para que disfrutes del camino hacia tu nuevo hogar, con la tranquilidad de estar en manos expertas desde el primer minuto.
+          </p>
+        </div>
+
+        <!-- Grid de Pasos -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 relative">
+          
+          <!-- Línea conectora (visible solo en desktop) -->
+          <div class="hidden lg:block absolute top-12 left-[12.5%] right-[12.5%] h-0.5 bg-slate-100 -z-10"></div>
+
+          <!-- Paso 1 -->
+          <div class="relative text-center fade-in-up delay-100 group">
+            <div class="w-24 h-24 mx-auto bg-white rounded-full flex items-center justify-center border-4 border-slate-50 shadow-md mb-6 group-hover:-translate-y-2 transition-transform duration-300 relative z-10 text-[var(--color-primary)]">
+              <span class="text-3xl font-black">1</span>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 mb-3">Visita Técnica</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Acudimos a tu domicilio para escuchar tus ideas, tomar medidas exactas y asesorarte sobre las mejores opciones técnicas y de distribución de espacios.
+            </p>
+          </div>
+
+          <!-- Paso 2 -->
+          <div class="relative text-center fade-in-up delay-200 group">
+            <div class="w-24 h-24 mx-auto bg-white rounded-full flex items-center justify-center border-4 border-slate-50 shadow-md mb-6 group-hover:-translate-y-2 transition-transform duration-300 relative z-10 text-[var(--color-primary)]">
+              <span class="text-3xl font-black">2</span>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 mb-3">Diseño y Presupuesto</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Elaboramos un presupuesto cerrado, detallado por partidas, y te presentamos opciones de materiales para que no haya sobrecostes de última hora.
+            </p>
+          </div>
+
+          <!-- Paso 3 (Destacado) -->
+          <div class="relative text-center fade-in-up delay-300 group">
+            <!-- Usa el color secundario de la marca para destacar el momento de la obra -->
+            <div class="w-24 h-24 mx-auto bg-[var(--color-secondary)] rounded-full flex items-center justify-center border-4 border-white shadow-xl mb-6 group-hover:-translate-y-2 transition-transform duration-300 relative z-10 text-white">
+              <span class="text-3xl font-black">3</span>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 mb-3">Ejecución de Obra</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Nuestro jefe de obra coordina a todos los gremios. Protegemos las zonas comunes y ejecutamos los trabajos respetando estrictamente los plazos pactados.
+            </p>
+          </div>
+
+          <!-- Paso 4 -->
+          <div class="relative text-center fade-in-up delay-300 group">
+            <div class="w-24 h-24 mx-auto bg-white rounded-full flex items-center justify-center border-4 border-slate-50 shadow-md mb-6 group-hover:-translate-y-2 transition-transform duration-300 relative z-10 text-[var(--color-primary)]">
+              <span class="text-3xl font-black">4</span>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 mb-3">Limpieza y Entrega</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Realizamos una limpieza integral de fin de obra y una revisión conjunta contigo para asegurar que cada detalle está exactamente como soñabas.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+    <!-- ======================================================== -->
+    <!-- SECCIÓN SOBRE NOSOTROS Y GARANTÍAS                      -->
+    <!-- ======================================================== -->
+    <section class="py-20 bg-slate-900 text-white relative z-10 overflow-hidden">
+      <div class="max-w-7xl mx-auto px-6 relative z-10">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          
+          <!-- Columna Izquierda: Texto persuasivo -->
+          <div class="fade-in-up">
+            <span class="text-[var(--color-primary)] font-bold tracking-widest uppercase text-xs mb-3 block">Compromiso y Solidez</span>
+            <h2 class="text-3xl md:text-5xl font-black mb-6 tracking-tight">Más que una constructora, tu socio de confianza</h2>
+            <p class="text-slate-300 text-base leading-relaxed mb-6">
+              Sabemos que dejar las llaves de tu casa en manos de desconocidos genera vértigo. Por eso, en nuestro equipo combinamos la experiencia de los mejores gremios tradicionales con la transparencia digital absoluta gracias a nuestro sistema de gestión.
+            </p>
+            
+            <div class="grid grid-cols-2 gap-6 pt-4 border-t border-slate-800">
+              <div>
+                <p class="text-3xl font-black text-[var(--color-primary)] mb-1">+15</p>
+                <p class="text-xs text-slate-400 font-semibold uppercase">Años de trayectoria</p>
+              </div>
+              <div>
+                <p class="text-3xl font-black text-[var(--color-primary)] mb-1">100%</p>
+                <p class="text-xs text-slate-400 font-semibold uppercase">Obras entregadas a tiempo</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Columna Derecha: Tarjetas de Garantías -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 fade-in-up delay-200">
+            <div class="bg-slate-800/80 p-6 rounded-2xl border border-slate-700 backdrop-blur-sm">
+              <span class="text-2xl mb-3 block">🛡️</span>
+              <h3 class="font-bold text-white mb-1">Seguro RC</h3>
+              <p class="text-xs text-slate-400 leading-relaxed">Póliza de responsabilidad civil activa para cualquier imprevisto durante la ejecución.</p>
+            </div>
+            
+            <div class="bg-slate-800/80 p-6 rounded-2xl border border-slate-700 backdrop-blur-sm">
+              <span class="text-2xl mb-3 block">📜</span>
+              <h3 class="font-bold text-white mb-1">Garantía por Escrito</h3>
+              <p class="text-xs text-slate-400 leading-relaxed">Firmamos una garantía de calidad en todos nuestros acabados de albañilería e instalaciones.</p>
+            </div>
+            
+            <div class="bg-slate-800/80 p-6 rounded-2xl border border-slate-700 backdrop-blur-sm">
+              <span class="text-2xl mb-3 block">👷</span>
+              <h3 class="font-bold text-white mb-1">Gremios Propios</h3>
+              <p class="text-xs text-slate-400 leading-relaxed">Sin subcontratas improvisadas: coordinamos fontaneros, electricistas y albañiles propios.</p>
+            </div>
+
+            <div class="bg-slate-800/80 p-6 rounded-2xl border border-slate-700 backdrop-blur-sm">
+              <span class="text-2xl mb-3 block">🔒</span>
+              <h3 class="font-bold text-white mb-1">Área Privada Clientes</h3>
+              <p class="text-xs text-slate-400 leading-relaxed">Acceso a un portal digital para ver el estado de tus partes de obra y presupuestos en vivo.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+    <!-- SECCIÓN DE CONTACTO / CAPTACIÓN -->
+    <section id="contacto" class="py-24 bg-white border-t border-slate-200">
+      <div class="max-w-5xl mx-auto px-6 flex flex-col md:flex-row gap-12 bg-blue-900 rounded-[2rem] overflow-hidden shadow-2xl">
+        
+        <div class="md:w-1/2 p-10 md:p-12 text-white flex flex-col justify-center">
+          <h2 class="text-3xl md:text-4xl font-black mb-4 tracking-tight">¿Hablamos de tu proyecto?</h2>
+          <p class="text-blue-200 mb-8 text-sm leading-relaxed">Cuéntanos qué tienes en mente y nuestro equipo técnico se pondrá en contacto contigo para realizar una visita técnica sin coste.</p>
+          
           <div class="space-y-4">
-            <!-- Simulación de Parte de intervención -->
-            <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex items-center justify-between hover:border-amber-300 transition-colors cursor-pointer">
-              <div class="flex items-center gap-4">
-                <div class="w-10 h-10 bg-rose-100 text-rose-600 rounded-lg flex items-center justify-center">🔧</div>
-                <div>
-                  <p class="text-sm font-bold text-slate-800">Rotura tubería principal</p>
-                  <p class="text-xs text-slate-500">Añadidas 3 fotos • Pendiente material</p>
-                </div>
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-blue-800 flex items-center justify-center">📞</div>
+              <div>
+                <p class="text-[10px] uppercase tracking-wider text-blue-300 font-bold">Llámanos</p>
+                <p class="font-bold">600 000 000</p>
               </div>
-              <span class="bg-rose-50 text-rose-700 text-xs font-bold px-2 py-1 rounded">Urgente</span>
             </div>
-
-            <!-- Simulación de Presupuesto -->
-            <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex items-center justify-between hover:border-amber-300 transition-colors cursor-pointer">
-              <div class="flex items-center gap-4">
-                <div class="w-10 h-10 bg-amber-100 text-amber-600 rounded-lg flex items-center justify-center">💶</div>
-                <div>
-                  <p class="text-sm font-bold text-slate-800">Certificación Fase 2</p>
-                  <p class="text-xs text-slate-500">Materiales y mano de obra</p>
-                </div>
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-blue-800 flex items-center justify-center">✉️</div>
+              <div>
+                <p class="text-[10px] uppercase tracking-wider text-blue-300 font-bold">Email</p>
+                <p class="font-bold">presupuestos@reformassample.com</p>
               </div>
-              <p class="text-sm font-black text-slate-900">4.250€</p>
             </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- Franja de Prueba Social (Social Proof) -->
-    <section class="border-y border-slate-200 bg-white/50 backdrop-blur-sm py-8 mb-20">
-      <div class="max-w-7xl mx-auto px-6 text-center">
-        <p class="text-sm font-bold text-slate-400 mb-6 uppercase tracking-wider">Más de 500 empresas de construcción ya han digitalizado sus obras</p>
-        <div class="flex flex-wrap justify-center gap-8 md:gap-16 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
-          <!-- Textos simulando logotipos de constructoras reales -->
-          <span class="text-xl font-black text-slate-800">REFORMAX</span>
-          <span class="text-xl font-black text-slate-800">Grupo <span class="font-light">Edifica</span></span>
-          <span class="text-xl font-black text-slate-800">Instalaciones<span class="text-amber-500">Pro</span></span>
-          <span class="text-xl font-black text-slate-800">CONSTRUCTIA</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- Grid de Características Avanzado (Basado en el Core de la App) -->
-    <div id="caracteristicas" class="mt-32 pb-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl w-full text-left mx-auto px-6">
-      
-      <!-- Fichajes -->
-      <div class="fade-in-up bg-white p-8 rounded-3xl shadow-sm border border-slate-200 hover:shadow-lg hover:border-cyan-200 transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden">
-        <div class="absolute top-0 right-0 bg-emerald-100 text-emerald-800 text-[10px] font-bold px-3 py-1 rounded-bl-xl">Art. 34.9 ET</div>
-        <div class="w-14 h-14 bg-slate-50 text-emerald-600 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm border border-slate-100">⏱️</div>
-        <h3 class="text-xl font-bold text-slate-900 mb-3">Fichaje Geoposicionado</h3>
-        <p class="text-sm text-slate-600 leading-relaxed mb-4">Registro inalterable de jornada laboral (Entrada, Pausa, Retorno, Salida). Genera informes mensuales con un clic listos para una inspección de trabajo.</p>
-      </div>
-
-      <!-- Presupuestos -->
-      <div class="fade-in-up delay-100 bg-white p-8 rounded-3xl shadow-sm border border-slate-200 hover:shadow-lg hover:border-cyan-200 transition-all duration-300 transform hover:-translate-y-1">
-        <div class="w-14 h-14 bg-slate-50 text-amber-500 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm border border-slate-100">💶</div>
-        <h3 class="text-xl font-bold text-slate-900 mb-3">Presupuestos Inteligentes</h3>
-        <p class="text-sm text-slate-600 leading-relaxed">Calculadora dinámica de mano de obra y materiales. Aplica automáticamente el tipo impositivo correcto (IVA 10%, 21% o IGIC) y expórtalo a PDF al instante.</p>
-      </div>
-
-      <!-- Incidencias -->
-      <div class="fade-in-up delay-200 bg-white p-8 rounded-3xl shadow-sm border border-slate-200 hover:shadow-lg hover:border-cyan-200 transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden">
-        <div class="absolute top-0 right-0 bg-rose-100 text-rose-800 text-[10px] font-bold px-3 py-1 rounded-bl-xl">Firma Táctil</div>
-        <div class="w-14 h-14 bg-slate-50 text-rose-500 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm border border-slate-100">✍️</div>
-        <h3 class="text-xl font-bold text-slate-900 mb-3">Partes de Intervención</h3>
-        <p class="text-sm text-slate-600 leading-relaxed">Tus técnicos reportan averías desde el móvil. Capturan fotos del "Antes" y "Después", detallan los trabajos y recogen la firma digital del cliente en la misma pantalla.</p>
-      </div>
-
-      <!-- PRL y EPIs (Extraído de tu app.html) -->
-      <div class="fade-in-up delay-100 bg-white p-8 rounded-3xl shadow-sm border border-slate-200 hover:shadow-lg hover:border-cyan-200 transition-all duration-300 transform hover:-translate-y-1">
-        <div class="w-14 h-14 bg-slate-50 text-sky-500 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm border border-slate-100">👷</div>
-        <h3 class="text-xl font-bold text-slate-900 mb-3">Control PRL y EPIs</h3>
-        <p class="text-sm text-slate-600 leading-relaxed">Mantén un expediente digital de cada operario. Controla las fechas de sus reconocimientos médicos, cursos de prevención de riesgos y la entrega de EPIs y uniformes.</p>
-      </div>
-
-      <!-- Flota y Maquinaria (Extraído de tu app.html) -->
-      <div class="fade-in-up delay-200 bg-white p-8 rounded-3xl shadow-sm border border-slate-200 hover:shadow-lg hover:border-cyan-200 transition-all duration-300 transform hover:-translate-y-1">
-        <div class="w-14 h-14 bg-slate-50 text-purple-500 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm border border-slate-100">🚐</div>
-        <h3 class="text-xl font-bold text-slate-900 mb-3">Flota y Herramientas</h3>
-        <p class="text-sm text-slate-600 leading-relaxed">No pierdas ni una radial más. Asigna herramientas en custodia a tus operarios y recibe alertas automáticas cuando caduque la ITV o toque revisión de aceite a tus furgonetas.</p>
-      </div>
-
-      <!-- PWA y Privacidad -->
-      <div class="fade-in-up delay-300 bg-gradient-to-br from-slate-900 to-slate-800 p-8 rounded-3xl shadow-md border border-slate-700 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 text-white">
-        <div class="w-14 h-14 bg-slate-800 text-cyan-400 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm border border-slate-600">📱</div>
-        <h3 class="text-xl font-bold text-white mb-3">App de Bolsillo</h3>
-        <p class="text-sm text-slate-300 leading-relaxed mb-4">Interfaz dividida: un acceso completo con clave maestra para Administración, y un portal simplificado (con nombre y DNI) para que los operarios fichen sin complicaciones.</p>
-      </div>
-    </div>
-
-    <!-- Sección Logística y Flota (Dark/Premium) -->
-  <section class="bg-slate-900 py-24 relative overflow-hidden mt-20">
-    <!-- Círculos decorativos de fondo -->
-    <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-slate-800/50 blur-3xl"></div>
-    <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-72 h-72 rounded-full bg-amber-900/20 blur-3xl"></div>
-
-    <div class="max-w-7xl mx-auto px-6 relative z-10 text-white">
-      
-      <div class="text-center max-w-3xl mx-auto mb-16 fade-in-up">
-        <span class="text-amber-500 font-bold tracking-wider uppercase text-sm mb-4 block">Logística Integral</span>
-        <h2 class="text-3xl md:text-5xl font-black mb-6 tracking-tight text-white">Controla cada furgoneta y cada radial.</h2>
-        <p class="text-lg text-slate-400">¿Cansado de no saber dónde está el martillo percutor o cuándo le toca la ITV a la furgoneta 3? Gesyweb rastrea tus activos al milímetro.</p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-        
-        <!-- Tarjeta Flota -->
-        <div class="bg-slate-800/50 backdrop-blur-sm p-8 rounded-3xl border border-slate-700 fade-in-up delay-100 hover:border-amber-500/50 transition-colors">
-          <div class="w-14 h-14 bg-slate-700 text-amber-400 rounded-2xl flex items-center justify-center text-3xl mb-6">🚐</div>
-          <h3 class="text-2xl font-bold mb-3 text-white">Gestión de Flota</h3>
-          <p class="text-slate-400 mb-6">Asigna vehículos a operarios, programa alertas automáticas para mantenimientos, revisiones de ITV y controla el gasto de combustible por proyecto.</p>
-          <div class="bg-slate-900/80 rounded-xl p-4 border border-slate-700">
-             <div class="flex justify-between items-center mb-2">
-               <span class="text-sm font-bold text-slate-300">Furgoneta 03 - Ford Transit</span>
-               <span class="text-xs bg-rose-500/20 text-rose-400 px-2 py-1 rounded font-bold">Alerta ITV</span>
-             </div>
-             <p class="text-xs text-slate-500">Conductor actual: Marcos Pérez</p>
           </div>
         </div>
 
-        <!-- Tarjeta Herramientas -->
-        <div class="bg-slate-800/50 backdrop-blur-sm p-8 rounded-3xl border border-slate-700 fade-in-up delay-200 hover:border-amber-500/50 transition-colors">
-          <div class="w-14 h-14 bg-slate-700 text-amber-400 rounded-2xl flex items-center justify-center text-3xl mb-6">🛠️</div>
-          <h3 class="text-2xl font-bold mb-3 text-white">Parque de Herramientas</h3>
-          <p class="text-slate-400 mb-6">Etiqueta tu maquinaria cara con códigos QR. Cuando un operario la necesite, la escanea para asignársela. Si se avería, se reporta en un clic.</p>
-          <div class="bg-slate-900/80 rounded-xl p-4 border border-slate-700 flex gap-4 items-center">
-            <div class="w-12 h-12 bg-white p-1 rounded-lg">
-              <!-- Simulación simple de un QR -->
-              <div class="w-full h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0IDQiPjxwYXRoIGQ9Ik0wLDBIMVYxSDBaTTIsMEgzVjFIMlpNMSwxSDJWMkgxWk0wLDJIMVYzSDBaTTIsMkgzVjNIMlpNMywzSDRWNEgzWiIgZmlsbD0iIzBmMTcyYSIvPjwvc3ZnPg==')] bg-cover opacity-80"></div>
-            </div>
+        <div class="md:w-1/2 bg-slate-50 p-10 md:p-12">
+          <!-- FORMULARIO DIRECTO AL GMAIL DEL CLIENTE -->
+          <form action="https://formsubmit.co/josemanueldarias@gmail.com" method="POST" class="space-y-4">
+            
+            <!-- Truco para evitar spam y configurar redirección -->
+            <input type="hidden" name="_subject" value="¡Nuevo cliente interesado en reforma desde la web!">
+            <input type="hidden" name="_captcha" value="false">
+
+            <!-- Campo Nombre -->
             <div>
-              <p class="text-sm font-bold text-slate-300">Martillo Percutor Bosch</p>
-              <p class="text-xs text-slate-500">Asignado a: Obra Centro</p>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Tu Nombre</label>
+              <input type="text" name="nombre" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200 outline-none transition-all" placeholder="Ej. Ana García">
             </div>
-          </div>
+
+            <!-- Campos Teléfono y Código Postal -->
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Teléfono</label>
+                <input type="tel" name="telefono" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200 outline-none transition-all" placeholder="600...">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Código Postal</label>
+                <input type="text" name="codigo_postal" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200 outline-none transition-all" placeholder="Ej. 28001">
+              </div>
+            </div>
+
+            <!-- Mensaje / Proyecto -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">¿Qué necesitas reformar?</label>
+              <textarea name="mensaje" rows="3" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200 outline-none transition-all" placeholder="Quiero reformar un baño de 5m2 y cambiar la bañera por plato de ducha..."></textarea>
+            </div>
+
+            <!-- Botón de Envío -->
+            <button type="submit" class="w-full mt-2 bg-amber-500 hover:bg-amber-600 text-slate-900 font-black py-4 rounded-xl shadow-md transition-all transform hover:-translate-y-0.5 cursor-pointer">
+              Solicitar Presupuesto
+            </button>
+          </form>
         </div>
 
       </div>
-    </div>
-  </section>
+    </section>
+  </main>
 
-  <!-- Sección App Offline (PWA) -->
-  <section class="py-24 bg-white border-b border-slate-200">
-    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center gap-12">
-      <div class="md:w-1/2 fade-in-up">
-        <h2 class="text-3xl md:text-4xl font-black text-slate-900 mb-6">¿Sin cobertura en el sótano? <span class="text-amber-500">No hay problema.</span></h2>
-        <p class="text-lg text-slate-600 mb-6">Las obras no siempre tienen 5G. Gesyweb es una App Progresiva (PWA) diseñada para operar sin conexión.</p>
-        <ul class="space-y-4">
-          <li class="flex items-start gap-3">
-             <div class="w-6 h-6 rounded-full bg-slate-900 text-white flex items-center justify-center text-xs mt-1 shrink-0">✓</div>
-             <p class="text-slate-700">Ficha la entrada y salida incluso en garajes subterráneos.</p>
-          </li>
-          <li class="flex items-start gap-3">
-             <div class="w-6 h-6 rounded-full bg-slate-900 text-white flex items-center justify-center text-xs mt-1 shrink-0">✓</div>
-             <p class="text-slate-700">Guarda fotos y firmas del cliente en modo offline.</p>
-          </li>
-          <li class="flex items-start gap-3">
-             <div class="w-6 h-6 rounded-full bg-slate-900 text-white flex items-center justify-center text-xs mt-1 shrink-0">✓</div>
-             <p class="text-slate-700">Sincronización automática con la oficina en cuanto recuperas la señal.</p>
-          </li>
-        </ul>
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-slate-200 pt-12 pb-8">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-blue-900 flex items-center justify-center font-black text-white shadow-sm">R</div>
+        <span class="text-lg font-black tracking-tight text-slate-900">Reformas PRO</span>
       </div>
-      
-      <!-- Simulación de estado de red -->
-      <div class="md:w-1/2 w-full fade-in-up delay-200 flex justify-center">
-        <div class="bg-slate-50 border border-slate-200 p-6 rounded-[2rem] shadow-xl w-full max-w-sm relative overflow-hidden">
-           <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-rose-500 to-amber-500"></div>
-           <div class="flex justify-between items-center mb-8 pt-2">
-             <span class="text-2xl">📱</span>
-             <span class="flex items-center gap-1 text-xs font-bold text-rose-500 bg-rose-50 px-3 py-1 rounded-full">
-               <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span> Sin Conexión
-             </span>
-           </div>
-           <p class="text-center text-slate-500 text-sm mb-4">Guardando datos localmente...</p>
-           <div class="w-full bg-slate-200 rounded-full h-2.5 mb-2">
-              <div class="bg-amber-500 h-2.5 rounded-full w-3/4"></div>
-           </div>
-           <p class="text-center text-xs font-bold text-slate-800">Sincronizando 3 partes de trabajo a la espera de red</p>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- Sección de Precios / Planes -->
-  <section id="precios" class="py-24 bg-slate-50 border-b border-slate-200">
-    <div class="max-w-7xl mx-auto px-6">
-      
-      <div class="text-center max-w-3xl mx-auto mb-16 fade-in-up">
-        <h2 class="text-3xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight">Una inversión, no un gasto.</h2>
-        <p class="text-lg text-slate-600">Recupera el coste de la suscripción con el primer presupuesto que no se te olvide facturar. Cancela cuando quieras.</p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-center">
-        
-        <!-- Plan Básico -->
-        <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow fade-in-up delay-100">
-          <h3 class="text-xl font-bold text-slate-900 mb-2">Cuadrilla</h3>
-          <p class="text-sm text-slate-500 mb-6">Para autónomos y pequeños equipos de reformas.</p>
-          <div class="mb-6">
-            <span class="text-4xl font-black text-slate-900">49€</span><span class="text-slate-500">/mes</span>
-          </div>
-          <ul class="space-y-4 mb-8">
-            <li class="flex items-center gap-3 text-sm text-slate-700"><span class="text-emerald-500 font-bold">✓</span> Hasta 5 operarios</li>
-            <li class="flex items-center gap-3 text-sm text-slate-700"><span class="text-emerald-500 font-bold">✓</span> Control Horario Básico</li>
-            <li class="flex items-center gap-3 text-sm text-slate-700"><span class="text-emerald-500 font-bold">✓</span> 50 Presupuestos al mes</li>
-            <li class="flex items-center gap-3 text-sm text-slate-400"><span class="text-slate-300">✗</span> Sin gestión de flota</li>
-          </ul>
-          <a href="#" class="block w-full text-center bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-3 rounded-xl transition-colors">Empezar Gratis</a>
-        </div>
-
-        <!-- Plan Profesional (Destacado) -->
-        <div class="bg-slate-900 p-8 rounded-3xl border-2 border-amber-500 shadow-2xl relative transform md:-translate-y-4 fade-in-up delay-200 z-10">
-          <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-amber-500 text-slate-950 text-xs font-black px-4 py-1 rounded-full uppercase tracking-wider">
-            El más popular
-          </div>
-          <h3 class="text-xl font-bold text-white mb-2">Constructora</h3>
-          <p class="text-sm text-slate-400 mb-6">El sistema operativo completo para empresas en crecimiento.</p>
-          <div class="mb-6">
-            <span class="text-4xl font-black text-white">129€</span><span class="text-slate-400">/mes</span>
-          </div>
-          <ul class="space-y-4 mb-8">
-            <li class="flex items-center gap-3 text-sm text-slate-300"><span class="text-amber-500 font-bold">✓</span> Operarios ILIMITADOS</li>
-            <li class="flex items-center gap-3 text-sm text-slate-300"><span class="text-amber-500 font-bold">✓</span> Partes de intervención con firma</li>
-            <li class="flex items-center gap-3 text-sm text-slate-300"><span class="text-amber-500 font-bold">✓</span> Control de Flota y Maquinaria</li>
-            <li class="flex items-center gap-3 text-sm text-slate-300"><span class="text-amber-500 font-bold">✓</span> App PWA Offline</li>
-          </ul>
-          <!-- Usamos el btn-glow definido en styles.css -->
-          <a href="#" class="btn-glow block w-full text-center bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-4 rounded-xl transition-colors">Prueba de 14 días</a>
-        </div>
-
-        <!-- Plan Enterprise -->
-        <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow fade-in-up delay-300">
-          <h3 class="text-xl font-bold text-slate-900 mb-2">Gran Empresa</h3>
-          <p class="text-sm text-slate-500 mb-6">Para promotoras y constructoras con múltiples delegaciones.</p>
-          <div class="mb-6">
-            <span class="text-4xl font-black text-slate-900">Personalizado</span>
-          </div>
-          <ul class="space-y-4 mb-8">
-            <li class="flex items-center gap-3 text-sm text-slate-700"><span class="text-emerald-500 font-bold">✓</span> API para integración contable</li>
-            <li class="flex items-center gap-3 text-sm text-slate-700"><span class="text-emerald-500 font-bold">✓</span> Analítica avanzada (PowerBI)</li>
-            <li class="flex items-center gap-3 text-sm text-slate-700"><span class="text-emerald-500 font-bold">✓</span> Gestor de cuenta dedicado</li>
-            <li class="flex items-center gap-3 text-sm text-slate-700"><span class="text-emerald-500 font-bold">✓</span> Servidor propio opcional</li>
-          </ul>
-          <a href="#" class="block w-full text-center bg-white border-2 border-slate-200 hover:border-slate-300 text-slate-800 font-bold py-3 rounded-xl transition-colors">Hablar con Ventas</a>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- Bottom CTA (Llamada a la Acción Final) -->
-  <section class="py-24 bg-patron relative">
-    <div class="max-w-4xl mx-auto px-6 text-center fade-in-up">
-      <h2 class="text-4xl md:text-5xl font-black text-slate-900 mb-6">Deja de regalar tu margen de beneficio.</h2>
-      <p class="text-xl text-slate-600 mb-10">Más de 300 gerentes de reformas ya controlan sus obras desde su bolsillo. Empieza hoy mismo y digitaliza tu empresa en 24 horas.</p>
-      
-      <div class="flex flex-col sm:flex-row justify-center gap-4">
-        <!-- Reutilizamos el efecto de tu styles.css para el botón -->
-        <a href="app.html" class="btn-glow bg-amber-500 hover:bg-amber-400 text-slate-950 text-lg font-black px-10 py-5 rounded-2xl shadow-xl transition-all flex items-center justify-center gap-2 transform hover:scale-105">
-          Crear mi cuenta gratis
-        </a>
-        <a href="#modal-demo" class="bg-white hover:bg-slate-50 text-slate-800 border-2 border-slate-200 text-lg font-bold px-10 py-5 rounded-2xl shadow-sm transition-all flex items-center justify-center">
-          Agendar una Demo
-        </a>
-      </div>
-      <p class="mt-6 text-sm text-slate-500 font-semibold">Sin tarjeta de crédito • Configuración inicial asistida</p>
-    </div>
-  </section>
-  <!-- Sección FAQ -->
-  <section class="py-24 bg-white">
-    <div class="max-w-4xl mx-auto px-6">
-      <div class="text-center mb-16 fade-in-up">
-        <h2 class="text-3xl md:text-4xl font-black text-slate-900 mb-4">Preguntas Frecuentes</h2>
-        <p class="text-lg text-slate-600">Resolvemos tus dudas antes de que des el salto digital.</p>
-      </div>
-
-      <div class="space-y-6 fade-in-up delay-100">
-        <!-- Pregunta 1 -->
-        <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200">
-          <h4 class="text-lg font-bold text-slate-900 mb-2 flex items-center gap-2">
-            <span class="text-amber-500">Q.</span> ¿Mis operarios sabrán usar la aplicación?
-          </h4>
-          <p class="text-slate-600">Sí. Hemos diseñado Gesyweb pensando en la obra, no en la oficina. Los botones son grandes, los textos claros y el proceso de fichaje o subida de fotos requiere un máximo de 2 clics. Es a prueba de balas.</p>
-        </div>
-        
-        <!-- Pregunta 2 -->
-        <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200">
-          <h4 class="text-lg font-bold text-slate-900 mb-2 flex items-center gap-2">
-            <span class="text-amber-500">Q.</span> ¿Puedo importar mis bases de datos de materiales?
-          </h4>
-          <p class="text-slate-600">Por supuesto. Puedes subir tus archivos Excel o CSV con tus tarifas de proveedores, partidas de mano de obra y clientes con un solo clic desde el panel de administrador.</p>
-        </div>
-
-        <!-- Pregunta 3 -->
-        <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200">
-          <h4 class="text-lg font-bold text-slate-900 mb-2 flex items-center gap-2">
-            <span class="text-amber-500">Q.</span> ¿Qué nivel de soporte técnico ofrecéis?
-          </h4>
-          <p class="text-slate-600">En los planes Constructora y Gran Empresa, te asignamos un técnico por WhatsApp y teléfono. Si algo falla en la obra, nos escribes y lo solucionamos en menos de 15 minutos.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- Footer Mejorado -->
-  <footer class="bg-white border-t border-slate-200 pt-16 pb-8">
-    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
-      <div class="md:col-span-2">
-        <div class="flex items-center gap-3 mb-4">
-          <div class="w-8 h-8 rounded-lg bg-amber-500 flex items-center justify-center font-black text-slate-950 shadow-inner">G</div>
-          <span class="text-xl font-black tracking-tight text-slate-900">Gesyweb</span>
-        </div>
-        <p class="text-slate-500 text-sm pr-4">El sistema operativo definitivo para empresas de construcción, reformas integrales e instalaciones técnicas. Del barro a la oficina, todo bajo control.</p>
-      </div>
-      <div>
-        <h4 class="font-bold text-slate-900 mb-4">Producto</h4>
-        <ul class="space-y-2 text-sm text-slate-500">
-          <li><a href="#" class="hover:text-amber-500 transition-colors">Control Horario</a></li>
-          <li><a href="#" class="hover:text-amber-500 transition-colors">Presupuestos</a></li>
-          <li><a href="#" class="hover:text-amber-500 transition-colors">Logística y Flota</a></li>
-          <li><a href="#" class="hover:text-amber-500 transition-colors">App Offline PWA</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 class="font-bold text-slate-900 mb-4">Compañía</h4>
-        <ul class="space-y-2 text-sm text-slate-500">
-          <li><a href="#" class="hover:text-amber-500 transition-colors">Casos de Éxito</a></li>
-          <li><a href="#" class="hover:text-amber-500 transition-colors">Precios</a></li>
-          <li><a href="#" class="hover:text-amber-500 transition-colors">Soporte Técnico</a></li>
-          <li><a href="#" class="hover:text-amber-500 transition-colors">Contacto</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="max-w-7xl mx-auto px-6 border-t border-slate-100 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-      <p class="text-sm text-slate-400">&copy; 2026 Gesyweb ERP. Todos los derechos reservados.</p>
+      <p class="text-sm text-slate-400 text-center">&copy; 2026 Reformas y Construcciones PRO. Todos los derechos reservados.</p>
       <div class="flex gap-4 text-sm text-slate-400">
         <a href="#" class="hover:text-slate-600">Aviso Legal</a>
         <a href="#" class="hover:text-slate-600">Privacidad</a>
       </div>
     </div>
   </footer>
-<!-- Modal Demo (Pure CSS) -->
-  <div id="modal-demo" class="fixed inset-0 z-[100] flex items-center justify-center opacity-0 pointer-events-none target:opacity-100 target:pointer-events-auto transition-all duration-300">
-    <!-- Overlay oscuro con enlace para cerrar (#) -->
-    <a href="#" class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm cursor-default"></a>
-    
-    <!-- Contenedor del Modal -->
-    <div class="relative bg-white rounded-[2rem] p-8 md:p-10 max-w-lg w-full mx-4 shadow-2xl border border-slate-100 transform translate-y-8 target:translate-y-0 transition-transform duration-300">
-      
-      <!-- Botón de cierre (X) -->
-      <a href="#" class="absolute top-6 right-6 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-800 transition-colors">
-        ✕
-      </a>
 
-      <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center text-2xl mb-6">👋</div>
-      <h3 class="text-2xl font-black text-slate-900 mb-2">Hablemos de tus obras</h3>
-      <p class="text-sm text-slate-500 mb-8">Déjanos tus datos y un especialista en digitalización de reformas te llamará en menos de 24 horas.</p>
-
-      <form class="space-y-4">
-        <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Nombre Completo</label>
-          <input type="text" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200 outline-none transition-all" placeholder="Ej. Carlos Martínez">
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Nombre de la Empresa</label>
-          <input type="text" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200 outline-none transition-all" placeholder="Ej. Reformas Centro">
-        </div>
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Teléfono</label>
-            <input type="tel" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200 outline-none transition-all" placeholder="+34 ...">
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Empleados</label>
-            <select class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200 outline-none transition-all bg-white">
-              <option>1 - 5</option>
-              <option>6 - 20</option>
-              <option>Más de 20</option>
-            </select>
-          </div>
-        </div>
-        <button type="button" class="w-full mt-4 bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 rounded-xl shadow-lg transition-all transform hover:-translate-y-0.5">
-          Solicitar Llamada
-        </button>
-      </form>
-    </div>
-  </div>
 </body>
 </html>
